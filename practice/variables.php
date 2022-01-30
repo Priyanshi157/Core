@@ -22,13 +22,6 @@ define variable : $name = 'piyu';
 Enum is nothing but can has multiple options available with it.
 Like an array 
 
-You can define a variable with key and value pairs
-Example:
-
-$users = [
-  Key1 => value1,
-  Key2 => value2,
-]
 
 -->
 <?php

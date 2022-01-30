@@ -1,0 +1,104 @@
+php.net
+_______________________________________-
+
+To right anything in php:
+
+<?php
+	......
+?>
+
+enum.exit()-> Ye check krne ke liye use hota h ki agr koi enum create kiya h program me 
+inside the function you can call your enums 
+
+request -> process -> output
+
+To print:
+	echo(arg1) ->int,string
+	print_t(expression); ->array , object -> made of more than one values
+	var_dump(expression); ->boolean,array,object -> shows type length and value
+
+can print : int , string , boolean , array , object
+echo "<br>";
+
+
+echo '<pre>';      -> to formate the page
+
+king of variable : null
+
+variable have name , value and location.
+
+variables: int , string , boolean , array , object
+
+define variable : $name = 'piyu';
+		  $age = '30';	
+		  $flag = true / false
+
+array: $product = [
+	'name' => 'nokia 1100';
+	'cost' => '1100';
+];  ->key=>value
+
+$product = ['hello','hi'];
+
+/************************************see array merge
+/************************************routing
+
+print_r(product);
+-> key must be unique
+
+print object : 
+class A{
+	
+}
+
+//declare object:
+$object = new A();
+print_r($object);
+
+object variables do not make their location
+non-object variables create their location
+
+product1 = 1
+name    -> product1
+value   -> 1
+loaction-> L1
+
+product2 = product1
+
+name    -> product2
+value   -> 1
+loaction-> L1
+
+product2 = 2
+
+name    -> product2
+value   -> 2
+loaction-> L2
+
+
+types of error:
+warning    ->
+notice     -> can be controlled
+fatal      ->
+-------------------------------------------------------------------------
+conditions:
+if(){
+	echo 'excellent';
+}
+else{
+	echo 'fail';
+}
+
+//false -> nulll,0,'',[],!true,'0'
+//true -> others are true
+-------------------------------------------------------------------------
+
+datatypes:
+
+class:
+
+conditions:
+
+class:
+
+loop:
