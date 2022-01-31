@@ -58,6 +58,9 @@ print_r($object);
 object variables do not make their location
 non-object variables create their location
 
+if you copy one object to another , the changes reflect onboth the objects -> it is referencing of object
+all object of same class refer to same location.
+
 product1 = 1
 name    -> product1
 value   -> 1
@@ -102,3 +105,21 @@ conditions:
 class:
 
 loop:
+
+__________________________________
+task : 31/1
+
+practice: 
+simple variable (assignment , overwrite , printing)
+class variable practice with an object (assignment , overwrite , printing)
+class method with an object(assignment , overwrite , printing)
+
+task: 
+1. Do mysql connection
+
+class name->adapter
+methods : connection : returns connection , 
+		  update(query) : update query into db, return true/false
+		  insert(query) : insert query into dp, return last insertId / false
+		  delete(query) : retuen true / false , 
+		  fetch(query) : return flse / array
