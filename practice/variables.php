@@ -22,14 +22,47 @@ define variable : $name = 'piyu';
 Enum is nothing but can has multiple options available with it.
 Like an array 
 
-You can define a variable with key and value pairs
-Example:
+var_dump return : true / false
+var_dump outut : datatype , value , string
+ 
+1.String
+2.Integer
+3.Float
+4.Boolean
+5.Array
+6.Object
+Non primitive are :Object , structure 
 
-$users = [
-  Key1 => value1,
-  Key2 => value2,
-]
+Primitive are:Int, string, float, bool , array
 
+//declare object:
+$object = new A();
+print_r($object);
+
+object variables do not make their location
+non-object variables create their location
+
+if you copy one object to another , the changes reflect onboth the objects -> it is referencing of object
+all object of same class refer to same location.
+
+product1 = 1
+name    -> product1
+value   -> 1
+loaction-> L1
+
+product2 = product1
+
+name    -> product2
+value   -> 1
+loaction-> L1
+
+product2 = 2
+
+name    -> product2
+value   -> 2
+loaction-> L2
+
+    
 -->
 <?php
     echo "CONSTANT";
@@ -53,15 +86,12 @@ $users = [
 
     echo 'hello '.$name;
     echo "<br>";
-    echo "$age";
-    echo "<br>";
-    echo "$flag";
-    echo "<br>";
+    echo "$age <br>";
+    echo "$flag <br>";
 
     echo $name." ".$age;
     echo "<br>";
-    echo "$name $name";
-    echo "<br>";
+    echo "$name $name <br>";
 
     $variable_name = 'Define Variable';
 
@@ -69,7 +99,8 @@ $users = [
     echo "<br>";
     print_r($variable_name.'Using print_r');
     echo "<br>";
-    var_dump($variable_name.'Using var_dump');
+    var_dump($variable_name.' Using var_dump <br>');
+    var_dump(var_dump($variable_name));
 
     echo "<br>";echo "<br>";
 
@@ -121,15 +152,4 @@ $users = [
     echo pi."value of pi which is defined as a constant";
     echo "<br>"    ;
     
-    /* 
-    1.String
-    2.Integer
-    3.Float
-    4.Boolean
-    5.Array
-    6.Object
-    Non primitive are :Object , structure 
-
-    Primitive are:Int, string, float, bool , array
-    */
 ?>
