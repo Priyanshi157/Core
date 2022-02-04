@@ -32,6 +32,74 @@ loaction-> L2
 
 <?php
     //echo phpinfo();
+echo "Server class<br>";
+
+    echo "1) ".$_SERVER['PHP_SELF'];
+    echo "<br>";
+    echo "2) ".$_SERVER['GATEWAY_INTERFACE'];
+    echo "<br>";
+    echo "3) ".$_SERVER['SERVER_ADDR'];
+    echo "<br>";
+    echo "4) ".$_SERVER['SERVER_NAME'];
+    echo "<br>";
+    echo "5) ".$_SERVER['SERVER_SOFTWARE'];
+    echo "<br>";
+    echo "6) ".$_SERVER['SERVER_PROTOCOL'];
+    echo "<br>";
+    echo "7) ".$_SERVER['REQUEST_METHOD'];
+    echo "<br>";
+    echo "8) ".$_SERVER['REQUEST_TIME'];
+    echo "<br>";
+    echo "9) ".$_SERVER['REQUEST_TIME_FLOAT'];
+    echo "<br>";
+    echo "10) ".$_SERVER['QUERY_STRING'];
+    echo "<br>";
+    echo "11) ".$_SERVER['DOCUMENT_ROOT'];
+    echo "<br>";
+    echo "12) ".$_SERVER['HTTP_ACCEPT'];
+    echo "<br>";
+    //echo "13) ".$_SERVER['HTTP_ACCEPT_CHARSET'];
+    //echo "<br>";
+    echo "14) ".$_SERVER['HTTP_CONNECTION'];
+    echo "<br>";
+    echo "15) ".$_SERVER['HTTP_HOST'];
+    echo "<br>";
+    //echo "16) ".$_SERVER['HTTP_REFERER'];
+    //echo "<br>";
+    echo "17) ".$_SERVER['HTTP_USER_AGENT'];
+    echo "<br>";
+    //echo "18) ".$_SERVER['HTTPS'];
+    //echo "<br>";
+    echo "19) ".$_SERVER['REMOTE_ADDR'];
+    echo "<br>";
+    //echo "20) ".$_SERVER['REMOTE_HOST'];
+    //echo "<br>";
+    echo "21) ".$_SERVER['REMOTE_PORT'];
+    echo "<br>";
+    //echo "22) ".$_SERVER['REMOTE_USER'];
+    //echo "<br>";
+    //echo "23) ".$_SERVER['REDIRECT_REMOTE_USER'];
+    //echo "<br>";
+    echo "24) ".$_SERVER['SCRIPT_FILENAME'];
+    echo "<br>";
+    echo "25) ".$_SERVER['SERVER_ADMIN'];
+    echo "<br>";
+    echo "26) ".$_SERVER['SERVER_PORT'];
+    echo "<br>";
+    echo "27) ".$_SERVER['SERVER_SIGNATURE'];
+    echo "<br>";
+    //echo "28) ".$_SERVER['PATH_TRANSLATED'];
+    //echo "<br>";
+    echo "29) ".$_SERVER['SCRIPT_NAME'];
+    echo "<br>";
+    echo "30) ".$_SERVER['REQUEST_URI'];
+    echo "<br>";
+    //echo "31) ".$_SERVER['AUTH_TYPE'];
+    //echo "<br>";
+
+
+    echo "<br>___________________________________________________<br>";
+
     echo "CLASS";
     echo "<br>";
     echo"********************************************<br>";
@@ -413,4 +481,6 @@ loaction-> L2
     }
     echo Hello::World()->text('!!!'); // Hello World!!!
     echo "<br>___________________________________________________<br>";
+
+
 ?>

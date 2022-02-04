@@ -123,3 +123,14 @@ methods : connection : returns connection ,
 		  insert(query) : insert query into dp, return last insertId / false
 		  delete(query) : retuen true / false , 
 		  fetch(query) : return flse / array
+
+
+___________________________________________________________________________________________________________________
+when you print object it shows variable names and it's value
+it does not show the methods of that class
+
+
+if you creating a variable
+-> make it's getter setter
+
+
