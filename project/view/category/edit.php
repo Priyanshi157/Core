@@ -1,6 +1,6 @@
 <?php
-require_once('Adapter.php');
-$adapter = new Adapter();
+require_once('Model/Core/Adapter.php');
+$adapter = new Model_Core_Adapter();
 try 
 {
 	$cid = $_GET['id'];
@@ -12,8 +12,8 @@ try
 	if(count($category) > 0)
 	{
 		$cname = $category['name'];
-		$price = $category['price'];
-		$quantity = $category['quantity'];
+		// $price = $category['price'];
+		// $quantity = $category['quantity'];
 		$status = $category['status'];
 	}
 
@@ -33,7 +33,7 @@ catch (Exception $e)
 </head>
 <body>
 	<div class="container">
-	<form method="POST" action="category.php?a=saveAction&id=<?php echo $cid ?>">
+	<form method="POST" action="index.php?c=category&a=save&id=<?php echo $cid ?>">
 
 	  <div class="row mb-4">
 	    <div class="col-md-10">
@@ -77,7 +77,7 @@ catch (Exception $e)
 
 	  <div class="row justify-content-center">
 	  <button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
-	  <a href="category.php?a=gridAction" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+	  <a href="index.php?c=category&a=grid" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
 		</div>
 	</form>
 	</div>

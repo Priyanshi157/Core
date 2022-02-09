@@ -1,21 +1,21 @@
-<?php require_once('Adapter.php');  ?>
+<?php require_once("Model/Core/Adapter.php");  ?>
 <?php 
 
-class Product
+class Controller_Product
 {
 	public function gridAction()
 	{
-		require_once('product_grid.php');
+		require_once('view/product/grid.php');
 	}
 
 	public function addAction()
 	{
-		require_once('product_add.php');
+		require_once('view/product/add.php');
 	}
 
 	public function editAction()
 	{
-		require_once('product_edit.php');
+		require_once('view/product/edit.php');
 	}
 
 	public function deleteAction()
@@ -33,11 +33,11 @@ class Product
 		    {
 		        throw new Exception("System is unable to delete record.", 1);
 		    }
-		    $this->redirect('product.php?a=gridAction');
+		    $this->redirect('index.php?c=product&a=grid');
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('product.php?a=gridAction');
+			$this->redirect('index.php?c=product&a=grid');
 		}		
 	}
 
@@ -87,11 +87,11 @@ class Product
 					throw new Exception("System is unable to insert record.", 1);
 				}
 			}
-			$this->redirect('product.php?a=gridAction');
+			$this->redirect('index.php?c=product&a=grid');
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('product.php?a=gridAction');	
+			$this->redirect('index.php?c=product&a=grid');	
 		}
 	}
 
@@ -107,8 +107,8 @@ class Product
 	}
 }
 
-$action = ($_GET['a']) ? $_GET['a'] : 'errorAction';
-$product = new Product();
-$product->$action();
+// $action = ($_GET['a']) ? $_GET['a'] : 'errorAction';
+// $product = new Product();
+// $product->$action();
 
 ?>

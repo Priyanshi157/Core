@@ -1,21 +1,21 @@
-<?php require_once('Adapter.php');  ?>
-<?php 
-
-class Customer
+<?php
+require_once("Model/Core/Adapter.php");
+//$adapter = new Model_Core_Adapter();
+class Controller_Customer
 {
 	public function gridAction()
 	{
-		require_once('customer_grid.php');
+		require_once('view/customer/grid.php');
 	}
 
 	public function addAction()
 	{
-		require_once('customer_add.php');
+		require_once('view/customer/add.php');
 	}
 
 	public function editAction()
 	{
-		require_once('customer_edit.php');
+		require_once('view/customer/edit.php');
 	}
 
 	public function deleteAction()
@@ -26,18 +26,18 @@ class Customer
 			{
 				throw new Exception("Invalid Request", 1);
 			}	
-			global $adapter;
+			$adapter = new Model_Core_Adapter();
 			$customerid = $_GET['id'];
 			$result = $adapter->delete("DELETE FROM `customer` WHERE `customerId` = '$customerid'");
 			if(!$result)
 			{
 				throw new Exception("System is unable to delete record.", 1);
 			}
-			$this->redirect('customer.php?a=gridAction');
+			$this->redirect("index.php?c=customer&a=grid");
 		}
 		catch (Exception $e) 
 		{
-			$this->redirect("customer.php?a=gridAction");	
+			$this->redirect("index.php?c=customer&a=grid");	
 		}	
 	}
 
@@ -48,7 +48,7 @@ class Customer
 			throw new Exception("Invalid Request", 1);
 		}
 
-		global $adapter;
+		$adapter = new Model_Core_Adapter();
 		$row = $_POST['customer'];
 		$firstName = $row["firstName"];
 	    $lastName = $row["lastName"];
@@ -57,7 +57,6 @@ class Customer
 		$status = $row["status"];
 		$createdAt = date('Y-m-d H:i:s');
 		$updatedAt = date('Y-m-d H:i:s');
-		
 		if (array_key_exists('customerId',$row))
 		{
 			if(!(int)$row['customerId'])
@@ -96,13 +95,12 @@ class Customer
 
 	public function saveAddress($customerId)
 	{
-		if(!isset($_POST['address']))
+		if(!isset($_POST['customerAddress']))
 		{
 			throw new Exception("Missing address data in request.", 1);
 		}
-
-		global $adapter;
-		$row = $_POST['address'];
+		$adapter = new Model_Core_Adapter();
+		$row = $_POST['customerAddress'];
 		$address = $row["address"];
 		$postalCode = $row["postalCode"];
 		$city = $row["city"];
@@ -116,8 +114,8 @@ class Customer
 		if(array_key_exists('shiping',$row) && $row["shiping"] == 1){
 			$shiping = 1;
 		}
-		
-		$addressData = $adapter->select("SELECT * FROM address WHERE customerId = $customerId");
+
+		$addressData = $adapter->fetchRow("SELECT * FROM address WHERE customerId = $customerId");
 		if($addressData)
 		{
 			$addressQuery = "UPDATE address 
@@ -139,7 +137,7 @@ class Customer
 		else
 		{
 			$insert = $adapter->insert("INSERT INTO `address` (`customerId`,`address`,`postalCode`,`city`,`state`,`country`,`billing`,`shiping`) 
-							VALUES ('$result','$address','$postalCode','$city','$state','$country','$billing','$shiping')");
+							VALUES ('$customerId','$address','$postalCode','$city','$state','$country','$billing','$shiping')");
 
 			if(!$insert)
 			{
@@ -155,11 +153,11 @@ class Customer
 			$customerId = $this->saveCustomer();
 			$this->saveAddress($customerId);
 			
-			$this->redirect('customer.php?a=gridAction');
+			$this->redirect('index.php?c=customer&a=grid');
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('customer.php?a=gridAction');
+			$this->redirect('index.php?c=customer&a=grid');
 		}
 	}
 
@@ -174,9 +172,4 @@ class Customer
 		echo "error";
 	}
 }
-
-$action = ($_GET['a']) ? $_GET['a'] : 'errorAction';
-$customer = new Customer();
-$customer->$action();
-
 ?>

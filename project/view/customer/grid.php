@@ -1,6 +1,7 @@
 <?php
-global $adapter;
-$customers = $adapter->fetchAll("SELECT * FROM customer LEFT JOIN address ON customer.customerId = address.customerId;");
+require_once("Model/Core/Adapter.php");
+$adapter = new Model_Core_Adapter();
+$customers = $adapter->fetchAll("SELECT * FROM customer");
 ?>
 <html>
 <head>
@@ -11,7 +12,7 @@ $customers = $adapter->fetchAll("SELECT * FROM customer LEFT JOIN address ON cus
 </head>
 <body>
 	<div class="fluid-container m-2">
-		<a href="customer.php?a=addAction"><button type="button" class="btn btn-primary">Add</button></a>
+		<a href="index.php?c=customer&a=add"><button type="button" class="btn btn-primary">Add</button></a>
 		<table class="table table-bordered my-4">
 		  <thead>
 		    <tr>
@@ -24,12 +25,6 @@ $customers = $adapter->fetchAll("SELECT * FROM customer LEFT JOIN address ON cus
 		      <th scope="col">Created At</th>
 		      <th scope="col">Updated AT</th>
 		      <th scope="col">Address</th>
-		      <th scope="col">Postal Code</th>
-		      <th scope="col">City</th>
-		      <th scope="col">State</th>
-		      <th scope="col">Country</th>
-		      <th scope="col">Billing</th>
-		      <th scope="col">Shipping</th>
 		      <th scope="col">Edit</th>
 		      <th scope="col">Delete</th>
 		    </tr>
@@ -48,15 +43,22 @@ $customers = $adapter->fetchAll("SELECT * FROM customer LEFT JOIN address ON cus
 					    <td><?php echo $customer['status'] ?></td>
 					    <td><?php echo $customer['createdAt'] ?></td>
 					    <td><?php echo $customer['updatedAt'] ?></td>
-						<td><?php echo $customer['address'] ?></td>
-					    <td><?php echo $customer['postalCode'] ?></td>
-					    <td><?php echo $customer['city'] ?></td>
-					    <td><?php echo $customer['state'] ?></td>
-					    <td><?php echo $customer['country'] ?></td>
-					    <td><?php echo $customer['billing'] ?></td>
-					    <td><?php echo $customer['shiping'] ?></td>
-					    <td><a href="customer.php?a=editAction&id=<?php echo $customer['customerId'] ?>">Edit</a></td>
-						<td><a href="customer.php?a=deleteAction&id=<?php echo $customer['customerId'] ?>">Delete</a></td>
+
+					    <td>
+					    <?php
+					    $address = "SELECT * FROM `address` WHERE customerId = $customer[customerId]";
+					    $selectAddress = $adapter->fetchRow($address);
+					    echo $selectAddress['address'].",<br>".$selectAddress['postalCode'].",<br>".$selectAddress['city'].",<br>".$selectAddress['state'].",<br>".$selectAddress['country'].".";
+
+					    //print_r($selectAddress);
+					    if($selectAddress['billing'] == 1)
+					     	echo "Billing";
+					    if($selectAddress['shiping'] == 1)
+					     	echo "shiping";
+					    ?>
+					    </td>
+						<td><a href="index.php?c=customer&a=edit&id=<?php echo $customer['customerId'] ?>">Edit</a></td>
+						<td><a href="index.php?c=customer&a=delete&id=<?php echo $customer['customerId'] ?>">Delete</a></td>
 					</tr>
 				<?php endforeach; ?>
 			<?php endif; ?>
