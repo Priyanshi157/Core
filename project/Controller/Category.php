@@ -1,21 +1,21 @@
-<?php require_once('Adapter.php');  ?>
+<?php require_once("Model/Core/Adapter.php");  ?>
 <?php 
 
-class Category
+class Controller_Category
 {
 	public function gridAction()
 	{
-		require_once('category_grid.php');
+		require_once('view/category/grid.php');
 	}
 
 	public function addAction()
 	{
-		require_once('category_add.php');
+		require_once('view/category/add.php');
 	}
 
 	public function editAction()
 	{
-		require_once('category_edit.php');
+		require_once('view/category/edit.php');
 	}
 
 	public function deleteAction()
@@ -26,18 +26,18 @@ class Category
 			{
 				throw new Exception("Invalid Request", 1);
 			}	
-			global $adapter;
+			$adapter = new Model_Core_Adapter();
 			$categoryid = $_GET["id"];
 			$result = $adapter->delete("DELETE FROM category WHERE categoryId=$categoryid");
 			if(!$result)
 			{
 				throw new Exception("System is unable to delete record.", 1);
 			}
-			$this->redirect('category.php?a=gridAction');
+			$this->redirect('index.php?c=category&a=grid');
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('category.php?a=gridAction');
+			$this->redirect('index.php?c=category&a=grid');
 		}
 	}
 
@@ -83,11 +83,11 @@ class Category
 					throw new Exception("System is unable to insert record.", 1);
 				}
 			}
-			$this->redirect('category.php?a=gridAction');
+			$this->redirect('index.php?c=category&a=grid');
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('category.php?a=gridAction');
+			$this->redirect('index.php?c=category&a=grid');
 		}
 	}
 
@@ -102,8 +102,8 @@ class Category
 	}
 }
 
-$action = ($_GET['a']) ? $_GET['a'] : 'errorAction';
-$category = new Category();
-$category->$action();
+// $action = ($_GET['a']) ? $_GET['a'] : 'errorAction';
+// $category = new Controller_Category();
+// $category->$action();
 
 ?>

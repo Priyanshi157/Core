@@ -12,14 +12,14 @@
 	  <div class="row mb-4">
 	    <label for="name" class="col-sm-2 col-form-label">Name</label>
 	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="name" name="name">
+	      <input type="text" class="form-control" id="name" name="category[name]">
 	    </div>
 	  </div>
 
 	  <div class="row mb-3">
 	    <label for="created" class="col-sm-2 col-form-label">Status</label>
 	    <div class="form-check">
-		  <input class="col-sm-2 col-form-label" type="radio" name="status" id="flexRadioDefault1" value="1">
+		  <input class="col-sm-2 col-form-label" type="radio" name="category[status]" id="flexRadioDefault1" value="1">
 		  <label class="form-check-label" for="flexRadioDefault1">
 		    Active
 		  </label>

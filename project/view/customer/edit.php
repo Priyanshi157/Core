@@ -1,6 +1,6 @@
 <?php
-require_once('Adapter.php');
-$adapter = new Adapter();
+require_once("Model/Core/Adapter.php");
+$adapter = new Model_Core_Adapter();
 try 
 {
 	$cid = $_GET['id'];
@@ -46,7 +46,7 @@ catch (Exception $e)
 </head>
 <body>
 	<div class="container">
-	<form method="POST" action="customer.php?a=saveAction&id=<?php echo $cid ?>">
+	<form method="POST" action="index.php?c=customer&a=save&id=<?php echo $cid ?>">
 
 	  <div class="row mb-4">
 	    <div class="col-md-10">
@@ -112,48 +112,48 @@ catch (Exception $e)
 	  	<div class="row mb-3">
 		    <label for="qty" class="col-sm-2 col-form-label">Address</label>
 		    <div class="col-md-10">
-		    	<input type="text" class="form-control" id="address" name="customer[address]" value="<?php echo $address?>">
+		    	<input type="text" class="form-control" id="address" name="customerAddress[address]" value="<?php echo $address?>">
 	    	</div>
 	  	</div>
 
 		<div class="row mb-3">
 	    	<label for="qty" class="col-sm-2 col-form-label">Postal Code</label>
 	    	<div class="col-md-10">
-	    		<input type="text" class="form-control" id="postalCode" name="customer[postalCode]" value="<?php echo $postalCode?>">
+	    		<input type="text" class="form-control" id="postalCode" name="customerAddress[postalCode]" value="<?php echo $postalCode?>">
 	    	</div>
 	  	</div>
 
 	  	<div class="row mb-3">
 	    	<label for="qty" class="col-sm-2 col-form-label">City</label>
 	    	<div class="col-md-10">
-	      		<input type="text" class="form-control" id="city" name="customer[city]" value="<?php echo $city?>">
+	      		<input type="text" class="form-control" id="city" name="customerAddress[city]" value="<?php echo $city?>">
 	    	</div>
 	  	</div>
 
 	  	<div class="row mb-3">
 	    	<label for="qty" class="col-sm-2 col-form-label">State</label>
 	    	<div class="col-md-10">
-	      		<input type="text" class="form-control" id="state" name="customer[state]" value="<?php echo $state?>">
+	      		<input type="text" class="form-control" id="state" name="customerAddress[state]" value="<?php echo $state?>">
 	    	</div>
 	  	</div>
 
 	  	<div class="row mb-3">
 	    	<label for="qty" class="col-sm-2 col-form-label">Country</label>
 	    	<div class="col-md-10">
-	      		<input type="text" class="form-control" id="country" name="customer[country]" value="<?php echo $country?>">
+	      		<input type="text" class="form-control" id="country" name="customerAddress[country]" value="<?php echo $country?>">
 	    	</div>
 	  	</div>
 
 	  	<div class="row mb-4">
-		    <input type="checkbox" id="billing" name="customer[billing]" value="1" <?php if ($billing == 1) { echo "checked"; } ?>>
+		    <input type="checkbox" id="billing" name="customerAddress[billing]" value="1" <?php if ($billing == 1) { echo "checked"; } ?>>
 			<label for="vehicle1">Billing</label><br>
-			<input type="checkbox" id="shiping" name="customer[shiping]" value="1" <?php if ($shiping == 1) { echo "checked"; } ?>>
+			<input type="checkbox" id="shiping" name="customerAddress[shiping]" value="1" <?php if ($shiping == 1) { echo "checked"; } ?>>
 			<label for="vehicle2"> Shipping </label><br>
 		</div>
 
 	  	<div class="row justify-content-center">
 	  		<button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
-	  		<a href="customer.php?a=gridAction" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+	  		<a href="index.php?c=customer&a=grid" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
 		</div>
 	</form>
 	</div>

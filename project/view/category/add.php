@@ -8,38 +8,24 @@
 </head>
 <body>
 	<div class="container">
-	<form  method="POST" action="product.php?a=saveAction">
+	<form  method="POST" action="index.php?c=category&a=save">
 	  <div class="row mb-4">
 	    <label for="name" class="col-sm-2 col-form-label">Name</label>
 	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="name" name="product[name]">
-	    </div>
-	  </div>
-
-	  <div class="row mb-4">
-	    <label for="price" class="col-sm-2 col-form-label">Price</label>
-	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="price" name="product[price]">
-	    </div>
-	  </div>
-
-	  <div class="row mb-3">
-	    <label for="qty" class="col-sm-2 col-form-label">Quantity</label>
-	    <div class="col-md-10">
-	      <input type="number" class="form-control" id="quantity" name="product[quantity]">
+	      <input type="text" class="form-control" id="name" name="category[name]">
 	    </div>
 	  </div>
 
 	  <div class="row mb-3">
 	    <label for="created" class="col-sm-2 col-form-label">Status</label>
 	    <div class="form-check">
-		  <input class="col-sm-2 col-form-label" type="radio" name="product[status]" id="flexRadioDefault1" value="1">
+		  <input class="col-sm-2 col-form-label" type="radio" name="category[status]" id="flexRadioDefault1" value="1">
 		  <label class="form-check-label" for="flexRadioDefault1">
 		    Active
 		  </label>
 		</div>
 		<div class="form-check">
-		  <input class="col-sm-2 col-form-label" type="radio" name="product[status]" id="flexRadioDefault2"  value="2" checked>
+		  <input class="col-sm-2 col-form-label" type="radio" name="category[status]" id="flexRadioDefault2"  value="2" checked>
 		  <label class="form-check-label" for="flexRadioDefault2">
 		    InActive
 		  </label>
@@ -47,7 +33,7 @@
 	  </div>
 
 	  <button type="submit" class="btn btn-primary">Add</button>
-	  <a href="product.php?a=gridAction"><button type="button" class="btn btn-primary">Cancel</button></a>
+	  <a href="index.php?c=category&a=grid"><button type="button" class="btn btn-primary">Cancel</button></a> 
 	</form>
 	</div>
 </body>

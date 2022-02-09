@@ -1,6 +1,6 @@
 <?php
-require_once('Adapter.php');
-$adapter = new Adapter();
+require_once('Model/Core/Adapter.php');
+$adapter = new Model_Core_Adapter();
 
 try 
 {
@@ -34,7 +34,7 @@ catch (Exception $e)
 </head>
 <body>
 	<div class="container">
-	<form method="POST" action="product.php?a=saveAction&id=<?php echo $pid ?>">
+	<form method="POST" action="index.php?c=product&a=save&id=<?php echo $pid ?>">
 
 	  <div class="row mb-4">
 	    <div class="col-md-10">
@@ -92,7 +92,7 @@ catch (Exception $e)
 
 	  <div class="row justify-content-center">
 	  <button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
-	  <a href="product.php?a=gridAction" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+	  <a href="index.php?c=product&a=grid" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
 		</div>
 	</form>
 	</div>

@@ -8,7 +8,7 @@
 </head>
 <body>
 	<div class="container">
-	<form  method="POST" action="product.php?a=saveAction">
+	<form  method="POST" action="index.php?c=product&a=save">
 	  <div class="row mb-4">
 	    <label for="name" class="col-sm-2 col-form-label">Name</label>
 	    <div class="col-md-10">
@@ -47,7 +47,7 @@
 	  </div>
 
 	  <button type="submit" class="btn btn-primary">Add</button>
-	  <a href="product.php?a=gridAction"><button type="button" class="btn btn-primary">Cancel</button></a>
+	  <a href="index.php?c=product&a=grid"><button type="button" class="btn btn-primary">Cancel</button></a>
 	</form>
 	</div>
 </body>
