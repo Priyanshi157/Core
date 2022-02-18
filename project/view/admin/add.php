@@ -1,3 +1,5 @@
+<?php $controllerAdmin = new Controller_Admin(); ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,38 +43,45 @@
 	</nav>
 
 	<div class="container">
-	<form  method="POST" action="index.php?c=product&a=save">
+	<form  method="POST" action="<?php echo $this->getUrl('admin','save',[],true); ?>">
 	  <div class="row mb-4">
-	    <label for="name" class="col-sm-2 col-form-label">Name</label>
+	    <label for="firstName" class="col-sm-2 col-form-label">First Name : </label>
 	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="name" name="product[name]">
+	      <input type="text" class="form-control" id="firstName" name="admin[firstName]">
 	    </div>
 	  </div>
 
 	  <div class="row mb-4">
-	    <label for="price" class="col-sm-2 col-form-label">Price</label>
+	    <label for="lastName" class="col-sm-2 col-form-label">Last Name : </label>
 	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="price" name="product[price]">
+	      <input type="text" class="form-control" id="lastName" name="admin[lastName]">
 	    </div>
 	  </div>
 
-	  <div class="row mb-3">
-	    <label for="qty" class="col-sm-2 col-form-label">Quantity</label>
+	  <div class="row mb-4">
+	    <label for="email" class="col-sm-2 col-form-label">Email</label>
 	    <div class="col-md-10">
-	      <input type="number" class="form-control" id="quantity" name="product[quantity]">
+	      <input type="email" class="form-control" id="email" name="admin[email]">
+	    </div>
+	  </div>
+
+	  <div class="row mb-4">
+	    <label for="password" class="col-sm-2 col-form-label">Password</label>
+	    <div class="col-md-10">
+	      <input type="password" class="form-control" id="password" name="admin[password]">
 	    </div>
 	  </div>
 
 	  <div class="row mb-3">
 	    <label for="created" class="col-sm-2 col-form-label">Status</label>
 	    <div class="form-check">
-		  <input class="col-sm-2 col-form-label" type="radio" name="product[status]" id="flexRadioDefault1" value="1">
+		  <input class="col-sm-2 col-form-label" type="radio" name="admin[status]" id="flexRadioDefault1" value="1">
 		  <label class="form-check-label" for="flexRadioDefault1">
 		    Active
 		  </label>
 		</div>
 		<div class="form-check">
-		  <input class="col-sm-2 col-form-label" type="radio" name="product[status]" id="flexRadioDefault2"  value="2" checked>
+		  <input class="col-sm-2 col-form-label" type="radio" name="admin[status]" id="flexRadioDefault2"  value="2" checked>
 		  <label class="form-check-label" for="flexRadioDefault2">
 		    InActive
 		  </label>
@@ -80,7 +89,7 @@
 	  </div>
 
 	  <button type="submit" class="btn btn-primary">Add</button>
-	  <a href="index.php?c=product&a=grid"><button type="button" class="btn btn-primary">Cancel</button></a>
+	  <a href="<?php echo $this->getUrl('admin','grid',[],true); ?>"><button type="button" class="btn btn-primary">Cancel</button></a>
 	</form>
 	</div>
 </body>

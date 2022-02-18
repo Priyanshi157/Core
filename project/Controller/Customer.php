@@ -1,33 +1,59 @@
+<?php Ccc::loadClass('Controller_Core_Action'); 
+Ccc::loadClass('Model_Core_Request');
+?>
 <?php
-require_once("Model/Core/Adapter.php");
-//$adapter = new Model_Core_Adapter();
-class Controller_Customer
+
+class Controller_Customer extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		require_once('view/customer/grid.php');
+		$adapter = new Model_Core_Adapter();
+		$view = $this->getView();
+		$customers = $adapter->fetchAll("SELECT * FROM customer");
+		$selectAddress = $adapter->fetchAll("SELECT a.address FROM customer c JOIN address a ON c.customerId = a.customerId");
+		$view->setTemplate('view/customer/grid.php');
+		$view->addData('customers',$customers);
+		$view->addData('address',$selectAddress);
+		$view->toHtml();
 	}
 
 	public function addAction()
 	{
-		require_once('view/customer/add.php');
+		$view = $this->getView();
+		$view->setTemplate('view/customer/add.php');
+		$view->toHtml();
 	}
 
 	public function editAction()
 	{
-		require_once('view/customer/edit.php');
+		global $c;
+		$request = $c->getFront()->getRequest();
+		$adapter = new Model_Core_Adapter();
+		$cid = $request->getRequest('id');
+		$customers = $adapter->fetchRow("SELECT * FROM customer WHERE customerId = $cid");
+		if(count($customers) > 0)
+		{
+			$customerAddress = $adapter->fetchRow("SELECT * FROM `address` WHERE `customerId` = '$cid'");
+		}	
+		$view = $this->getView();
+		$view->setTemplate('view/customer/edit.php');
+		$view->addData('customer',$customers);
+		$view->addData('address',$customerAddress);
+		$view->toHtml();
 	}
 
 	public function deleteAction()
 	{
 		try 
 		{
-			if(!isset($_GET['id']))
+			global $c;
+			$request = $c->getFront()->getRequest();
+			if(!$request->getRequest('id'))
 			{
 				throw new Exception("Invalid Request", 1);
 			}	
 			$adapter = new Model_Core_Adapter();
-			$customerid = $_GET['id'];
+			$customerid = $request->getRequest('id');
 			$result = $adapter->delete("DELETE FROM `customer` WHERE `customerId` = '$customerid'");
 			if(!$result)
 			{
@@ -43,13 +69,16 @@ class Controller_Customer
 
 	protected function saveCustomer()
 	{
-		if(!isset($_POST['customer']))
+		global $c;
+		$post = $c->getFront()->getRequest();
+		$post->getPost();
+		if(!$post->getPost('customer'))
 		{
 			throw new Exception("Invalid Request", 1);
 		}
 
 		$adapter = new Model_Core_Adapter();
-		$row = $_POST['customer'];
+		$row = $post->getPost('customer');
 		$firstName = $row["firstName"];
 	    $lastName = $row["lastName"];
 		$email = $row["email"];
@@ -64,15 +93,8 @@ class Controller_Customer
 				throw new Exception("Invalid Request.", 1);
 			}
 			$customerId = $row["customerId"];
-
-			$query = "UPDATE customer 
-				SET firstName='$firstName',
-					lastName='$lastName',
-					email='$email',
-					mobile='$mobile',
-					status='$status',
-					updatedAt='$updatedAt'
-				WHERE customerId= '$customerId'";
+			
+			$query = "UPDATE `customer` SET `firstName`='$firstName',`lastName`='$lastName',`email`='$email',`mobile`='$mobile',`status`='$status',`updatedAt`='$updatedAt' WHERE `customerId` = '$customerId'";
 
 			$update = $adapter->update($query);
 			if(!$update)
@@ -95,12 +117,15 @@ class Controller_Customer
 
 	public function saveAddress($customerId)
 	{
-		if(!isset($_POST['customerAddress']))
+		global $c;
+		$post = $c->getFront()->getRequest();
+		//print_r($post->getPost());
+		if(!$post->getPost('address'))
 		{
 			throw new Exception("Missing address data in request.", 1);
 		}
 		$adapter = new Model_Core_Adapter();
-		$row = $_POST['customerAddress'];
+		$row = $post->getPost('address');
 		$address = $row["address"];
 		$postalCode = $row["postalCode"];
 		$city = $row["city"];
@@ -157,6 +182,8 @@ class Controller_Customer
 		} 
 		catch (Exception $e) 
 		{
+			print_r($e->getMessage());
+			exit;
 			$this->redirect('index.php?c=customer&a=grid');
 		}
 	}

@@ -1,28 +1,45 @@
-<?php require_once("Model/Core/Adapter.php");  ?>
+<?php Ccc::loadClass('Controller_Core_Action'); ?>
 <?php 
 
-class Controller_Product
+class Controller_Product extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		require_once('view/product/grid.php');
+		$adapter = new Model_Core_Adapter();
+		$products = $adapter->fetchAll("SELECT * FROM product");
+		$view = $this->getView();
+		$view->setTemplate('view/product/grid.php');
+		$view->addData('products',$products);
+		$view->toHtml();
 	}
 
 	public function addAction()
 	{
-		require_once('view/product/add.php');
+		$view = $this->getView();
+		$view->setTemplate('view/product/add.php');
+		$view->toHtml();
 	}
 
 	public function editAction()
 	{
-		require_once('view/product/edit.php');
+		global $c;
+		$request = $c->getFront()->getRequest();
+		$adapter = new Model_Core_Adapter();
+		$pid = $request->getRequest('id');
+		$product = $adapter->fetchRow("SELECT * FROM product WHERE productId = $pid");
+		$view = $this->getView();
+		$view->setTemplate('view/product/edit.php');
+		$view->addData('product',$product);
+		$view->toHtml();
 	}
 
 	public function deleteAction()
 	{
 		try 
 		{
-			if(!isset($_GET['id']))
+			global $c;
+			$request = $c->getFront()->getRequest();
+			if(!$request->getRequest('id'))
 			{
 				throw new Exception("Invalid Request.", 1);
 			}
@@ -45,12 +62,15 @@ class Controller_Product
 	{
 		try 
 		{
-			if(!isset($_POST['product']))
+			global $c;
+			$post = $c->getFront()->getRequest();
+			$post->getPost();
+			if(!$post->getPost('product'))
 			{
 				throw new Exception("Invalid Request", 1);
 			}	
 			global $adapter;
-			$row = $_POST['product'];
+			$row = $post->getPost('product');
 			$name = $row["name"];
 			$price = $row["price"];
 			$quantity = $row["quantity"];
@@ -106,9 +126,5 @@ class Controller_Product
 		echo "error";
 	}
 }
-
-// $action = ($_GET['a']) ? $_GET['a'] : 'errorAction';
-// $product = new Product();
-// $product->$action();
 
 ?>

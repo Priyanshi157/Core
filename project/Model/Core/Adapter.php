@@ -80,17 +80,43 @@ class Model_Core_Adapter{
         return false;
     }
 
-    public function fetchAll($query)
+    public function fetchAll($query,$mode=MYSQLI_ASSOC)
     {
         $result = $this->query($query);
         if($result->num_rows)
         {
-            return $result->fetch_all(MYSQLI_ASSOC);
+            return $result->fetch_all($mode);
         }
         return false;
+    }
+
+    public function fetchPairs($query)
+    {
+        $result = $this->fetchAll($query,MYSQLI_NUM);
+        if(!$result)
+        {
+            return false; 
+        }
+        $keys = array_column($result,"0"); 
+        $values = array_column($result,"1"); 
+        if(!$values)
+        {
+            $values = array_fill(0,count($keys),null);
+        }
+        $result = array_combine($keys,$values); 
+        return $result;
+    }
+
+    public function fetchOne($query)
+    {
+        $result = $this->fetchAll($query);
+        if(!$result)
+        {
+            return false;
+        }
+        $key = $result['0']['0'];
+        return $key;
     }
 }
 
 $adapter = new Model_Core_Adapter();
-
-?>
