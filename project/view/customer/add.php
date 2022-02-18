@@ -7,26 +7,58 @@
 	<title></title>
 </head>
 <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-white">
+	    <div class="container-fluid">
+	      	<button
+		        class="navbar-toggler"
+		        type="button"
+		        data-mdb-toggle="collapse"
+		        data-mdb-target="#navbarExample01"
+		        aria-controls="navbarExample01"
+		        aria-expanded="false"
+		        aria-label="Toggle navigation"
+		    >
+	        <i class="fas fa-bars"></i>
+	      	</button>
+	      	<div class="collapse navbar-collapse" id="navbarExample01">
+	        	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+	          		<li class="nav-item active">
+	            		<a class="nav-link" aria-current="page" href="#">Admin</a>
+	          		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="index.php?c=category&a=grid">Category</a>
+	          		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="index.php?c=product&a=grid">Product</a>
+	          		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="index.php?c=customer&a=grid">Customer</a>
+	          		</li>
+	        	</ul>
+	      	</div>
+	    </div>
+	</nav>
+
 	<div class="container">
 		<form  method="POST" action="index.php?c=customer&a=save"> 
 		  	<div class="row mb-4">
 		    	<label for="name" class="col-sm-2 col-form-label">First Name</label>
 		    	<div class="col-md-10">
-		      		<input type="text" class="form-control" id="firstName" name="customer[firstName]" value="mahek">
+		      		<input type="text" class="form-control" id="firstName" name="customer[firstName]">
 		    	</div>
 		  	</div>
 
 		  	<div class="row mb-4">
 			    <label for="name" class="col-sm-2 col-form-label">Last Name</label>
 			    <div class="col-md-10">
-			    	<input type="text" class="form-control" id="lastName" name="customer[lastName]" value="kalol">
+			    	<input type="text" class="form-control" id="lastName" name="customer[lastName]">
 		    	</div>
 		  	</div>
 
 		  	<div class="row mb-4">
 			    <label for="name" class="col-sm-2 col-form-label">email</label>
 			    <div class="col-md-10">
-			    	<input type="email" class="form-control" id="email" name="customer[email]" value="mahek@gmail.com">
+			    	<input type="email" class="form-control" id="email" name="customer[email]">
 			    </div>
 		  	</div>
 
@@ -34,7 +66,7 @@
 		  	<div class="row mb-4">
 			    <label for="price" class="col-sm-2 col-form-label">mobile</label>
 			    <div class="col-md-10">
-			      <input type="text" class="form-control" id="mobile" name="customer[mobile]" value="7845125874">
+			      <input type="text" class="form-control" id="mobile" name="customer[mobile]">
 			    </div>
 		  	</div>
 
@@ -54,34 +86,34 @@
 		  	<div class="row mb-4">
 			    <label for="price" class="col-sm-2 col-form-label">Address</label>
 			    <div class="col-md-10">
-			      <textarea id="address" name="address[address]" rows="4" cols="50" value="paldi"></textarea>
+			      <textarea id="address" name="address[address]" rows="4" cols="50"></textarea>
 			    </div>
 		  	</div>
 		
 			<div class="row mb-4">
 			    <label for="price" class="col-sm-2 col-form-label">Postal Code</label>
 			    <div class="col-md-10">
-			      <input type="text" class="form-control" id="postalCode" name="address[postalCode]" value="389151">
+			      <input type="text" class="form-control" id="postalCode" name="address[postalCode]">
 			    </div>
 			</div>
 			
 			<div class="row mb-4">
 			    <label for="price" class="col-sm-2 col-form-label">city</label>
 			    <div class="col-md-10">
-			      <input type="text" class="form-control" id="city" name="address[city]" value="ahmedabad">
+			      <input type="text" class="form-control" id="city" name="address[city]">
 			    </div>
 		  	</div>
 		
 			<div class="row mb-4">
 			    <label for="price" class="col-sm-2 col-form-label">State</label>
 			    <div class="col-md-10">
-			      <input type="text" class="form-control" id="state" name="address[state]" value="gujrat">
+			      <input type="text" class="form-control" id="state" name="address[state]">
 			    </div>
 		  	</div>
 			<div class="row mb-4">
 			    <label for="price" class="col-sm-2 col-form-label">Country</label>
 			    <div class="col-md-10">
-			      <input type="text" class="form-control" id="country" name="address[country]" value="india">
+			      <input type="text" class="form-control" id="country" name="address[country]">
 			    </div>
 		  	</div>
 

@@ -1,7 +1,7 @@
-<?php
-require_once("Model/Core/Adapter.php");
-$adapter = new Model_Core_Adapter();
-$categories = $adapter->fetchAll("SELECT * FROM category");
+<?php 
+$controllerCategory = new Controller_Category();
+$categories = $this->getData('categories');
+
 ?>
 
 <html>
@@ -12,7 +12,40 @@ $categories = $adapter->fetchAll("SELECT * FROM category");
 	<title>Category CRUD</title>
 </head>
 <body>
-	<div class="fluid-container m-2">
+	<nav class="navbar navbar-expand-lg navbar-light bg-white">
+	    <div class="container-fluid">
+	      	<button
+		        class="navbar-toggler"
+		        type="button"
+		        data-mdb-toggle="collapse"
+		        data-mdb-target="#navbarExample01"
+		        aria-controls="navbarExample01"
+		        aria-expanded="false"
+		        aria-label="Toggle navigation"
+		    >
+	        <i class="fas fa-bars"></i>
+	      	</button>
+	      	<div class="collapse navbar-collapse" id="navbarExample01">
+	        	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+	          		<li class="nav-item active">
+	            		<a class="nav-link" aria-current="page" href="#">Admin</a>
+	          		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="index.php?c=category&a=grid">Category</a>
+	          		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="index.php?c=product&a=grid">Product</a>
+	          		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="index.php?c=customer&a=grid">Customer</a>
+	          		</li>
+	        	</ul>
+	      	</div>
+	    </div>
+	</nav>
+
+
+    <div class="fluid-container m-2">
 		<a href="index.php?c=category&a=add"><button type="button" class="btn btn-primary">Add</button></a>
 		<table class="table border my-4">
 		  <thead>
@@ -27,16 +60,17 @@ $categories = $adapter->fetchAll("SELECT * FROM category");
 		    </tr>
 		  </thead>
 		  <tbody>
-		  	<?php if(!$categories): ?>
+		  	<?php if(!$data['categories']): ?>
 		  		<tr><td colspan="10">No Record available.</td></tr>
 		  	<?php else: ?>
 		  		<?php foreach ($categories as $category): ?>
 			  		<tr>
-					    <td><?php echo $category['categoryId'] ?></td>
-					    <td><?php echo $category['name'] ?></td>
-					    <td><?php echo $category['status'] ?></td>
-					    <td><?php echo $category['createdAt'] ?></td>
-					    <td><?php echo $category['updatedAt'] ?></td>
+					    <td><?php echo $category['categoryId']; ?></td>
+					    <td><?php $result = $controllerCategory->getDataByPath();
+		    				echo $result[$category['categoryId']]; ?></td>
+					    <td><?php echo $category['status']; ?></td>
+					    <td><?php echo $category['createdAt']; ?></td>
+					    <td><?php echo $category['updatedAt']; ?></td>
 					    <td><a href="index.php?c=category&a=edit&id=<?php echo $category['categoryId'] ?>">Edit</a></td>
 						<td><a href="index.php?c=category&a=delete&id=<?php echo $category['categoryId'] ?>">Delete</a></td>
 					</tr>

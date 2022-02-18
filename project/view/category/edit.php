@@ -1,27 +1,13 @@
 <?php
-require_once('Model/Core/Adapter.php');
-$adapter = new Model_Core_Adapter();
-try 
-{
-	$cid = $_GET['id'];
-	if(!$cid)
-	{
-		throw new Exception("Invalid Request.", 1);
-	}
-	$category = $adapter->fetchRow("SELECT * FROM category WHERE categoryId = '$cid'");
-	if(count($category) > 0)
-	{
-		$cname = $category['name'];
-		// $price = $category['price'];
-		// $quantity = $category['quantity'];
-		$status = $category['status'];
-	}
 
-} 
-catch (Exception $e) 
-{
-	throw new Exception("System is unable to fetch.", 1);	
-}
+$controllerCategory = new Controller_Category();
+$categoryData = $this->getData('category');   
+print_r($categoryData);
+$categoryPath = $this->getData('categoryPath');
+print_r($categoryPath);
+$result = $controllerCategory->getDataByPath();
+print_r($result);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,51 +19,57 @@ catch (Exception $e)
 </head>
 <body>
 	<div class="container">
-	<form method="POST" action="index.php?c=category&a=save&id=<?php echo $cid ?>">
+	<form method="POST" action="index.php?c=category&a=save&id=<?php echo $categoryData['categoryId'] ?>">
+	  	<div class="row mb-4">
+	    	<div class="col-md-10">
+	      		<input type="hidden" class="form-control" id="categoryid" name="category[categoryId]" value="<?php echo $categoryData['categoryId'];?>">
+	    	</div>
+	  	</div>
 
-	  <div class="row mb-4">
-	    <div class="col-md-10">
-	      <input type="hidden" class="form-control" id="categoryid" name="category[categoryId]" value="<?php echo $cid;?>">
-	    </div>
-	  </div>
+	  	<div>
+			<lable>Category_Dropdown: </lable>
+			<select name="category[parentId]" id="parentId">
+				<option value="NULL">Main category </option>
+				<?php foreach($categoryPath as $key=>$value): ?>
+					<option value=<?php echo $key; ?>>
+					<?php echo($result[$key]); ?>
+					</option>
+				<?php endforeach; ?>
+	      	</select>
+	      	
+	  	</div>
 
+	  	<div class="row mb-4">
+	    	<label for="name" class="col-sm-2 col-form-label">Name</label>
+	    	<div class="col-md-10">
+	      		<input type="text" class="form-control" id="name" name="category[name]" value="<?php echo $categoryData['name']; ?>">
+	    	</div>
+	  	</div>
 
-	  <div class="row mb-4">
-	    <label for="name" class="col-sm-2 col-form-label">Name</label>
-	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="name" name="category[name]" value="<?php echo $cname; ?>">
-	    </div>
-	  </div>
+	  	<div class="row mb-3">
+	    	<label for="created" class="col-sm-2 col-form-label">Status</label>
+	    	<div class="row col-sm-10">
+		    	<div class="form-check col-sm-6">
+		    		<?php if($categoryData['status'] == 1){ ?>
+			  		<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault1" value="1" checked>
+			  		<?php }else{ ?>
+			  		<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault1" value="1">
+			  		<?php } ?>
+			  		<label class="form-check-label col-sm-2" for="flexRadioDefault1"> Active </label>		
+				</div>
+				<div class="form-check col-sm-6">
+					<?php if($categoryData['status'] == 2){ ?>
+			 		<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault2"  value="2" checked>
+			  		<?php }else{ ?>
+			  		<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault2"  value="2" >
+				  	<?php } ?>
+			  		<label class="form-check-label col-sm-2" for="flexRadioDefault2"> InActive </label>
+				</div>
+	  		</div>
 
-	  <div class="row mb-3">
-	    <label for="created" class="col-sm-2 col-form-label">Status</label>
-	    <div class="row col-sm-10">
-		    <div class="form-check col-sm-6">
-		    	<?php if($status == 1){ ?>
-			  	<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault1" value="1" checked>
-			  	<?php }else{ ?>
-			  	<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault1" value="1">
-			  	<?php } ?>
-			  <label class="form-check-label col-sm-2" for="flexRadioDefault1">
-			    Active
-			  </label>		
-			</div>
-			<div class="form-check col-sm-6">
-				<?php if($status == 2){ ?>
-			 <input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault2"  value="2" checked>
-			  	<?php }else{ ?>
-			  <input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault2"  value="2" >
-			  	<?php } ?>
-			 
-			  <label class="form-check-label col-sm-2" for="flexRadioDefault2">
-			    InActive
-			  </label>
-			</div>
-	  </div>
-
-	  <div class="row justify-content-center">
-	  <button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
-	  <a href="index.php?c=category&a=grid" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+	  		<div class="row justify-content-center">
+	  		<button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
+	  		<a href="index.php?c=category&a=grid" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
 		</div>
 	</form>
 	</div>

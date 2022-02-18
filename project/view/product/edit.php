@@ -1,28 +1,7 @@
 <?php
-require_once('Model/Core/Adapter.php');
-$adapter = new Model_Core_Adapter();
+$product = $this->getData();
+$productData = $product['product'];
 
-try 
-{
-	$pid = $_GET['id'];
-	if(!$pid)
-	{
-		throw new Exception("Invalid Request.", 1);
-	}
-	$product = $adapter->fetchRow("SELECT * FROM product WHERE productId = '$pid'");
-	if(count($product) > 0)
-	{
-		$pname = $product['name'];
-		$price = $product['price'];
-		$quantity = $product['quantity'];
-		$status = $product['status'];
-	}
-
-} 
-catch (Exception $e) 
-{
-	throw new Exception("System is unable to fetch.", 1);	
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,12 +12,44 @@ catch (Exception $e)
 	<title></title>
 </head>
 <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-white">
+	    <div class="container-fluid">
+	      	<button
+		        class="navbar-toggler"
+		        type="button"
+		        data-mdb-toggle="collapse"
+		        data-mdb-target="#navbarExample01"
+		        aria-controls="navbarExample01"
+		        aria-expanded="false"
+		        aria-label="Toggle navigation"
+		    >
+	        <i class="fas fa-bars"></i>
+	      	</button>
+	      	<div class="collapse navbar-collapse" id="navbarExample01">
+	        	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+	          		<li class="nav-item active">
+	            		<a class="nav-link" aria-current="page" href="#">Admin</a>
+	          		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="index.php?c=category&a=grid">Category</a>
+	          		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="index.php?c=product&a=grid">Product</a>
+	          		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="index.php?c=customer&a=grid">Customer</a>
+	          		</li>
+	        	</ul>
+	      	</div>
+	    </div>
+	</nav>
+
 	<div class="container">
-	<form method="POST" action="index.php?c=product&a=save&id=<?php echo $pid ?>">
+	<form method="POST" action="index.php?c=product&a=save&id">
 
 	  <div class="row mb-4">
 	    <div class="col-md-10">
-	      <input type="hidden" class="form-control" id="productid" name="product[productId]" value="<?php echo $pid;?>">
+	      <input type="hidden" class="form-control" id="productid" name="product[productId]" value="<?php echo $productData['productId'];?>">
 	    </div>
 	  </div>
 
@@ -46,21 +57,21 @@ catch (Exception $e)
 	  <div class="row mb-4">
 	    <label for="name" class="col-sm-2 col-form-label">Name</label>
 	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="name" name="product[name]" value="<?php echo $pname; ?>">
+	      <input type="text" class="form-control" id="name" name="product[name]" value="<?php echo $productData['name']; ?>">
 	    </div>
 	  </div>
 
 	  <div class="row mb-4">
 	    <label for="price" class="col-sm-2 col-form-label">Price</label>
 	    <div class="col-md-10">
-	      <input type="number" class="form-control" id="price" name="product[price]" value="<?php echo $price?>">
+	      <input type="number" class="form-control" id="price" name="product[price]" value="<?php echo $productData['price']?>">
 	    </div>
 	  </div>
 
 	  <div class="row mb-3">
 	    <label for="qty" class="col-sm-2 col-form-label">Quantity</label>
 	    <div class="col-md-10">
-	      <input type="number" class="form-control" id="qty" name="product[quantity]" value="<?php echo $quantity?>">
+	      <input type="number" class="form-control" id="qty" name="product[quantity]" value="<?php echo $productData['quantity']?>">
 	    </div>
 	  </div>
 
@@ -68,7 +79,7 @@ catch (Exception $e)
 	    <label for="created" class="col-sm-2 col-form-label">Status</label>
 	    <div class="row col-sm-10">
 		    <div class="form-check col-sm-6">
-		    	<?php if($status == 1){ ?>
+		    	<?php if($productData['status'] == 1){ ?>
 			  	<input class="form-check-input col-sm-4" type="radio" name="product[status]" id="flexRadioDefault1" value="1" checked>
 			  	<?php }else{ ?>
 			  	<input class="form-check-input col-sm-4" type="radio" name="product[status]" id="flexRadioDefault1" value="1">
@@ -78,7 +89,7 @@ catch (Exception $e)
 			  </label>		
 			</div>
 			<div class="form-check col-sm-6">
-				<?php if($status == 2){ ?>
+				<?php if($productData['status'] == 2){ ?>
 			 <input class="form-check-input col-sm-4" type="radio" name="product[status]" id="flexRadioDefault2"  value="2" checked>
 			  	<?php }else{ ?>
 			  <input class="form-check-input col-sm-4" type="radio" name="product[status]" id="flexRadioDefault2"  value="2" >

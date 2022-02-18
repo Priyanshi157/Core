@@ -1,3 +1,5 @@
+<?php $controllerCategory = new Controller_Category();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,33 +9,47 @@
 	<title></title>
 </head>
 <body>
-	<div class="container">
+	<div class="container border">
 	<form  method="POST" action="index.php?c=category&a=save">
-	  <div class="row mb-4">
-	    <label for="name" class="col-sm-2 col-form-label">Name</label>
-	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="name" name="category[name]">
-	    </div>
-	  </div>
 
-	  <div class="row mb-3">
-	    <label for="created" class="col-sm-2 col-form-label">Status</label>
-	    <div class="form-check">
-		  <input class="col-sm-2 col-form-label" type="radio" name="category[status]" id="flexRadioDefault1" value="1">
-		  <label class="form-check-label" for="flexRadioDefault1">
-		    Active
-		  </label>
+		<div>
+			<lable>Category_Dropdown: </lable>
+				<select name="category[parentId]">
+					<option value="NULL">Main category </option>
+					<?php
+						$result = $controllerCategory->getDataByPath();
+						foreach($result as $key => $value):
+					?>		
+					<option value=<?php echo $key; ?> >
+					<?php
+							echo($value);
+					?>
+					</option>
+					<?php endforeach; ?>					
+					
+	      		</select>
 		</div>
-		<div class="form-check">
-		  <input class="col-sm-2 col-form-label" type="radio" name="category[status]" id="flexRadioDefault2"  value="2" checked>
-		  <label class="form-check-label" for="flexRadioDefault2">
-		    InActive
-		  </label>
-		</div>
-	  </div>
+			<label>Name : </label>
+			<input class="col-sm-2 col-form-label" type="text" name="category[name]">
+	  	<div>
+		    
 
-	  <button type="submit" class="btn btn-primary">Add</button>
-	  <a href="index.php?c=category&a=grid"><button type="button" class="btn btn-primary">Cancel</button></a> 
+		</div>
+
+	  	<div class="row mb-3">
+	    	<label for="created" class="col-sm-2 col-form-label">Status</label>
+	    	<div class="form-check">
+		  		<input class="col-sm-2 col-form-label" type="radio" name="category[status]" id="flexRadioDefault1" value="1">
+		  		<label class="form-check-label" for="flexRadioDefault1"> Active </label>
+			</div>
+			<div class="form-check">
+		  		<input class="col-sm-2 col-form-label" type="radio" name="category[status]" id="flexRadioDefault2"  value="2" checked>
+		  		<label class="form-check-label" for="flexRadioDefault2"> InActive </label>
+			</div>
+	  	</div>
+
+	  	<button type="submit" class="btn btn-primary">Add</button>
+	  	<a href="index.php?c=category&a=grid"><button type="button" class="btn btn-primary">Cancel</button></a> 
 	</form>
 	</div>
 </body>
