@@ -41,7 +41,7 @@
 	</nav>
 
 	<div class="container">
-	<form  method="POST" action="index.php?c=product&a=save">
+	<form  method="POST" action="<?php echo $this->getUrl('product','save',[],true); ?>">
 	  <div class="row mb-4">
 	    <label for="name" class="col-sm-2 col-form-label">Name</label>
 	    <div class="col-md-10">
@@ -80,7 +80,7 @@
 	  </div>
 
 	  <button type="submit" class="btn btn-primary">Add</button>
-	  <a href="index.php?c=product&a=grid"><button type="button" class="btn btn-primary">Cancel</button></a>
+	  <a href="<?php echo $this->getUrl('product','grid',[],true); ?>"><button type="button" class="btn btn-primary">Cancel</button></a>
 	</form>
 	</div>
 </body>

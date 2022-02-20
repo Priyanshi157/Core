@@ -1,7 +1,7 @@
 <?php
 
-$customerData = $this->getData('customer');
-$customerAddress = $this->getData('address');
+$customer = $this->getCustomer();
+$customerAddress = $this->getAddress();
 
 ?>
 <!DOCTYPE html>
@@ -46,11 +46,11 @@ $customerAddress = $this->getData('address');
 	</nav>
 
 	<div class="container">
-	<form method="POST" action="index.php?c=customer&a=save&id=<?php echo $customerData['customerId']; ?>">
+	<form method="POST" action="<?php echo $this->getUrl('customer','save',['id'=>$customer['customerId']],true); ?>">
 
 	  <div class="row mb-4">
 	    <div class="col-md-10">
-	      <input type="hidden" class="form-control" id="customerid" name="customer[customerId]" value="<?php echo $customerData['customerId'];?>">
+	      <input type="hidden" class="form-control" id="customerid" name="customer[customerId]" value="<?php echo $customer['customerId'];?>">
 	    </div>
 	  </div>
 
@@ -58,28 +58,28 @@ $customerAddress = $this->getData('address');
 	  <div class="row mb-4">
 	    <label for="name" class="col-sm-2 col-form-label">First Name</label>
 	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="firstName" name="customer[firstName]" value="<?php echo $customerData['firstName']; ?>">
+	      <input type="text" class="form-control" id="firstName" name="customer[firstName]" value="<?php echo $customer['firstName']; ?>">
 	    </div>
 	  </div>
 
 	  <div class="row mb-4">
 	    <label for="name" class="col-sm-2 col-form-label">Last Name</label>
 	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="lastName" name="customer[lastName]" value="<?php echo $customerData['lastName']; ?>">
+	      <input type="text" class="form-control" id="lastName" name="customer[lastName]" value="<?php echo $customer['lastName']; ?>">
 	    </div>
 	  </div>
 
 	  <div class="row mb-4">
 	    <label for="price" class="col-sm-2 col-form-label">email</label>
 	    <div class="col-md-10">
-	      <input type="email" class="form-control" id="email" name="customer[email]" value="<?php echo $customerData['email']?>">
+	      <input type="email" class="form-control" id="email" name="customer[email]" value="<?php echo $customer['email']?>">
 	    </div>
 	  </div>
 
 	  <div class="row mb-3">
 	    <label for="qty" class="col-sm-2 col-form-label">mobile</label>
 	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="mobile" name="customer[mobile]" value="<?php echo $customerData['mobile'] ?>">
+	      <input type="text" class="form-control" id="mobile" name="customer[mobile]" value="<?php echo $customer['mobile'] ?>">
 	    </div>
 	  </div>
 
@@ -87,7 +87,7 @@ $customerAddress = $this->getData('address');
 	    <label for="created" class="col-sm-2 col-form-label">Status</label>
 	    <div class="row col-sm-10">
 		    <div class="form-check col-sm-6">
-		    	<?php if($customerData['status'] == 1){ ?>
+		    	<?php if($customer['status'] == 1){ ?>
 			  	<input class="form-check-input col-sm-4" type="radio" name="customer[status]" id="flexRadioDefault1" value="1" checked>
 			  	<?php }else{ ?>
 			  	<input class="form-check-input col-sm-4" type="radio" name="customer[status]" id="flexRadioDefault1" value="1">
@@ -97,7 +97,7 @@ $customerAddress = $this->getData('address');
 			  </label>		
 			</div>
 			<div class="form-check col-sm-6">
-				<?php if($customerData['status'] == 2){ ?>
+				<?php if($customer['status'] == 2){ ?>
 			 <input class="form-check-input col-sm-4" type="radio" name="customer[status]" id="flexRadioDefault2"  value="2" checked>
 			  	<?php }else{ ?>
 			  <input class="form-check-input col-sm-4" type="radio" name="customer[status]" id="flexRadioDefault2"  value="2" >
@@ -153,7 +153,7 @@ $customerAddress = $this->getData('address');
 
 	  	<div class="row justify-content-center">
 	  		<button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
-	  		<a href="index.php?c=customer&a=grid" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+	  		<a href="<?php echo $this->getUrl('customer','grid',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
 		</div>
 	</form>
 	</div>

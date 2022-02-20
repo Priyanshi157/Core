@@ -5,56 +5,68 @@ class Controller_Product extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		$adapter = new Model_Core_Adapter();
-		$products = $adapter->fetchAll("SELECT * FROM product");
-		$view = $this->getView();
-		$view->setTemplate('view/product/grid.php');
-		$view->addData('products',$products);
-		$view->toHtml();
+		Ccc::getBlock('Product_Grid')->toHtml();
 	}
 
 	public function addAction()
 	{
-		$view = $this->getView();
-		$view->setTemplate('view/product/add.php');
-		$view->toHtml();
+		Ccc::getBlock('Product_Add')->toHtml();
 	}
 
 	public function editAction()
 	{
-		global $c;
-		$request = $c->getFront()->getRequest();
-		$adapter = new Model_Core_Adapter();
-		$pid = $request->getRequest('id');
-		$product = $adapter->fetchRow("SELECT * FROM product WHERE productId = $pid");
-		$view = $this->getView();
-		$view->setTemplate('view/product/edit.php');
-		$view->addData('product',$product);
-		$view->toHtml();
+		try 
+		{
+			$productModel = Ccc::getModel('Product');
+			$request = $this->getRequest();
+			$pid = (int)$request->getRequest('id');
+			if(!$pid)
+			{
+				throw new Exception("Invalid Request", 1);
+			}
+			$product = $productModel->fetchRow("SELECT * FROM product WHERE productId = {$pid}");
+			if(!$product)
+			{
+				throw new Exception("System is unable to find record.", 1);
+				
+			}
+			Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();	
+		} 
+		catch (Exception $e) 
+		{
+			throw new Exception("System is unable to find record.", 1);
+		}
 	}
 
 	public function deleteAction()
 	{
 		try 
 		{
-			global $c;
-			$request = $c->getFront()->getRequest();
+			$productModel = Ccc::getModel('Product');
+			$request = $this->getRequest();
 			if(!$request->getRequest('id'))
 			{
 				throw new Exception("Invalid Request.", 1);
 			}
-			global $adapter;
-			$productid = $_GET["id"];
-		    $result = $adapter->delete("DELETE FROM product WHERE productId='$productid'");
-		    if($result)
-		    {
-		        throw new Exception("System is unable to delete record.", 1);
-		    }
-		    $this->redirect('index.php?c=product&a=grid');
+
+			$productId = $request->getRequest('id');
+			if(!$productId)
+			{
+				throw new Exception("Unable to fetch ID.", 1);
+				
+			}
+			
+			$result = $productModel->delete($productId);
+			if(!$result)
+			{
+				throw new Exception("Unable to Delet Record.", 1);
+				
+			}
+		    $this->redirect($this->getView()->getUrl('product','grid',[],true));
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('index.php?c=product&a=grid');
+			$this->redirect($this->getView()->getUrl('product','grid',[],true));
 		}		
 	}
 
@@ -62,68 +74,47 @@ class Controller_Product extends Controller_Core_Action
 	{
 		try 
 		{
-			global $c;
-			$post = $c->getFront()->getRequest();
-			$post->getPost();
-			if(!$post->getPost('product'))
+			$productModel = Ccc::getModel('Product');
+			$request = $this->getRequest();
+			if(!$request->getPost('product'))
 			{
 				throw new Exception("Invalid Request", 1);
 			}	
-			global $adapter;
-			$row = $post->getPost('product');
-			$name = $row["name"];
-			$price = $row["price"];
-			$quantity = $row["quantity"];
-			$status = $row["status"];
-			$createdAt = date('Y-m-d H:i:s');
-			$updatedAt = date('Y-m-d H:i:s');
-
-			if (array_key_exists('productId',$row))
+			$postData = $request->getPost('product');
+			if(!$postData)
 			{
-				if(!(int)$row['productId'])
+				throw new Exception("Invalid data posted.", 1);	
+			}
+
+			if (array_key_exists('productId',$postData))
+			{
+				if(!(int)$postData['productId'])
 				{
 					throw new Exception("Invalid Request.", 1);
 				}
-				$productid = $row["productId"];
-				$update = $adapter->update("UPDATE product 
-											SET name = '$name' , 
-												price = '$price' , 
-												quantity = '$quantity' , 
-												status = '$status' , 
-												updatedAt = '$updatedAt' 
-											WHERE productId=$productid");
-
+				$productId = $postData["productId"];
+				$postData['updatedAt']  = date('Y-m-d H:m:s');
+				$update = $productModel->update($postData,$productId);
 				if(!$update)
 				{
-					throw new Exception("System is unable to update.");
+					throw new Exception("System is unable to Update.", 1);
 				}
 			}
 			else
 			{
-				$insert = $adapter->insert("INSERT INTO `product` (`name`,`price`,`quantity`,`status`,`createdAt`,`updatedAt`) 
-											VALUES ('$name','$price','$quantity','$status','$createdAt','$updatedAt')");
+				$postData['createdAt'] = date('Y-m-d H:m:s');
+				$insert = $productModel->insert($postData);
 				if(!$insert)
 				{
-					throw new Exception("System is unable to insert record.", 1);
+					throw new Exception("System is unable to Insert.", 1);
 				}
 			}
-			$this->redirect('index.php?c=product&a=grid');
+			$this->redirect($this->getView()->getUrl('product','grid',[],true));
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('index.php?c=product&a=grid');	
+			$this->redirect($this->getView()->getUrl('product','grid',[],true));
 		}
-	}
-
-
-	public function redirect($url)
-	{
-		header("location:$url");
-	}
-
-	public function errorAction()
-	{
-		echo "error";
 	}
 }
 

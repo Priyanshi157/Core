@@ -1,5 +1,3 @@
-<?php $controllerCategory = new Controller_Category();
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +15,7 @@
 				<select name="category[parentId]">
 					<option value="NULL">Main category </option>
 					<?php
-						$result = $controllerCategory->getDataByPath();
+						$result = $this->getDataByPath();
 						foreach($result as $key => $value):
 					?>		
 					<option value=<?php echo $key; ?> >

@@ -45,7 +45,7 @@ $productData = $product['product'];
 	</nav>
 
 	<div class="container">
-	<form method="POST" action="index.php?c=product&a=save&id">
+	<form method="POST" action="<?php echo $this->getUrl('product','save',[],true); ?>">
 
 	  <div class="row mb-4">
 	    <div class="col-md-10">
@@ -103,7 +103,7 @@ $productData = $product['product'];
 
 	  <div class="row justify-content-center">
 	  <button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
-	  <a href="index.php?c=product&a=grid" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+	  <a href="<?php echo $this->getUrl('product','grid',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
 		</div>
 	</form>
 	</div>

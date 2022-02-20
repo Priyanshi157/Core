@@ -117,6 +117,15 @@ class Model_Core_Adapter{
         $key = $result['0']['0'];
         return $key;
     }
+    
+    public function fetchAssos($query)
+    {
+        $result = $this->query($query);
+        if($result->num_rows){
+            return $result->fetch_assoc();
+        }
+        return false;
+    }
 }
 
 $adapter = new Model_Core_Adapter();
