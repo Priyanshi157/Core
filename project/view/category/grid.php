@@ -1,7 +1,5 @@
 <?php 
-$controllerCategory = new Controller_Category();
-$categories = $this->getData('categories');
-
+$categories = $this->getCategories();
 ?>
 
 <html>
@@ -52,6 +50,7 @@ $categories = $this->getData('categories');
 		    <tr>
 		      <th scope="col">Category Id</th>
 		      <th scope="col">Name</th>
+		      <th scope="col">Path</th>
 		      <th scope="col">Status</th>
 		      <th scope="col">CreatedAt</th>
 		      <th scope="col">UpdatedAt</th>
@@ -60,14 +59,15 @@ $categories = $this->getData('categories');
 		    </tr>
 		  </thead>
 		  <tbody>
-		  	<?php if(!$data['categories']): ?>
+		  	<?php if(!$categories): ?>
 		  		<tr><td colspan="10">No Record available.</td></tr>
 		  	<?php else: ?>
 		  		<?php foreach ($categories as $category): ?>
 			  		<tr>
 					    <td><?php echo $category['categoryId']; ?></td>
-					    <td><?php $result = $controllerCategory->getDataByPath();
+					    <td><?php $result = $this->getDataByPath();
 		    				echo $result[$category['categoryId']]; ?></td>
+		    			<td><?php echo $category['categoryPath']; ?></td>
 					    <td><?php echo $category['status']; ?></td>
 					    <td><?php echo $category['createdAt']; ?></td>
 					    <td><?php echo $category['updatedAt']; ?></td>

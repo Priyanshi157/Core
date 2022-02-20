@@ -1,5 +1,5 @@
 <?php
-$products = $this->getData();
+$products = $this->getProducts();
 ?>
 <html>
 <head>
@@ -42,7 +42,7 @@ $products = $this->getData();
 	</nav>
 
 	<div class="fluid-container m-2">
-		<a href="index.php?c=product&a=add"><button type="button" class="btn btn-primary">Add</button></a>
+		<a href="<?php echo $this->getUrl('product','add',[],true); ?>"><button type="button" class="btn btn-primary">Add</button></a>
 		<table class="table border my-4">
 		  <thead>
 		    <tr>
@@ -58,10 +58,10 @@ $products = $this->getData();
 		    </tr>
 		  </thead>
 		  <tbody>
-		  	<?php if(!$data['products']): ?>
+		  	<?php if(!$products): ?>
 		  		<tr><td colspan="10">No Record available.</td></tr>
 		  	<?php else: ?>
-		  		<?php foreach ($data['products'] as $product): ?>
+		  		<?php foreach ($products as $product): ?>
 			  		<tr>
 					    <td><?php echo $product['productId'] ?></td>
 					    <td><?php echo $product['name'] ?></td>
@@ -70,8 +70,8 @@ $products = $this->getData();
 					    <td><?php echo $product['status'] ?></td>
 					    <td><?php echo $product['createdAt'] ?></td>
 					    <td><?php echo $product['updatedAt'] ?></td>
-					    <td><a href="index.php?c=product&a=edit&id=<?php echo $product['productId'] ?>">Edit</a></td>
-						<td><a href="index.php?c=product&a=delete&id=<?php echo $product['productId'] ?>">Delete</a></td>
+					    <td><a href="<?php echo $this->getUrl('product','edit',['id'=>$product['productId']],true); ?>">Edit</a></td>
+						<td><a href="<?php echo $this->getUrl('product','delete',['id'=>$product['productId']],true); ?>">Delete</a></td>
 					</tr>
 				<?php endforeach; ?>
 			<?php endif; ?>

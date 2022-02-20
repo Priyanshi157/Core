@@ -1,6 +1,6 @@
 <?php
-$customer = $this->getData('customers');
-$selectAddress = $this->getData('address');
+$customers = $this->getCustomers();
+$addresses = $this->getAddresses();
 //echo "<pre>";
 //print_r($selectAddress);
 //exit;
@@ -64,22 +64,26 @@ $selectAddress = $this->getData('address');
 		    </tr>
 		  </thead>
 		  <tbody>
-		  	<?php if(!$customer): ?>
+		  	<?php if(!$customers): ?>
 		  		<tr><td colspan="10">No Record available.</td></tr>
 		  	<?php else: ?>
-		  		<?php foreach ($customer as $key => $value): ?>
+		  		<?php foreach ($customers as $customer): ?>
 			  		<tr>
-					    <td><?php echo $customer[$key]['customerId'] ?></td>
-					    <td><?php echo $customer[$key]['firstName'] ?></td>
-					    <td><?php echo $customer[$key]['lastName'] ?></td>
-					    <td><?php echo $customer[$key]['email'] ?></td>
-					    <td><?php echo $customer[$key]['mobile'] ?></td>
-					    <td><?php echo $customer[$key]['status'] ?></td>
-					    <td><?php echo $customer[$key]['createdAt'] ?></td>
-					    <td><?php echo $customer[$key]['updatedAt'] ?></td>
-					    <td><?php echo $selectAddress[$key]['address'] ?></td>
-						<td><a href="index.php?c=customer&a=edit&id=<?php echo $customer[$key]['customerId'] ?>">Edit</a></td>
-						<td><a href="index.php?c=customer&a=delete&id=<?php echo $customer[$key]['customerId'] ?>">Delete</a></td>
+					    <td><?php echo $customer['customerId'] ?></td>
+					    <td><?php echo $customer['firstName'] ?></td>
+					    <td><?php echo $customer['lastName'] ?></td>
+					    <td><?php echo $customer['email'] ?></td>
+					    <td><?php echo $customer['mobile'] ?></td>
+					    <td><?php echo $customer['status'] ?></td>
+					    <td><?php echo $customer['createdAt'] ?></td>
+					    <td><?php echo $customer['updatedAt'] ?></td>
+					    <?php foreach ($addresses as $address): ?>
+					    	<?php if($address['customerId'] == $customer['customerId']): ?>
+					    		<td><?php echo $address['address'] ?></td>
+					    	<?php endif; ?>
+					    <?php endforeach; ?>
+						<td><a href="<?php echo $this->getUrl('customer','edit',['id'=>$customer['customerId']],true); ?>">Edit</a></td>
+						<td><a href="<?php echo $this->getUrl('customer','delete',['id'=>$customer['customerId']],true); ?>">Delete</a></td>
 					</tr>
 				<?php endforeach; ?>
 			<?php endif; ?>

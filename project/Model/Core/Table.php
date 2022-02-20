@@ -74,11 +74,10 @@ class Model_Core_Table
 		}
 	}
 
-	public function fetchAll()
+	public function fetchAll($query)
 	{
-		$fetchQuery="SELECT * FROM $this->tableName";
 		global $adapter;
-		$fetchAll=$adapter->fetchAll($fetchQuery);
+		$fetchAll=$adapter->fetchAll($query);
 		if(!$fetchAll)
 		{
 			throw new Exception("Error Processing Request", 1);	
@@ -86,11 +85,10 @@ class Model_Core_Table
 		return $fetchAll;
 	}
 
-	public function fetchRow($primaryKey=null)
+	public function fetchRow($query)
 	{
-		$fetchQuery="SELECT * FROM $this->tableName WHERE $this->primaryKey=$primaryKey";
 		global $adapter;
-		$fetchRow=$adapter->fetchRow($fetchQuery);
+		$fetchRow=$adapter->fetchRow($query);
 		if(!$fetchRow)
 		{
 			throw new Exception("Error Processing Request", 1);			

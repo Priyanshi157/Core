@@ -40,7 +40,7 @@
 	</nav>
 
 	<div class="container">
-		<form  method="POST" action="index.php?c=customer&a=save"> 
+		<form  method="POST" action="<?php echo $this->getUrl('customer','save',[],true); ?>"> 
 		  	<div class="row mb-4">
 		    	<label for="name" class="col-sm-2 col-form-label">First Name</label>
 		    	<div class="col-md-10">
@@ -125,7 +125,7 @@
 		  	</div>
 
 		  	<button type="submit" class="btn btn-primary">Add</button>
-		  	<a href="index.php?c=customer&a=grid"><button type="button" class="btn btn-primary">Cancel</button></a>
+		  	<a href="<?php echo $this->getUrl('customer','grid',[],true); ?>"><button type="button" class="btn btn-primary">Cancel</button></a>
 		</form>
 	</div>
 </body>

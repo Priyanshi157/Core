@@ -1,6 +1,6 @@
 <?php Ccc::loadClass('Block_Core_Template'); ?>
 <?php
-class Block_Admin_Grid extends Block_Core_Template   
+class Block_Admin_Grid extends Block_Core_Template
 { 
 	public function __construct()
 	{
@@ -10,7 +10,7 @@ class Block_Admin_Grid extends Block_Core_Template
    public function getAdmins()
    {
    		$adminModel = Ccc::getModel('Admin');
-		$admins = $adminModel->fetchAll();
+		$admins = $adminModel->fetchAll("SELECT * FROM admin");
 		return $admins;
    }
 }

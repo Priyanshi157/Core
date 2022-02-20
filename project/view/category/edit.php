@@ -1,12 +1,10 @@
 <?php
 
-$controllerCategory = new Controller_Category();
-$categoryData = $this->getData('category');   
-print_r($categoryData);
-$categoryPath = $this->getData('categoryPath');
-print_r($categoryPath);
-$result = $controllerCategory->getDataByPath();
-print_r($result);
+$categoryData = $this->getCategory();   
+
+$categoryPath = $this->getCategoryPath();
+
+$result = $this->getDataByPath();
 
 ?>
 <!DOCTYPE html>
@@ -19,7 +17,7 @@ print_r($result);
 </head>
 <body>
 	<div class="container">
-	<form method="POST" action="index.php?c=category&a=save&id=<?php echo $categoryData['categoryId'] ?>">
+	<form method="POST" action="<?php echo $this->getUrl('category','save',['id'=>$category['categoryId']],true); ?>">
 	  	<div class="row mb-4">
 	    	<div class="col-md-10">
 	      		<input type="hidden" class="form-control" id="categoryid" name="category[categoryId]" value="<?php echo $categoryData['categoryId'];?>">
@@ -28,7 +26,7 @@ print_r($result);
 
 	  	<div>
 			<lable>Category_Dropdown: </lable>
-			<select name="category[parentId]" id="parentId">
+			<select name="category[root]" id="parentId">
 				<option value="NULL">Main category </option>
 				<?php foreach($categoryPath as $key=>$value): ?>
 					<option value=<?php echo $key; ?>>
@@ -46,6 +44,9 @@ print_r($result);
 	    	</div>
 	  	</div>
 
+	  	<input type="text" class="form-control" id="" name="category[parentId]" value="<?php echo $categoryData['parentId']; ?>" hidden>
+
+	  	
 	  	<div class="row mb-3">
 	    	<label for="created" class="col-sm-2 col-form-label">Status</label>
 	    	<div class="row col-sm-10">
@@ -69,7 +70,7 @@ print_r($result);
 
 	  		<div class="row justify-content-center">
 	  		<button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
-	  		<a href="index.php?c=category&a=grid" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+	  		<a href="<?php echo $this->getUrl('category','grid',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
 		</div>
 	</form>
 	</div>

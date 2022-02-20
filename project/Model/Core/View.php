@@ -18,7 +18,6 @@ class Model_Core_View
 
 	public function toHtml()
 	{
-		$data = $this->data;
 		require($this->getTemplate());
 	}
 
@@ -37,7 +36,7 @@ class Model_Core_View
 
 	public function setData(array $data)
 	{
-		$this->data->$data;
+		$this->data = $data;
 		return $this;
 	}
 
@@ -64,8 +63,23 @@ class Model_Core_View
 			$info = Ccc::getFront()->getRequest()->getRequest();
 		}
 
-		$info['c']= $c==null ?Ccc::getFront()->getRequest()->getRequest('c') : $info['c']=$c ; 
-		$info['a']= $a==null ?Ccc::getFront()->getRequest()->getRequest('a') : $info['a']=$a ; 
+		if($c == null)
+		{
+			$c = Ccc::getFront()->getRequest()->getRequest('c');
+		}
+		else
+		{
+			$info['c']=$c;
+		}
+		if($a == null)
+		{
+			$a = Ccc::getFront()->getRequest()->getRequest('a');
+		}
+		else
+		{
+			$info['a']=$a;
+		}
+		
 		if($reset)
 		{
 			if($data) 
@@ -73,7 +87,6 @@ class Model_Core_View
 				$info = array_merge($info,$data);
 			}
 		}
-		
 		else
 		{
 			$info = array_merge(Ccc::getFront()->getRequest()->getRequest(),$info);
@@ -83,7 +96,6 @@ class Model_Core_View
 			}	
 		}
 		$url = "index.php?".http_build_query($info);
-		//$this->redirect($url);
 		return $url;
 	}
 }
