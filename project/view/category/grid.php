@@ -10,52 +10,22 @@ $categories = $this->getCategories();
 	<title>Category CRUD</title>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-white">
-	    <div class="container-fluid">
-	      	<button
-		        class="navbar-toggler"
-		        type="button"
-		        data-mdb-toggle="collapse"
-		        data-mdb-target="#navbarExample01"
-		        aria-controls="navbarExample01"
-		        aria-expanded="false"
-		        aria-label="Toggle navigation"
-		    >
-	        <i class="fas fa-bars"></i>
-	      	</button>
-	      	<div class="collapse navbar-collapse" id="navbarExample01">
-	        	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-	          		<li class="nav-item active">
-	            		<a class="nav-link" aria-current="page" href="#">Admin</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=category&a=grid">Category</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=product&a=grid">Product</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=customer&a=grid">Customer</a>
-	          		</li>
-	        	</ul>
-	      	</div>
-	    </div>
-	</nav>
-
-
     <div class="fluid-container m-2">
-		<a href="index.php?c=category&a=add"><button type="button" class="btn btn-primary">Add</button></a>
+		<a href="<?php echo $this->getUrl('add','category') ?>"><button type="button" class="btn btn-primary">Add</button></a>
 		<table class="table border my-4">
 		  <thead>
 		    <tr>
 		      <th scope="col">Category Id</th>
 		      <th scope="col">Name</th>
-		      <th scope="col">Path</th>
+		      <th scope="col">Base Image</th>
+		      <th scope="col">Thumb Image</th>
+		      <th scope="col">Small Image</th>
 		      <th scope="col">Status</th>
 		      <th scope="col">CreatedAt</th>
 		      <th scope="col">UpdatedAt</th>
 		      <th scope="col">Edit</th>
 		      <th scope="col">Delete</th>
+		      <th scope="col">Gallery</th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -64,21 +34,36 @@ $categories = $this->getCategories();
 		  	<?php else: ?>
 		  		<?php foreach ($categories as $category): ?>
 			  		<tr>
-					    <td><?php echo $category['categoryId']; ?></td>
-					    <td><?php $result = $this->getDataByPath();
-		    				echo $result[$category['categoryId']]; ?></td>
-		    			<td><?php echo $category['categoryPath']; ?></td>
-					    <td><?php echo $category['status']; ?></td>
-					    <td><?php echo $category['createdAt']; ?></td>
-					    <td><?php echo $category['updatedAt']; ?></td>
-					    <td><a href="index.php?c=category&a=edit&id=<?php echo $category['categoryId'] ?>">Edit</a></td>
-						<td><a href="index.php?c=category&a=delete&id=<?php echo $category['categoryId'] ?>">Delete</a></td>
+					    <td><?php  echo $category->categoryId; ?></td>
+		                <td><?php echo $this->getPath($category->categoryId,$category->path); ?></td>
+		                <?php if($category->base ): ?>
+		                <td><img src="<?php echo 'Media/Category/'.$this->getMedia($category->base)['name']; ?>" alt="No Image found" width=50 height=50></td>
+		                <?php else: ?>
+		                <td>No base image</td>
+		                <?php endif; ?>
+
+		                <?php if($category->thumb ): ?>
+		                <td><img src="<?php echo 'Media/Category/'.$this->getMedia($category->thumb)['name']; ?>" alt="No Image found" width=50 height=50></td>
+		                <?php else: ?>
+		                <td>No thumb image</td>
+		                <?php endif; ?>
+
+		                <?php if($category->small ): ?>
+		                <td><img src="<?php echo 'Media/Category/'.$this->getMedia($category->small)['name']; ?>" alt="No Image found" width=50 height=50></td>
+		                <?php else: ?>
+		                <td>No small image</td>
+		                <?php endif; ?>
+		                <td><?php echo $category->getStatus($category->status); ?></td>
+		                <td><?php echo $category->createdAt; ?></td>
+		                <td><?php echo $category->updatedAt; ?></td>
+		                <td><a href='<?php echo $this->getUrl('edit','category',['id'=>$category->categoryId],true) ?>'>Edit</a></td>
+		                <td><a href='<?php echo $this->getUrl('delete','category',['id'=>$category->categoryId],true) ?>'>Delete</a></td>
+		                <td><a href="<?php echo $this->getUrl('grid','category_media',['id'=>$category->categoryId],true) ?>">Gallery</a></td>
 					</tr>
 				<?php endforeach; ?>
 			<?php endif; ?>
 		  </tbody>
 		</table>
 	</div>
-
-	</body>
+</body>
 </html>

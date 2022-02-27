@@ -1,10 +1,7 @@
 <?php
 
-$categoryData = $this->getCategory();   
-
-$categoryPath = $this->getCategoryPath();
-
-$result = $this->getDataByPath();
+$categoryData =  $this->getCategory();  
+$categories = $this->getCategories();
 
 ?>
 <!DOCTYPE html>
@@ -17,41 +14,36 @@ $result = $this->getDataByPath();
 </head>
 <body>
 	<div class="container">
-	<form method="POST" action="<?php echo $this->getUrl('category','save',['id'=>$category['categoryId']],true); ?>">
-	  	<div class="row mb-4">
-	    	<div class="col-md-10">
-	      		<input type="hidden" class="form-control" id="categoryid" name="category[categoryId]" value="<?php echo $categoryData['categoryId'];?>">
-	    	</div>
-	  	</div>
-
+	<form method="POST" action="<?php echo $this->getUrl('save','category',['id'=>$categoryData->categoryId],true); ?>">
 	  	<div>
 			<lable>Category_Dropdown: </lable>
-			<select name="category[root]" id="parentId">
-				<option value="NULL">Main category </option>
-				<?php foreach($categoryPath as $key=>$value): ?>
-					<option value=<?php echo $key; ?>>
-					<?php echo($result[$key]); ?>
-					</option>
-				<?php endforeach; ?>
-	      	</select>
-	      	
+			<select name="category[parentId]" id="parentId">
+                <option value="<?php echo null; ?>" <?php echo ($categoryData->parentId == NULL) ? 'selected' : ''; ?>>Root Category
+                </option>
+               	<?php foreach($categories as $category): ?>
+                   	<?php if($categoryData->categoryId != $category->categoryId):  ?>
+                        <option value="<?php echo $category->categoryId; ?>" <?php echo ($categoryData->parentId == $category->categoryId) ? 'selected' : ''; ?>><?php echo $this->getPath($category->categoryId,$category->path); ?>
+                        </option>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </select>
 	  	</div>
 
 	  	<div class="row mb-4">
 	    	<label for="name" class="col-sm-2 col-form-label">Name</label>
 	    	<div class="col-md-10">
-	      		<input type="text" class="form-control" id="name" name="category[name]" value="<?php echo $categoryData['name']; ?>">
+	      		<input type="text" class="form-control" id="name" name="category[name]" value="<?php echo $categoryData->name; ?>">
 	    	</div>
 	  	</div>
 
-	  	<input type="text" class="form-control" id="" name="category[parentId]" value="<?php echo $categoryData['parentId']; ?>" hidden>
+	  	
 
 	  	
 	  	<div class="row mb-3">
 	    	<label for="created" class="col-sm-2 col-form-label">Status</label>
 	    	<div class="row col-sm-10">
 		    	<div class="form-check col-sm-6">
-		    		<?php if($categoryData['status'] == 1){ ?>
+		    		<?php if($categoryData->status == 1){ ?>
 			  		<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault1" value="1" checked>
 			  		<?php }else{ ?>
 			  		<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault1" value="1">
@@ -59,7 +51,7 @@ $result = $this->getDataByPath();
 			  		<label class="form-check-label col-sm-2" for="flexRadioDefault1"> Active </label>		
 				</div>
 				<div class="form-check col-sm-6">
-					<?php if($categoryData['status'] == 2){ ?>
+					<?php if($categoryData->status == 2){ ?>
 			 		<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault2"  value="2" checked>
 			  		<?php }else{ ?>
 			  		<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault2"  value="2" >
@@ -70,7 +62,7 @@ $result = $this->getDataByPath();
 
 	  		<div class="row justify-content-center">
 	  		<button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
-	  		<a href="<?php echo $this->getUrl('category','grid',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+	  		<a href="<?php echo $this->getUrl('grid','category',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
 		</div>
 	</form>
 	</div>

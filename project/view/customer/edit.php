@@ -13,44 +13,12 @@ $customerAddress = $this->getAddress();
 	<title></title>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-white">
-	    <div class="container-fluid">
-	      	<button
-		        class="navbar-toggler"
-		        type="button"
-		        data-mdb-toggle="collapse"
-		        data-mdb-target="#navbarExample01"
-		        aria-controls="navbarExample01"
-		        aria-expanded="false"
-		        aria-label="Toggle navigation"
-		    >
-	        <i class="fas fa-bars"></i>
-	      	</button>
-	      	<div class="collapse navbar-collapse" id="navbarExample01">
-	        	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-	          		<li class="nav-item active">
-	            		<a class="nav-link" aria-current="page" href="#">Admin</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=category&a=grid">Category</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=product&a=grid">Product</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=customer&a=grid">Customer</a>
-	          		</li>
-	        	</ul>
-	      	</div>
-	    </div>
-	</nav>
-
 	<div class="container">
-	<form method="POST" action="<?php echo $this->getUrl('customer','save',['id'=>$customer['customerId']],true); ?>">
+	<form method="POST" action="<?php echo $this->getUrl('save','customer',['id'=>$customer->customerId],true); ?>">
 
 	  <div class="row mb-4">
 	    <div class="col-md-10">
-	      <input type="hidden" class="form-control" id="customerid" name="customer[customerId]" value="<?php echo $customer['customerId'];?>">
+	      <input type="hidden" class="form-control" id="customerid" name="customer[customerId]" value="<?php echo $customer->customerId;?>">
 	    </div>
 	  </div>
 
@@ -58,28 +26,28 @@ $customerAddress = $this->getAddress();
 	  <div class="row mb-4">
 	    <label for="name" class="col-sm-2 col-form-label">First Name</label>
 	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="firstName" name="customer[firstName]" value="<?php echo $customer['firstName']; ?>">
+	      <input type="text" class="form-control" id="firstName" name="customer[firstName]" value="<?php echo $customer->firstName; ?>">
 	    </div>
 	  </div>
 
 	  <div class="row mb-4">
 	    <label for="name" class="col-sm-2 col-form-label">Last Name</label>
 	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="lastName" name="customer[lastName]" value="<?php echo $customer['lastName']; ?>">
+	      <input type="text" class="form-control" id="lastName" name="customer[lastName]" value="<?php echo $customer->lastName; ?>">
 	    </div>
 	  </div>
 
 	  <div class="row mb-4">
 	    <label for="price" class="col-sm-2 col-form-label">email</label>
 	    <div class="col-md-10">
-	      <input type="email" class="form-control" id="email" name="customer[email]" value="<?php echo $customer['email']?>">
+	      <input type="email" class="form-control" id="email" name="customer[email]" value="<?php echo $customer->email?>">
 	    </div>
 	  </div>
 
 	  <div class="row mb-3">
 	    <label for="qty" class="col-sm-2 col-form-label">mobile</label>
 	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="mobile" name="customer[mobile]" value="<?php echo $customer['mobile'] ?>">
+	      <input type="text" class="form-control" id="mobile" name="customer[mobile]" value="<?php echo $customer->mobile ?>">
 	    </div>
 	  </div>
 
@@ -87,73 +55,69 @@ $customerAddress = $this->getAddress();
 	    <label for="created" class="col-sm-2 col-form-label">Status</label>
 	    <div class="row col-sm-10">
 		    <div class="form-check col-sm-6">
-		    	<?php if($customer['status'] == 1){ ?>
-			  	<input class="form-check-input col-sm-4" type="radio" name="customer[status]" id="flexRadioDefault1" value="1" checked>
-			  	<?php }else{ ?>
-			  	<input class="form-check-input col-sm-4" type="radio" name="customer[status]" id="flexRadioDefault1" value="1">
-			  	<?php } ?>
-			  <label class="form-check-label col-sm-2" for="flexRadioDefault1">
-			    Active
-			  </label>		
-			</div>
-			<div class="form-check col-sm-6">
-				<?php if($customer['status'] == 2){ ?>
-			 <input class="form-check-input col-sm-4" type="radio" name="customer[status]" id="flexRadioDefault2"  value="2" checked>
-			  	<?php }else{ ?>
-			  <input class="form-check-input col-sm-4" type="radio" name="customer[status]" id="flexRadioDefault2"  value="2" >
-			  	<?php } ?>
-			 
-			  <label class="form-check-label col-sm-2" for="flexRadioDefault2">
-			    InActive
-			  </label>
+		    	<select name="customer[status]">
+					<option value="1" <?php echo ($customer->getStatus($customer->status)=='Active')?'selected':'' ?>>Active</option>
+					<option value="2" <?php echo ($customer->getStatus($customer->status)=='Inactive')?'selected':'' ?>>Inactive</option>
+				</select>
 			</div>
 	  	</div>
+
+	  	<div class="row mb-4">
+	    	<div class="col-md-10">
+	      		<input type="hidden" class="form-control" id="customerid" name="address[customerId]" value="<?php echo $customer->customerId;?>">
+	    	</div>
+	  	</div>
+
+	  	<input type="hidden" class="form-control" id="addressId" name="address[addressId]" value="<?php echo $customerAddress->addressId?>">
 
 	  	<div class="row mb-3">
 		    <label for="qty" class="col-sm-2 col-form-label">Address</label>
 		    <div class="col-md-10">
-		    	<input type="text" class="form-control" id="address" name="address[address]" value="<?php echo $customerAddress['address']?>">
+		    	<input type="text" class="form-control" id="address" name="address[address]" value="<?php echo $customerAddress->address?>">
 	    	</div>
 	  	</div>
 
 		<div class="row mb-3">
 	    	<label for="qty" class="col-sm-2 col-form-label">Postal Code</label>
 	    	<div class="col-md-10">
-	    		<input type="text" class="form-control" id="postalCode" name="address[postalCode]" value="<?php echo $customerAddress['postalCode']?>">
+	    		<input type="text" class="form-control" id="postalCode" name="address[postalCode]" value="<?php echo $customerAddress->postalCode?>">
 	    	</div>
 	  	</div>
 
 	  	<div class="row mb-3">
 	    	<label for="qty" class="col-sm-2 col-form-label">City</label>
 	    	<div class="col-md-10">
-	      		<input type="text" class="form-control" id="city" name="address[city]" value="<?php echo $customerAddress['city']?>">
+	      		<input type="text" class="form-control" id="city" name="address[city]" value="<?php echo $customerAddress->city?>">
 	    	</div>
 	  	</div>
 
 	  	<div class="row mb-3">
 	    	<label for="qty" class="col-sm-2 col-form-label">State</label>
 	    	<div class="col-md-10">
-	      		<input type="text" class="form-control" id="state" name="address[state]" value="<?php echo $customerAddress['state']?>">
+	      		<input type="text" class="form-control" id="state" name="address[state]" value="<?php echo $customerAddress->state?>">
 	    	</div>
 	  	</div>
 
 	  	<div class="row mb-3">
 	    	<label for="qty" class="col-sm-2 col-form-label">Country</label>
 	    	<div class="col-md-10">
-	      		<input type="text" class="form-control" id="country" name="address[country]" value="<?php echo $customerAddress['country']?>">
+	      		<input type="text" class="form-control" id="country" name="address[country]" value="<?php echo $customerAddress->country?>">
 	    	</div>
 	  	</div>
 
-	  	<div class="row mb-4">
-		    <input type="checkbox" id="billing" name="address[billing]" value="1" <?php if ($customerAddress['billing'] == 1) { echo "checked"; } ?>>
-			<label for="vehicle1">Billing</label><br>
-			<input type="checkbox" id="shiping" name="address[shiping]" value="1" <?php if ($customerAddress['shiping'] == 1) { echo "checked"; } ?>>
-			<label for="vehicle2"> Shipping </label><br>
+		<div class="row mb-4">
+			<input type="checkbox" name="address[billing]" value="1" <?php echo ($customerAddress->getStatus($customerAddress->billing)=='Active')?'checked':'' ?>>
+				
+			<label for="billing"> Billing</label><br>
+
+			<input type="checkbox" name="address[shipping]" value="1" <?php echo ($customerAddress->getStatus($customerAddress->shiping)=='Active')?'checked':'' ?>>
+			
+			<label for="shiping"> Shiping</label><br>
 		</div>
 
 	  	<div class="row justify-content-center">
 	  		<button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
-	  		<a href="<?php echo $this->getUrl('customer','grid',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+	  		<a href="<?php echo $this->getUrl('grid','customer',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
 		</div>
 	</form>
 	</div>

@@ -12,4 +12,3 @@ class Block_Product_Edit extends Block_Core_Template
 		return $this->getData('product');
 	}
 }
-?>

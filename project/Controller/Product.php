@@ -10,7 +10,8 @@ class Controller_Product extends Controller_Core_Action
 
 	public function addAction()
 	{
-		Ccc::getBlock('Product_Add')->toHtml();
+		$productModel = Ccc::getModel('Product');
+		Ccc::getBlock('Product_Edit')->setData(['product'=>$productModel])->toHtml();
 	}
 
 	public function editAction()
@@ -24,50 +25,19 @@ class Controller_Product extends Controller_Core_Action
 			{
 				throw new Exception("Invalid Request", 1);
 			}
-			$product = $productModel->fetchRow("SELECT * FROM product WHERE productId = {$pid}");
-			if(!$product)
+			$product = $productModel;
+			$productData = $product->load($pid);
+			if(!$productData)
 			{
 				throw new Exception("System is unable to find record.", 1);
 				
 			}
-			Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();	
+			Ccc::getBlock('Product_Edit')->setData(['product' => $productData])->toHtml();	
 		} 
 		catch (Exception $e) 
 		{
 			throw new Exception("System is unable to find record.", 1);
 		}
-	}
-
-	public function deleteAction()
-	{
-		try 
-		{
-			$productModel = Ccc::getModel('Product');
-			$request = $this->getRequest();
-			if(!$request->getRequest('id'))
-			{
-				throw new Exception("Invalid Request.", 1);
-			}
-
-			$productId = $request->getRequest('id');
-			if(!$productId)
-			{
-				throw new Exception("Unable to fetch ID.", 1);
-				
-			}
-			
-			$result = $productModel->delete($productId);
-			if(!$result)
-			{
-				throw new Exception("Unable to Delet Record.", 1);
-				
-			}
-		    $this->redirect($this->getView()->getUrl('product','grid',[],true));
-		} 
-		catch (Exception $e) 
-		{
-			$this->redirect($this->getView()->getUrl('product','grid',[],true));
-		}		
 	}
 
 	public function saveAction()
@@ -86,35 +56,78 @@ class Controller_Product extends Controller_Core_Action
 				throw new Exception("Invalid data posted.", 1);	
 			}
 
-			if (array_key_exists('productId',$postData))
+			$product = $productModel;
+			$product->setData($postData);
+			if(!($product->productId))
 			{
-				if(!(int)$postData['productId'])
-				{
-					throw new Exception("Invalid Request.", 1);
-				}
-				$productId = $postData["productId"];
-				$postData['updatedAt']  = date('Y-m-d H:m:s');
-				$update = $productModel->update($postData,$productId);
-				if(!$update)
-				{
-					throw new Exception("System is unable to Update.", 1);
-				}
-			}
-			else
-			{
-				$postData['createdAt'] = date('Y-m-d H:m:s');
-				$insert = $productModel->insert($postData);
+				$product->createdAt = date('y-m-d h:m:s');
+				unset($product->productId);
+				$product->save();
+				$insert = $product->save();
 				if(!$insert)
 				{
 					throw new Exception("System is unable to Insert.", 1);
 				}
 			}
-			$this->redirect($this->getView()->getUrl('product','grid',[],true));
+			else
+			{
+				if(!(int)$product->productId)
+				{
+					throw new Exception("Invalid Request.", 1);
+				}
+				$product->productId = $postData["productId"];
+				$product->updatedAt = date('y-m-d h:m:s');
+				$update = $product->save();
+				if(!$update)
+				{
+					throw new Exception("System is unable to Update.", 1);
+				}
+			}
+			$this->redirect($this->getView()->getUrl('grid','product',[],true));
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('product','grid',[],true));
+			$this->redirect($this->getView()->getUrl('grid','product',[],true));
 		}
+	}
+
+		public function deleteAction()
+	{
+		try 
+		{
+			$productModel = Ccc::getModel('Product');
+			$request = $this->getRequest();
+			if(!$request->getRequest('id'))
+			{
+				throw new Exception("Invalid Request.", 1);
+			}
+
+			$productId = $request->getRequest('id');
+			if(!$productId)
+			{
+				throw new Exception("Unable to fetch ID.", 1);
+				
+			}
+			$product = $productModel;
+			$datas = $product->fetchAll("SELECT name FROM product_media WHERE  productId='$productId'");
+			
+			foreach ($datas as $data) 
+			{
+				unlink($this->getView()->getBaseUrl("Media/Product/"). $data->name);
+			}
+
+			$result = $productModel->load($productId)->delete();
+			if(!$result)
+			{
+				throw new Exception("Unable to Delet Record.", 1);
+				
+			}
+		    $this->redirect($this->getView()->getUrl('grid','product',[],true));
+		} 
+		catch (Exception $e) 
+		{
+			$this->redirect($this->getView()->getUrl('grid','product',[],true));
+		}		
 	}
 }
 

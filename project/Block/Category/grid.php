@@ -7,33 +7,37 @@ class Block_Category_Grid extends Block_Core_Template
 		$this->setTemplate('view/category/grid.php');
 	}
 
-   	public function getCategories()
-   	{
-   		$categoryModel = Ccc::getModel('Category');
-		$categories = $categoryModel->fetchAll("SELECT * FROM category ORDER BY categoryPath ASC");
-		return $categories;
-   	}
-
-   	public function getDataByPath()
+   public function getCategories()
     {
-        $adapter = new Model_Core_Adapter();
-
-        $category = [];
-        $categoryIdName = $adapter->fetchPairs('SELECT categoryId , name FROM category ORDER BY categoryPath ASC');
-        $categoryIdPath = $adapter->fetchPairs('SELECT categoryId , categoryPath FROM category ORDER BY categoryPath ASC');
-        foreach ($categoryIdPath as $categoryId => $path) 
-        {
-            $idArray = explode("/", $path);
-            $temp=[];
-            foreach($idArray as $key => $Id)
+        $categoryModel = Ccc::getModel('Category');
+        $categories = $categoryModel->fetchAll("SELECT * FROM `category` ORDER BY `path`");
+        return $categories;
+    }
+    
+    public function getPath($categoryId,$path)
+    {
+        $finalPath = NULL;
+        $path = explode("/",$path);
+        foreach ($path as $path1)
+         {
+            $categoryModel = Ccc::getModel('Category');
+            $category = $categoryModel->fetchRow("SELECT * FROM `category` WHERE `categoryId` = '$path1' ");
+            if($path1 != $categoryId)
             {
-                if(array_key_exists($Id, $categoryIdName)):
-                    array_push($temp ,$categoryIdName[$Id]);
-                endif;
+                $finalPath .= $category->name ."=>";
             }
-            $pathArray = implode("/", $temp);
-            $category[$categoryId] = $pathArray;   
+            else
+            {
+                $finalPath .= $category->name;
+            }
         }
-        return($category);
+        return $finalPath;
+    }
+
+    public function getMedia($mediaId)
+    {
+        $mediaModel = Ccc::getModel('category');
+        $media = $mediaModel->fetchAll("SELECT * FROM `category_media` WHERE `mediaId` = '$mediaId'");
+        return $media[0]->getData();
     }
 }

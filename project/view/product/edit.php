@@ -12,44 +12,12 @@ $productData = $product['product'];
 	<title></title>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-white">
-	    <div class="container-fluid">
-	      	<button
-		        class="navbar-toggler"
-		        type="button"
-		        data-mdb-toggle="collapse"
-		        data-mdb-target="#navbarExample01"
-		        aria-controls="navbarExample01"
-		        aria-expanded="false"
-		        aria-label="Toggle navigation"
-		    >
-	        <i class="fas fa-bars"></i>
-	      	</button>
-	      	<div class="collapse navbar-collapse" id="navbarExample01">
-	        	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-	          		<li class="nav-item active">
-	            		<a class="nav-link" aria-current="page" href="#">Admin</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=category&a=grid">Category</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=product&a=grid">Product</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=customer&a=grid">Customer</a>
-	          		</li>
-	        	</ul>
-	      	</div>
-	    </div>
-	</nav>
-
 	<div class="container">
-	<form method="POST" action="<?php echo $this->getUrl('product','save',[],true); ?>">
+	<form method="POST" action="<?php echo $this->getUrl('save','product',[],true); ?>">
 
 	  <div class="row mb-4">
 	    <div class="col-md-10">
-	      <input type="hidden" class="form-control" id="productid" name="product[productId]" value="<?php echo $productData['productId'];?>">
+	      <input type="hidden" class="form-control" id="productid" name="product[productId]" value="<?php echo $productData->productId;?>">
 	    </div>
 	  </div>
 
@@ -57,21 +25,21 @@ $productData = $product['product'];
 	  <div class="row mb-4">
 	    <label for="name" class="col-sm-2 col-form-label">Name</label>
 	    <div class="col-md-10">
-	      <input type="text" class="form-control" id="name" name="product[name]" value="<?php echo $productData['name']; ?>">
+	      <input type="text" class="form-control" id="name" name="product[name]" value="<?php echo $productData->name; ?>">
 	    </div>
 	  </div>
 
 	  <div class="row mb-4">
 	    <label for="price" class="col-sm-2 col-form-label">Price</label>
 	    <div class="col-md-10">
-	      <input type="number" class="form-control" id="price" name="product[price]" value="<?php echo $productData['price']?>">
+	      <input type="number" class="form-control" id="price" name="product[price]" value="<?php echo $productData->price?>">
 	    </div>
 	  </div>
 
 	  <div class="row mb-3">
 	    <label for="qty" class="col-sm-2 col-form-label">Quantity</label>
 	    <div class="col-md-10">
-	      <input type="number" class="form-control" id="qty" name="product[quantity]" value="<?php echo $productData['quantity']?>">
+	      <input type="number" class="form-control" id="qty" name="product[quantity]" value="<?php echo $productData->quantity?>">
 	    </div>
 	  </div>
 
@@ -79,7 +47,7 @@ $productData = $product['product'];
 	    <label for="created" class="col-sm-2 col-form-label">Status</label>
 	    <div class="row col-sm-10">
 		    <div class="form-check col-sm-6">
-		    	<?php if($productData['status'] == 1){ ?>
+		    	<?php if($productData->status == 1){ ?>
 			  	<input class="form-check-input col-sm-4" type="radio" name="product[status]" id="flexRadioDefault1" value="1" checked>
 			  	<?php }else{ ?>
 			  	<input class="form-check-input col-sm-4" type="radio" name="product[status]" id="flexRadioDefault1" value="1">
@@ -89,7 +57,7 @@ $productData = $product['product'];
 			  </label>		
 			</div>
 			<div class="form-check col-sm-6">
-				<?php if($productData['status'] == 2){ ?>
+				<?php if($productData->status == 2){ ?>
 			 <input class="form-check-input col-sm-4" type="radio" name="product[status]" id="flexRadioDefault2"  value="2" checked>
 			  	<?php }else{ ?>
 			  <input class="form-check-input col-sm-4" type="radio" name="product[status]" id="flexRadioDefault2"  value="2" >
@@ -102,8 +70,8 @@ $productData = $product['product'];
 	  </div>
 
 	  <div class="row justify-content-center">
-	  <button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
-	  <a href="<?php echo $this->getUrl('product','grid',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+	  <button type="submit" class="btn btn-primary col-sm-2 m-1">Save</button>
+	  <a href="<?php echo $this->getUrl('grid','product',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
 		</div>
 	</form>
 	</div>
