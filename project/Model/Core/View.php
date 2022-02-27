@@ -55,22 +55,14 @@ class Model_Core_View
 		return $this;
 	}
 
-	public function getUrl($c=null,$a=null,array $data = [],$reset = false)
+	public function getUrl($a=null,$c=null,array $data = [],$reset = false)
 	{
 		$info = [];
-		if($c==null && $a==null && $data==null && $reset==false)
+		if($a==null && $c==null && $data==null && $reset==false)
 		{
 			$info = Ccc::getFront()->getRequest()->getRequest();
 		}
-
-		if($c == null)
-		{
-			$c = Ccc::getFront()->getRequest()->getRequest('c');
-		}
-		else
-		{
-			$info['c']=$c;
-		}
+		
 		if($a == null)
 		{
 			$a = Ccc::getFront()->getRequest()->getRequest('a');
@@ -78,6 +70,15 @@ class Model_Core_View
 		else
 		{
 			$info['a']=$a;
+		}
+		
+		if($c == null)
+		{
+			$c = Ccc::getFront()->getRequest()->getRequest('c');
+		}
+		else
+		{
+			$info['c']=$c;
 		}
 		
 		if($reset)
@@ -98,6 +99,15 @@ class Model_Core_View
 		$url = "index.php?".http_build_query($info);
 		return $url;
 	}
+
+	public function getBaseUrl($subUrl = null)
+    {
+        $url = "C:/xampp/htdocs/Core/project";
+        if($subUrl){
+            $url = $url."/".$subUrl;
+        }
+        return $url;
+    }
 }
 
 ?>

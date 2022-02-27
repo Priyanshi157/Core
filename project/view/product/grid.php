@@ -9,45 +9,16 @@ $products = $this->getProducts();
 	<title>Products CRUD</title>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-white">
-	    <div class="container-fluid">
-	      	<button
-		        class="navbar-toggler"
-		        type="button"
-		        data-mdb-toggle="collapse"
-		        data-mdb-target="#navbarExample01"
-		        aria-controls="navbarExample01"
-		        aria-expanded="false"
-		        aria-label="Toggle navigation"
-		    >
-	        <i class="fas fa-bars"></i>
-	      	</button>
-	      	<div class="collapse navbar-collapse" id="navbarExample01">
-	        	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-	          		<li class="nav-item active">
-	            		<a class="nav-link" aria-current="page" href="#">Admin</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=category&a=grid">Category</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=product&a=grid">Product</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=customer&a=grid">Customer</a>
-	          		</li>
-	        	</ul>
-	      	</div>
-	    </div>
-	</nav>
-
 	<div class="fluid-container m-2">
-		<a href="<?php echo $this->getUrl('product','add',[],true); ?>"><button type="button" class="btn btn-primary">Add</button></a>
+		<a href="<?php echo $this->getUrl('add','product',[],true); ?>"><button type="button" class="btn btn-primary">Add</button></a>
 		<table class="table border my-4">
 		  <thead>
 		    <tr>
 		      <th scope="col">Product Id</th>
 		      <th scope="col">Name</th>
+		      <th scope="col">Base Image</th>
+		      <th scope="col">Thumb Image</th>
+		      <th scope="col">Small Image</th>
 		      <th scope="col">Price</th>
 		      <th scope="col">Quantity</th>
 		      <th scope="col">Status</th>
@@ -55,6 +26,7 @@ $products = $this->getProducts();
 		      <th scope="col">Updated AT</th>
 		      <th scope="col">Edit</th>
 		      <th scope="col">Delete</th>
+		      <th scope="col">Gallery</th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -63,15 +35,31 @@ $products = $this->getProducts();
 		  	<?php else: ?>
 		  		<?php foreach ($products as $product): ?>
 			  		<tr>
-					    <td><?php echo $product['productId'] ?></td>
-					    <td><?php echo $product['name'] ?></td>
-					    <td><?php echo $product['price'] ?></td>
-					    <td><?php echo $product['quantity'] ?></td>
-					    <td><?php echo $product['status'] ?></td>
-					    <td><?php echo $product['createdAt'] ?></td>
-					    <td><?php echo $product['updatedAt'] ?></td>
-					    <td><a href="<?php echo $this->getUrl('product','edit',['id'=>$product['productId']],true); ?>">Edit</a></td>
-						<td><a href="<?php echo $this->getUrl('product','delete',['id'=>$product['productId']],true); ?>">Delete</a></td>
+					    <td><?php echo $product->productId ?></td>
+					    <td><?php echo $product->name ?></td>
+					    <?php if($product->base): ?>
+						<td><img src="<?php echo "Media/Product/".$this->getMedia($product->base)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
+						<?php else: ?>
+						<td>No Base Image</td>
+						<?php endif; ?>	
+						<?php if($product->thumb): ?>
+						<td><img src="<?php echo "Media/Product/".$this->getMedia($product->thumb)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
+						<?php else: ?>
+						<td>No Thumb Image</td>
+						<?php endif; ?>	
+						<?php if($product->small): ?>
+						<td><img src="<?php echo "Media/Product/".$this->getMedia($product->small)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
+						<?php else: ?>
+						<td>No Small Image</td>
+						<?php endif; ?>
+					    <td><?php echo $product->price ?></td>
+					    <td><?php echo $product->quantity ?></td>
+					    <td><?php echo $product->getStatus($product->status) ?></td>
+					    <td><?php echo $product->createdAt ?></td>
+					    <td><?php echo $product->updatedAt ?></td>
+					    <td><a href="<?php echo $this->getUrl('edit','product',['id'=>$product->productId],true); ?>">Edit</a></td>
+						<td><a href="<?php echo $this->getUrl('delete','product',['id'=>$product->productId],true); ?>">Delete</a></td>
+						<td><a href="<?php echo $this->getUrl('grid','product_media',['id'=>$product->productId],true); ?>">Gallery</a></td>
 					</tr>
 				<?php endforeach; ?>
 			<?php endif; ?>

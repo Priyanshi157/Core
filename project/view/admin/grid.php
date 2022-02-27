@@ -9,40 +9,8 @@ $admins = $this->getAdmins();
 	<title>Admin</title>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-white">
-	    <div class="container-fluid">
-	      	<button
-		        class="navbar-toggler"
-		        type="button"
-		        data-mdb-toggle="collapse"
-		        data-mdb-target="#navbarExample01"
-		        aria-controls="navbarExample01"
-		        aria-expanded="false"
-		        aria-label="Toggle navigation"
-		    >
-	        <i class="fas fa-bars"></i>
-	      	</button>
-	      	<div class="collapse navbar-collapse" id="navbarExample01">
-	        	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-	          		<li class="nav-item active">
-	            		<a class="nav-link" aria-current="page" href="#">Admin</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=category&a=grid">Category</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=product&a=grid">Product</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=customer&a=grid">Customer</a>
-	          		</li>
-	        	</ul>
-	      	</div>
-	    </div>
-	</nav>
-
 	<div class="fluid-container m-2">
-		<a href="<?php echo $this->getUrl('admin','add',[],true); ?>"><button type="button" class="btn btn-primary">Add</button></a>
+		<a href="<?php echo $this->getUrl('add','admin',[],true); ?>"><button type="button" class="btn btn-primary">Add</button></a>
 		<table class="table border my-4">
 		  <thead>
 		    <tr>
@@ -64,16 +32,16 @@ $admins = $this->getAdmins();
 		  	<?php else: ?>
 		  		<?php foreach ($admins as $admin): ?>
 			  		<tr>
-					    <td><?php echo $admin['adminId'] ?></td>
-					    <td><?php echo $admin['firstName'] ?></td>
-					    <td><?php echo $admin['lastName'] ?></td>
-					    <td><?php echo $admin['email'] ?></td>
-					    <td><?php echo $admin['password'] ?></td>
-					    <td><?php echo $admin['status'] ?></td>
-					    <td><?php echo $admin['createdAt'] ?></td>
-					    <td><?php echo $admin['updatedAt'] ?></td>
-					    <td><a href="<?php echo $this->getUrl('admin','edit',['id'=>$admin['adminId']],true); ?>">Edit</a></td>
-					    <td><a href="<?php echo $this->getUrl('admin','delete',['id'=>$admin['adminId']],true); ?>">Delete</a></td>
+					    <td><?php echo $admin->adminId ?></td>
+					    <td><?php echo $admin->firstName ?></td>
+					    <td><?php echo $admin->lastName ?></td>
+					    <td><?php echo $admin->email ?></td>
+					    <td><?php echo $admin->password ?></td>
+					    <td><?php echo $admin->getStatus($admin->status) ?></td>
+					    <td><?php echo $admin->createdAt ?></td>
+					    <td><?php echo $admin->updatedAt ?></td>
+					    <td><a href="<?php echo $this->getUrl('edit','admin',['id'=>$admin->adminId],true); ?>">Edit</a></td>
+					    <td><a href="<?php echo $this->getUrl('delete','admin',['id'=>$admin->adminId],true); ?>">Delete</a></td>
 					    
 						
 					</tr>

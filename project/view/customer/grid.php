@@ -1,9 +1,6 @@
 <?php
 $customers = $this->getCustomers();
 $addresses = $this->getAddresses();
-//echo "<pre>";
-//print_r($selectAddress);
-//exit;
 ?>
 <html>
 <head>
@@ -13,40 +10,9 @@ $addresses = $this->getAddresses();
 	<title>Customer</title>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-white">
-	    <div class="container-fluid">
-	      	<button
-		        class="navbar-toggler"
-		        type="button"
-		        data-mdb-toggle="collapse"
-		        data-mdb-target="#navbarExample01"
-		        aria-controls="navbarExample01"
-		        aria-expanded="false"
-		        aria-label="Toggle navigation"
-		    >
-	        <i class="fas fa-bars"></i>
-	      	</button>
-	      	<div class="collapse navbar-collapse" id="navbarExample01">
-	        	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-	          		<li class="nav-item active">
-	            		<a class="nav-link" aria-current="page" href="#">Admin</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=category&a=grid">Category</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=product&a=grid">Product</a>
-	          		</li>
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=customer&a=grid">Customer</a>
-	          		</li>
-	        	</ul>
-	      	</div>
-	    </div>
-	</nav>
-
+	
 	<div class="fluid-container m-2">
-		<a href="index.php?c=customer&a=add"><button type="button" class="btn btn-primary">Add</button></a>
+		<a href="<?php echo $this->getUrl('add','customer',[],true); ?>"><button type="button" class="btn btn-primary">Add</button></a>
 		<table class="table table-bordered my-4">
 		  <thead>
 		    <tr>
@@ -69,21 +35,21 @@ $addresses = $this->getAddresses();
 		  	<?php else: ?>
 		  		<?php foreach ($customers as $customer): ?>
 			  		<tr>
-					    <td><?php echo $customer['customerId'] ?></td>
-					    <td><?php echo $customer['firstName'] ?></td>
-					    <td><?php echo $customer['lastName'] ?></td>
-					    <td><?php echo $customer['email'] ?></td>
-					    <td><?php echo $customer['mobile'] ?></td>
-					    <td><?php echo $customer['status'] ?></td>
-					    <td><?php echo $customer['createdAt'] ?></td>
-					    <td><?php echo $customer['updatedAt'] ?></td>
+					    <td><?php echo $customer->customerId ?></td>
+					    <td><?php echo $customer->firstName ?></td>
+					    <td><?php echo $customer->lastName ?></td>
+					    <td><?php echo $customer->email ?></td>
+					    <td><?php echo $customer->mobile ?></td>
+					    <td><?php echo $customer->status ?></td>
+					    <td><?php echo $customer->createdAt ?></td>
+					    <td><?php echo $customer->updatedAt ?></td>
 					    <?php foreach ($addresses as $address): ?>
-					    	<?php if($address['customerId'] == $customer['customerId']): ?>
-					    		<td><?php echo $address['address'] ?></td>
+					    	<?php if($address->customerId == $customer->customerId): ?>
+					    		<td><?php echo $address->address ?></td>
 					    	<?php endif; ?>
 					    <?php endforeach; ?>
-						<td><a href="<?php echo $this->getUrl('customer','edit',['id'=>$customer['customerId']],true); ?>">Edit</a></td>
-						<td><a href="<?php echo $this->getUrl('customer','delete',['id'=>$customer['customerId']],true); ?>">Delete</a></td>
+						<td><a href="<?php echo $this->getUrl('edit','customer',['id'=>$customer->customerId],true); ?>">Edit</a></td>
+						<td><a href="<?php echo $this->getUrl('delete','customer',['id'=>$customer->customerId],true); ?>">Delete</a></td>
 					</tr>
 				<?php endforeach; ?>
 			<?php endif; ?>
