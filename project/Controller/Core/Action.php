@@ -4,6 +4,7 @@ Ccc::loadClass('Model_Core_View');
 class Controller_Core_Action 
 {
 	protected $view = null;
+	protected $layout = null;
 
 	public function redirect($url)
 	{
@@ -11,18 +12,39 @@ class Controller_Core_Action
 		exit();
 	}
 
-	public function getView()
+	public function getview()
 	{
-		if (!$this->view) {
-			$this->setView(new Model_Core_View());
+		if (!$this->view) 
+		{
+			$this->setview(new Model_Core_View());
 		}
 		return $this->view;
 	}
 
-	public function setView($view)
+	public function setview($view)
 	{
 		$this->view = $view;
 		return $this;
+	}
+
+	public function getLayout()
+	{
+		if (!$this->layout) 
+		{
+			$this->setlayout(Ccc::getBlock('Core_Layout'));
+		}
+		return $this->layout;
+	}
+
+	public function setlayout($layout)
+	{
+		$this->layout = $layout;
+		return $this;
+	}
+
+	public function renderLayout()
+	{
+		$this->getLayout()->toHtml();
 	}
 
 	public function getRequest()

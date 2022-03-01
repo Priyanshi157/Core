@@ -101,8 +101,7 @@ class Controller_Config extends Controller_Core_Action
 			$result = $configModel->load($configId)->delete();
 			if(!$result)
 			{
-				throw new Exception("Unable to Delet Record.", 1);
-				
+				throw new Exception("Unable to Delete Record.", 1);
 			}
 			$this->redirect($this->getView()->getUrl('grid','config',[],true));
 		} 

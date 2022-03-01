@@ -37,6 +37,15 @@
 	          		<li class="nav-item">
 	            		<a class="nav-link" href="index.php?c=config&a=grid">Config</a>
 	          		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="index.php?c=page&a=grid">Page</a>
+	          		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="index.php?c=salesman&a=grid">Salesman</a>
+	          		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="index.php?c=vendor&a=grid">Vendor</a>
+	          		</li>
 	        	</ul>
 	      	</div>
 	    </div>
