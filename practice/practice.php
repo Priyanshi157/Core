@@ -13,7 +13,7 @@ $data = [
 ];
 
 echo "<pre>";
-echo "Array 1";
+echo "Array 1<br>";
 
 $i = 0;
 while($i<count($data)){
@@ -25,25 +25,20 @@ while($i<count($data)){
 print_r($result);
 echo "________________________________________________<br>";
 
-$data = [
-
-	['category'=>1,'categoryname'=>'c1','attribute'=>1,'attributename'=>'a1','option'=>1,'optionname'=>'o1'],
-	['category'=>1,'categoryname'=>'c1','attribute'=>1,'attributename'=>'a1','option'=>2,'optionname'=>'o2'],
-	['category'=>1,'categoryname'=>'c1','attribute'=>2,'attributename'=>'a2','option'=>3,'optionname'=>'o3'],
-	['category'=>1,'categoryname'=>'c1','attribute'=>2,'attributename'=>'a2','option'=>4,'optionname'=>'o4'],
-	['category'=>2,'categoryname'=>'c2','attribute'=>3,'attributename'=>'a3','option'=>5,'optionname'=>'o5'],
-	['category'=>2,'categoryname'=>'c2','attribute'=>3,'attributename'=>'a3','option'=>6,'optionname'=>'o6'],
-	['category'=>2,'categoryname'=>'c2','attribute'=>4,'attributename'=>'a4','option'=>7,'optionname'=>'o7'],
-	['category'=>2,'categoryname'=>'c2','attribute'=>4,'attributename'=>'a4','option'=>8,'optionname'=>'o8']
-
-];
-
-$i = 0;
-while($i<count($data))
+$final = [];
+foreach ($result as $categoryId => $level1) 
 {
-	$result[$data[$i]['category']][$data[$i]['categoryname']][$data[$i]['attribute']][$data[$i]['option']] = $data[$i]['optionname'];
-	$i++;
+	$row['category'] = $categoryId;
+	foreach ($level1 as $attributeId => $level2) 
+	{
+		$row['attribute'] = $attributeId;
+		foreach ($level2 as $optionId => $level3) 
+		{	
+			$row['option'] = $optionId;
+			array_push($final, $row);
+		}
+	}	
 }
+print_r($final);
 
-print_r($result);
 ?>
