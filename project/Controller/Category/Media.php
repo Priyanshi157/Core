@@ -5,7 +5,10 @@ class Controller_Category_Media extends Controller_Core_Action{
 
 	public function gridAction()
 	{
-		Ccc::getBlock('Category_Media_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$mediaGrid = Ccc::getBlock('Category_Media_Grid');
+		$content->addChild($mediaGrid,'Grid');
+		$this->renderLayout();
 	}
 
 	public function saveAction()
@@ -107,7 +110,9 @@ class Controller_Category_Media extends Controller_Core_Action{
 				}
 			} 	
 			$this->redirect($this->getView()->getUrl('grid','category_media',['id' => $id],true));	
-			}catch (Exception $e) {
+		}
+		catch (Exception $e) 
+		{
 			echo $e->getMessage();
 		}
 		

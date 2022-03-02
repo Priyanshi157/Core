@@ -4,13 +4,19 @@ class Controller_Page extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		Ccc::getBlock('Page_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$pageGrid = Ccc::getBlock('Page_Grid');
+		$content->addChild($pageGrid,'Grid');
+		$this->renderLayout();
 	}
 
 	public function addAction()
 	{
 		$pageModel = Ccc::getModel('Page');
-		Ccc::getBlock('Page_Edit')->setData(['page'=>$pageModel])->toHtml();
+		$content = $this->getLayout()->getContent();
+		$pageAdd = Ccc::getBlock('Page_Edit')->setData(['page'=>$pageModel]);
+		$content->addChild($pageAdd,'Add');
+		$this->renderLayout();
 	}
 
 	public function editAction()
@@ -30,7 +36,11 @@ class Controller_Page extends Controller_Core_Action
 			{
 				throw new Exception("SYstem is unable to fetch record.", 1);
 			}
-			Ccc::getBlock('Page_Edit')->setData(['page'=>$pageData])->toHtml();
+			$content = $this->getLayout()->getContent();
+			$pageEdit = Ccc::getBlock('Page_Edit')->setData(['page'=>$pageData]);
+			$content->addChild($pageEdit,'Edit');
+			$this->renderLayout();
+
 		} 
 		catch (Exception $e) 
 		{

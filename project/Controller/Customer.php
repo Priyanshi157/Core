@@ -5,14 +5,20 @@ class Controller_Customer extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		Ccc::getBlock('Customer_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$customerGrid = Ccc::getBlock('Customer_Grid');
+		$content->addChild($customerGrid,'Grid');
+		$this->renderLayout();
 	}
 
 	public function addAction()
 	{
 		$customerModel = Ccc::getModel('Customer');
 		$addressModel = Ccc::getModel('Customer_Address');
-		Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customerModel,'address'=>$addressModel])->toHtml();
+		$content = $this->getLayout()->getContent();
+		$customerAdd = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customerModel,'address'=>$addressModel]);
+		$content->addChild($customerAdd,'Add');
+		$this->renderLayout();
 	}
 
 	public function editAction()
@@ -39,10 +45,13 @@ class Controller_Customer extends Controller_Core_Action
 
 			if(!$address)
 			{
-				$address = ['address' => null,
-						 'postalCode' => null,'city' => null, 'state' => null, 'country' => null, 'billing' => 2, 'shipping'=>2, 'customerId' => $customer['customerId']];	
+				$address = Ccc::getModel('customer_address');
 			}
-			Ccc::getBlock('Customer_Edit')->addData('customer',$customer)->addData('address',$address)->toHtml();
+			
+			$content = $this->getLayout()->getContent();
+			$customerEdit = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customer,'address'=>$address]);
+			$content->addChild($customerEdit,'Edit');
+			$this->renderLayout();
 		} 
 		catch (Exception $e) 
 		{

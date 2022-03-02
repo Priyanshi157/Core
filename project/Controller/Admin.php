@@ -4,14 +4,19 @@ class Controller_Admin extends Controller_Core_Action
 {
 	public function gridAction()
 	{
+		$content = $this->getLayout()->getContent();
+		$adminGrid = Ccc::getBlock('Admin_Grid');
+		$content->addChild($adminGrid,'Grid');
 		$this->renderLayout();
-		//Ccc::getBlock('Admin_Grid')->toHtml();
 	}
 
 	public function addAction()
 	{
 		$adminModel = Ccc::getModel('Admin');
-		Ccc::getBlock('Admin_Edit')->setData(['admin'=>$adminModel])->toHtml();
+		$content = $this->getLayout()->getContent();
+		$adminAdd = Ccc::getBlock('Admin_Edit')->setData(['admin'=>$adminModel]);
+		$content->addChild($adminAdd,'Add');
+		$this->renderLayout();
 	}
 
 	public function editAction()
@@ -26,13 +31,15 @@ class Controller_Admin extends Controller_Core_Action
 				throw new Exception("Invalid Request", 1);
 			}
 			$admin = $adminModel->load($aid);
-			//$admin->load($aid);
 			if(!$admin)
 			{
 				throw new Exception("System is unable to find record.", 1);
 			}
 			
-			Ccc::getBlock('Admin_Edit')->setData(['admin'=>$admin])->toHtml();
+			$content = $this->getLayout()->getContent();
+			$adminEdit = Ccc::getBlock('Admin_Edit')->setData(['admin'=>$admin]);
+			$content->addChild($adminEdit,'Edit');
+			$this->renderLayout();
    		}	 
    		catch (Exception $e) 
    		{
@@ -58,9 +65,6 @@ class Controller_Admin extends Controller_Core_Action
 
 			$admin = $adminModel;
 			$admin->setData($postData);
-			//print_r($admin);
-			//exit;
-		
 			if(!($admin->adminId))
 			{
 				$admin->createdAt = date('Y-m-d H:m:s');

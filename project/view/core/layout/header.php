@@ -1,1 +1,1 @@
-<h2>Header</h2>
+<?php Ccc::getBlock('Core_Layout_Menu')->toHtml(); ?>

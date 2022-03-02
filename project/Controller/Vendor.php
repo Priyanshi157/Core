@@ -5,14 +5,20 @@ class Controller_Vendor extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		Ccc::getBlock('Vendor_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$vendorGrid = Ccc::getBlock('Vendor_Grid');
+		$content->addChild($vendorGrid,'Grid');
+		$this->renderLayout();
 	}
 
 	public function addAction()
 	{
 		$vendorModel = Ccc::getModel('Vendor');
 		$addressModel = Ccc::getModel('Vendor_Address');
-		Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendorModel,'address'=>$addressModel])->toHtml();
+		$content = $this->getLayout()->getContent();
+		$vendorAdd = Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendorModel,'address'=>$addressModel]);
+		$content->addChild($vendorAdd,'Add');
+		$this->renderLayout();
 	}
 
 	public function editAction()
@@ -41,7 +47,10 @@ class Controller_Vendor extends Controller_Core_Action
 			{
 				$address = Ccc::getModel('Vendor_Address');
 			}
-			Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address)->toHtml();
+			$content = $this->getLayout()->getContent();
+			$vendorEdit = Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address'=>$address]);
+			$content->addChild($vendorEdit,'Edit');
+			$this->renderLayout();
 		} 
 		catch (Exception $e) 
 		{

@@ -5,13 +5,19 @@ class Controller_Product extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		Ccc::getBlock('Product_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$productGrid = Ccc::getBlock('Product_Grid');
+		$content->addChild($productGrid,'Grid');
+		$this->renderLayout();
 	}
 
 	public function addAction()
 	{
 		$productModel = Ccc::getModel('Product');
-		Ccc::getBlock('Product_Edit')->setData(['product'=>$productModel])->toHtml();
+		$content = $this->getLayout()->getContent();
+		$productAdd = Ccc::getBlock('Product_Edit')->setData(['product'=>$productModel]);
+		$content->addChild($productAdd,'Add');
+		$this->renderLayout();
 	}
 
 	public function editAction()
@@ -32,7 +38,10 @@ class Controller_Product extends Controller_Core_Action
 				throw new Exception("System is unable to find record.", 1);
 				
 			}
-			Ccc::getBlock('Product_Edit')->setData(['product' => $productData])->toHtml();	
+			$content = $this->getLayout()->getContent();
+			$productEdit = Ccc::getBlock('Product_Edit')->setData(['product'=>$product]);
+			$content->addChild($productEdit,'Edit');
+			$this->renderLayout();
 		} 
 		catch (Exception $e) 
 		{

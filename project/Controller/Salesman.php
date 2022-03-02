@@ -4,13 +4,19 @@ class Controller_Salesman extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		Ccc::getBlock('Salesman_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$salesmanGrid = Ccc::getBlock('Salesman_Grid');
+		$content->addChild($salesmanGrid,'Grid');
+		$this->renderLayout();
 	}
 
 	public function addAction()
 	{
 		$salesmanModel = Ccc::getModel('Salesman');
-		Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanModel])->toHtml();
+		$content = $this->getLayout()->getContent();
+		$salesmanAdd = Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanModel]);
+		$content->addChild($salesmanAdd,'Add');
+		$this->renderLayout();
 	}
 
 	public function editAction()
@@ -31,7 +37,10 @@ class Controller_Salesman extends Controller_Core_Action
 			{
 				throw new Exception("System is unable to find record.", 1);
 			}
-			Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanData])->toHtml();
+			$content = $this->getLayout()->getContent();
+			$salesmanEdit = Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanData]);
+			$content->addChild($salesmanEdit,'Edit');
+			$this->renderLayout();
 		} 
 		catch (Exception $e) 
 		{

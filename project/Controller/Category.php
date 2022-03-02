@@ -5,14 +5,19 @@ class Controller_Category extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		Ccc::getBlock('Category_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+        $categoryGrid = Ccc::getBlock('Category_Grid');
+        $content->addChild($categoryGrid,'Grid');
+        $this->renderLayout();
 	}
 	
 	public function addAction()
 	{
 		$categoryModel = Ccc::getModel('Category');
-        $category = $categoryModel;
-        Ccc::getBlock('Category_Edit')->addData('category',$category)->toHtml();
+        $content = $this->getLayout()->getContent();
+        $categoryAdd = Ccc::getBlock('Category_Edit')->setData(['category'=>$categoryModel]);
+        $content->addChild($categoryAdd,'Add');
+        $this->renderLayout();
 	}
 
 	public function editAction()
@@ -34,7 +39,10 @@ class Controller_Category extends Controller_Core_Action
 	        {
 	            throw new Exception("System is unable to find record.", 1);
 	        }
-        	Ccc::getBlock('Category_Edit')->addData('category',$category)->toHtml();
+        	$content = $this->getLayout()->getContent();
+            $categoryEdit = Ccc::getBlock('Category_Edit')->setData(['category'=>$category]);
+            $content->addChild($categoryEdit,'Edit');
+            $this->renderLayout();
 		}
 		catch (Exception $e) 
 		{
