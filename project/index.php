@@ -23,25 +23,25 @@
 	      	<div class="collapse navbar-collapse" id="navbarExample01">
 	        	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 	          		<li class="nav-item active">
-	            		<a class="nav-link" aria-current="page" href="index.php?c=Admin&a=grid">Admin</a>
+	            		<a class="nav-link" aria-current="page" href="index.php?c=admin&a=grid" >Admin</a>
 	          		</li>
 	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=category&a=grid">Category</a>
+	            		<a class="nav-link" href="index.php?c=category&a=grid" >Category</a>
 	          		</li>
 	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=product&a=grid">Product</a>
+	            		<a class="nav-link" href="index.php?c=product&a=grid" >Product</a>
 	          		</li>
 	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=customer&a=grid">Customer</a>
+	            		<a class="nav-link" href="index.php?c=customer&a=grid" >Customer</a>
 	          		</li>
 	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=config&a=grid">Config</a>
+	            		<a class="nav-link" href="index.php?c=config&a=grid" >Config</a>
 	          		</li>
 	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=page&a=grid">Page</a>
+	            		<a class="nav-link" href="index.php?c=page&a=grid" >Page</a>
 	          		</li>
 	          		<li class="nav-item">
-	            		<a class="nav-link" href="index.php?c=salesman&a=grid">Salesman</a>
+	            		<a class="nav-link" href="index.php?c=salesman&a=grid" >Salesman</a>
 	          		</li>
 	          		<li class="nav-item">
 	            		<a class="nav-link" href="index.php?c=vendor&a=grid">Vendor</a>
