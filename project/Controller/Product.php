@@ -5,13 +5,24 @@ class Controller_Product extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		Ccc::getBlock('Product_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$productGrid = Ccc::getBlock('Product_Grid');
+		$content->addChild($productGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$message = Ccc::getBlock('Core_Layout_Message');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
+		$this->renderLayout();
 	}
 
 	public function addAction()
 	{
 		$productModel = Ccc::getModel('Product');
-		Ccc::getBlock('Product_Edit')->setData(['product'=>$productModel])->toHtml();
+		$content = $this->getLayout()->getContent();
+		$productAdd = Ccc::getBlock('Product_Edit')->setData(['product'=>$productModel]);
+		$content->addChild($productAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+		$this->renderLayout();
 	}
 
 	public function editAction()
@@ -32,7 +43,12 @@ class Controller_Product extends Controller_Core_Action
 				throw new Exception("System is unable to find record.", 1);
 				
 			}
-			Ccc::getBlock('Product_Edit')->setData(['product' => $productData])->toHtml();	
+			$content = $this->getLayout()->getContent();
+			$productEdit = Ccc::getBlock('Product_Edit')->setData(['product'=>$product]);
+			$content->addChild($productEdit,'Edit');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+			$this->renderLayout();
 		} 
 		catch (Exception $e) 
 		{
@@ -68,6 +84,7 @@ class Controller_Product extends Controller_Core_Action
 				{
 					throw new Exception("System is unable to Insert.", 1);
 				}
+				$this->getMessage()->addMessage('Added Successfully.');
 			}
 			else
 			{
@@ -82,6 +99,7 @@ class Controller_Product extends Controller_Core_Action
 				{
 					throw new Exception("System is unable to Update.", 1);
 				}
+				$this->getMessage()->addMessage('Updated Successfully.');
 			}
 			$this->redirect($this->getView()->getUrl('grid','product',[],true));
 		} 
@@ -119,9 +137,9 @@ class Controller_Product extends Controller_Core_Action
 			$result = $productModel->load($productId)->delete();
 			if(!$result)
 			{
-				throw new Exception("Unable to Delet Record.", 1);
-				
+				throw new Exception("Unable to Delet Record.", 1);	
 			}
+			$this->getMessage()->addMessage('Deleted Successfully.');
 		    $this->redirect($this->getView()->getUrl('grid','product',[],true));
 		} 
 		catch (Exception $e) 

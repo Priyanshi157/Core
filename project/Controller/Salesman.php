@@ -4,13 +4,24 @@ class Controller_Salesman extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		Ccc::getBlock('Salesman_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$salesmanGrid = Ccc::getBlock('Salesman_Grid');
+		$content->addChild($salesmanGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$message = Ccc::getBlock('Core_Layout_Message');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
+		$this->renderLayout();
 	}
 
 	public function addAction()
 	{
 		$salesmanModel = Ccc::getModel('Salesman');
-		Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanModel])->toHtml();
+		$content = $this->getLayout()->getContent();
+		$salesmanAdd = Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanModel]);
+		$content->addChild($salesmanAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+		$this->renderLayout();
 	}
 
 	public function editAction()
@@ -31,7 +42,12 @@ class Controller_Salesman extends Controller_Core_Action
 			{
 				throw new Exception("System is unable to find record.", 1);
 			}
-			Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanData])->toHtml();
+			$content = $this->getLayout()->getContent();
+			$salesmanEdit = Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanData]);
+			$content->addChild($salesmanEdit,'Edit');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+			$this->renderLayout();
 		} 
 		catch (Exception $e) 
 		{
@@ -63,6 +79,7 @@ class Controller_Salesman extends Controller_Core_Action
 				{
 					throw new Exception("System is unable to find record.", 1);
 				}
+				$this->getMessage()->addMessage('Added Successfully.');
 			}
 			else
 			{
@@ -76,6 +93,7 @@ class Controller_Salesman extends Controller_Core_Action
 				{
 					throw new Exception("System is unable to fetch record.", 1);
 				}
+				$this->getMessage()->addMessage('Updated Successfully.');
 			}
 			$this->redirect($this->getView()->getUrl('grid','salesman',[],true));
 		} 
@@ -103,6 +121,7 @@ class Controller_Salesman extends Controller_Core_Action
 			{
 				throw new Exception("System is unable to find record.", 1);
 			}
+			$this->getMessage()->addMessage('Deleted Successfully.');
 			$this->redirect($this->getView()->getUrl('grid','salesman',[],true));
 		} 
 		catch (Exception $e) 

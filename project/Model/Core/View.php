@@ -102,8 +102,9 @@ class Model_Core_View
 
 	public function getBaseUrl($subUrl = null)
     {
-        $url = "C:/xampp/htdocs/Core/project";
-        if($subUrl){
+        $url = "C:/xampp/htdocs/core-layout/Core/project";
+        if($subUrl)
+        {
             $url = $url."/".$subUrl;
         }
         return $url;

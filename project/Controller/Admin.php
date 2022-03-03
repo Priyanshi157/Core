@@ -4,13 +4,24 @@ class Controller_Admin extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		Ccc::getBlock('Admin_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$adminGrid = Ccc::getBlock('Admin_Grid');
+		$content->addChild($adminGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$message = Ccc::getBlock('Core_Layout_Message');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
+		$this->renderLayout();
 	}
 
 	public function addAction()
 	{
 		$adminModel = Ccc::getModel('Admin');
-		Ccc::getBlock('Admin_Edit')->setData(['admin'=>$adminModel])->toHtml();
+		$content = $this->getLayout()->getContent();
+		$adminAdd = Ccc::getBlock('Admin_Edit')->setData(['admin'=>$adminModel]);
+		$content->addChild($adminAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+		$this->renderLayout();
 	}
 
 	public function editAction()
@@ -30,7 +41,12 @@ class Controller_Admin extends Controller_Core_Action
 				throw new Exception("System is unable to find record.", 1);
 			}
 			
-			Ccc::getBlock('Admin_Edit')->setData(['admin'=>$admin])->toHtml();
+			$content = $this->getLayout()->getContent();
+			$adminEdit = Ccc::getBlock('Admin_Edit')->setData(['admin'=>$admin]);
+			$content->addChild($adminEdit,'Edit');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+			$this->renderLayout();
    		}	 
    		catch (Exception $e) 
    		{
@@ -56,12 +72,12 @@ class Controller_Admin extends Controller_Core_Action
 
 			$admin = $adminModel;
 			$admin->setData($postData);
-			
 			if(!($admin->adminId))
 			{
 				$admin->createdAt = date('Y-m-d H:m:s');
 				unset($admin->adminId);
 				$admin->save();
+				$this->getMessage()->addMessage('Added Successfully.');
 			}
 			else
 			{
@@ -76,6 +92,7 @@ class Controller_Admin extends Controller_Core_Action
 				{
 					throw new Exception("System is unable to Update.", 1);
 				}
+				$this->getMessage()->addMessage('updated Successfully.');
 			}
 			$this->redirect($this->getView()->getUrl('grid','admin',[],true));
 		} 
@@ -107,6 +124,7 @@ class Controller_Admin extends Controller_Core_Action
 				throw new Exception("Unable to Delet Record.", 1);
 				
 			}
+			$this->getMessage()->addMessage('Deleted Successfully.');
 			$this->redirect($this->getView()->getUrl('grid','admin',[],true));
 		} 
 		catch (Exception $e) 

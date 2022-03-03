@@ -4,13 +4,25 @@ class Controller_Page extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		Ccc::getBlock('Page_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$pageGrid = Ccc::getBlock('Page_Grid');
+		$content->addChild($pageGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$message = Ccc::getBlock('Core_Layout_Message');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
+		$this->renderLayout();
 	}
 
 	public function addAction()
 	{
 		$pageModel = Ccc::getModel('Page');
-		Ccc::getBlock('Page_Edit')->setData(['page'=>$pageModel])->toHtml();
+		$content = $this->getLayout()->getContent();
+		$pageAdd = Ccc::getBlock('Page_Edit')->setData(['page'=>$pageModel]);
+		$content->addChild($pageAdd,'Add');
+		$content->addChild($adminAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+		$this->renderLayout();
 	}
 
 	public function editAction()
@@ -30,7 +42,14 @@ class Controller_Page extends Controller_Core_Action
 			{
 				throw new Exception("SYstem is unable to fetch record.", 1);
 			}
-			Ccc::getBlock('Page_Edit')->setData(['page'=>$pageData])->toHtml();
+			$content = $this->getLayout()->getContent();
+			$pageEdit = Ccc::getBlock('Page_Edit')->setData(['page'=>$pageData]);
+			$content->addChild($pageEdit,'Edit');
+			$content->addChild($adminAdd,'Add');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+			$this->renderLayout();
+
 		} 
 		catch (Exception $e) 
 		{
@@ -61,6 +80,7 @@ class Controller_Page extends Controller_Core_Action
 				{
 					throw new Exception("System is unable to insert.", 1);
 				}
+				$this->getMessage()->addMessage('Added Successfully.');
 			}
 			else
 			{
@@ -74,6 +94,7 @@ class Controller_Page extends Controller_Core_Action
 				{
 					throw new Exception("System is unable to fetch the record.", 1);
 				}
+				$this->getMessage()->addMessage('updated Successfully.');
 			}
 			$this->redirect($this->getView()->getUrl('grid','page',[],true));
 		} 
@@ -100,6 +121,7 @@ class Controller_Page extends Controller_Core_Action
 			{
 				throw new Exception("System is unable to fetch record.", 1);
 			}
+			$this->getMessage()->addMessage('Deleted Successfully.');
 			$this->redirect($this->getView()->getUrl('grid','page',[],true));
 		} 
 		catch (Exception $e) 
