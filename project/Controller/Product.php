@@ -8,6 +8,8 @@ class Controller_Product extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$productGrid = Ccc::getBlock('Product_Grid');
 		$content->addChild($productGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -17,6 +19,8 @@ class Controller_Product extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$productAdd = Ccc::getBlock('Product_Edit')->setData(['product'=>$productModel]);
 		$content->addChild($productAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -41,6 +45,8 @@ class Controller_Product extends Controller_Core_Action
 			$content = $this->getLayout()->getContent();
 			$productEdit = Ccc::getBlock('Product_Edit')->setData(['product'=>$product]);
 			$content->addChild($productEdit,'Edit');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 			$this->renderLayout();
 		} 
 		catch (Exception $e) 
@@ -114,8 +120,7 @@ class Controller_Product extends Controller_Core_Action
 			$productId = $request->getRequest('id');
 			if(!$productId)
 			{
-				throw new Exception("Unable to fetch ID.", 1);
-				
+				throw new Exception("Unable to fetch ID.", 1);				
 			}
 			$product = $productModel;
 			$datas = $product->fetchAll("SELECT name FROM product_media WHERE  productId='$productId'");
@@ -128,8 +133,7 @@ class Controller_Product extends Controller_Core_Action
 			$result = $productModel->load($productId)->delete();
 			if(!$result)
 			{
-				throw new Exception("Unable to Delet Record.", 1);
-				
+				throw new Exception("Unable to Delet Record.", 1);	
 			}
 		    $this->redirect($this->getView()->getUrl('grid','product',[],true));
 		} 

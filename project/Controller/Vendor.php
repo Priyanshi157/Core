@@ -8,6 +8,8 @@ class Controller_Vendor extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$vendorGrid = Ccc::getBlock('Vendor_Grid');
 		$content->addChild($vendorGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -18,6 +20,8 @@ class Controller_Vendor extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$vendorAdd = Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendorModel,'address'=>$addressModel]);
 		$content->addChild($vendorAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -50,6 +54,8 @@ class Controller_Vendor extends Controller_Core_Action
 			$content = $this->getLayout()->getContent();
 			$vendorEdit = Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address'=>$address]);
 			$content->addChild($vendorEdit,'Edit');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 			$this->renderLayout();
 		} 
 		catch (Exception $e) 
@@ -148,8 +154,7 @@ class Controller_Vendor extends Controller_Core_Action
 		} 
 		catch (Exception $e) 
 		{
-			print_r($e->getMessage());
-			//$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+			$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
 		}
 	}
 
@@ -179,8 +184,7 @@ class Controller_Vendor extends Controller_Core_Action
 		} 
 		catch (Exception $e) 
 		{
-			print_r($e->getMessage());
-			//$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+			$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
 		}
 	}
 }

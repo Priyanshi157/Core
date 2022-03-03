@@ -8,6 +8,8 @@ class Controller_Customer extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$customerGrid = Ccc::getBlock('Customer_Grid');
 		$content->addChild($customerGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -18,6 +20,8 @@ class Controller_Customer extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$customerAdd = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customerModel,'address'=>$addressModel]);
 		$content->addChild($customerAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -51,6 +55,8 @@ class Controller_Customer extends Controller_Core_Action
 			$content = $this->getLayout()->getContent();
 			$customerEdit = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customer,'address'=>$address]);
 			$content->addChild($customerEdit,'Edit');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 			$this->renderLayout();
 		} 
 		catch (Exception $e) 

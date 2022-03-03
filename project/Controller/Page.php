@@ -7,6 +7,8 @@ class Controller_Page extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$pageGrid = Ccc::getBlock('Page_Grid');
 		$content->addChild($pageGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -16,6 +18,8 @@ class Controller_Page extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$pageAdd = Ccc::getBlock('Page_Edit')->setData(['page'=>$pageModel]);
 		$content->addChild($pageAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -39,6 +43,8 @@ class Controller_Page extends Controller_Core_Action
 			$content = $this->getLayout()->getContent();
 			$pageEdit = Ccc::getBlock('Page_Edit')->setData(['page'=>$pageData]);
 			$content->addChild($pageEdit,'Edit');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 			$this->renderLayout();
 
 		} 

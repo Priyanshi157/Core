@@ -7,6 +7,8 @@ class Controller_Salesman extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$salesmanGrid = Ccc::getBlock('Salesman_Grid');
 		$content->addChild($salesmanGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -16,6 +18,8 @@ class Controller_Salesman extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$salesmanAdd = Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanModel]);
 		$content->addChild($salesmanAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -40,6 +44,8 @@ class Controller_Salesman extends Controller_Core_Action
 			$content = $this->getLayout()->getContent();
 			$salesmanEdit = Ccc::getBlock('Salesman_Edit')->setData(['salesman'=>$salesmanData]);
 			$content->addChild($salesmanEdit,'Edit');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 			$this->renderLayout();
 		} 
 		catch (Exception $e) 

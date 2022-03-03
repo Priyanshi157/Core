@@ -7,6 +7,8 @@ class Controller_Config extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$configGrid = Ccc::getBlock('Config_Grid');
 		$content->addChild($configGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -16,6 +18,8 @@ class Controller_Config extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$configAdd = Ccc::getBlock('Config_Edit')->setData(['config'=>$configModel]);
 		$content->addChild($configAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -39,6 +43,8 @@ class Controller_Config extends Controller_Core_Action
 			$content = $this->getLayout()->getContent();
 			$configEdit = Ccc::getBlock('Config_Edit')->setData(['config'=>$config]);
 			$content->addChild($configEdit,'Edit');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 			$this->renderLayout();
    		}	 
    		catch (Exception $e) 

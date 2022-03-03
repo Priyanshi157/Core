@@ -7,6 +7,8 @@ class Controller_Admin extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$adminGrid = Ccc::getBlock('Admin_Grid');
 		$content->addChild($adminGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -16,6 +18,8 @@ class Controller_Admin extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$adminAdd = Ccc::getBlock('Admin_Edit')->setData(['admin'=>$adminModel]);
 		$content->addChild($adminAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -39,6 +43,8 @@ class Controller_Admin extends Controller_Core_Action
 			$content = $this->getLayout()->getContent();
 			$adminEdit = Ccc::getBlock('Admin_Edit')->setData(['admin'=>$admin]);
 			$content->addChild($adminEdit,'Edit');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 			$this->renderLayout();
    		}	 
    		catch (Exception $e) 

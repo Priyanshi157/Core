@@ -8,6 +8,8 @@ class Controller_Category extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
         $categoryGrid = Ccc::getBlock('Category_Grid');
         $content->addChild($categoryGrid,'Grid');
+                $menu = Ccc::getBlock('Core_Layout_Menu');
+        $header = $this->getLayout()->getHeader()->addChild($menu,'menu');
         $this->renderLayout();
 	}
 	
@@ -17,6 +19,8 @@ class Controller_Category extends Controller_Core_Action
         $content = $this->getLayout()->getContent();
         $categoryAdd = Ccc::getBlock('Category_Edit')->setData(['category'=>$categoryModel]);
         $content->addChild($categoryAdd,'Add');
+        $menu = Ccc::getBlock('Core_Layout_Menu');
+        $header = $this->getLayout()->getHeader()->addChild($menu,'menu');
         $this->renderLayout();
 	}
 
@@ -42,6 +46,8 @@ class Controller_Category extends Controller_Core_Action
         	$content = $this->getLayout()->getContent();
             $categoryEdit = Ccc::getBlock('Category_Edit')->setData(['category'=>$category]);
             $content->addChild($categoryEdit,'Edit');
+            $menu = Ccc::getBlock('Core_Layout_Menu');
+            $header = $this->getLayout()->getHeader()->addChild($menu,'menu');
             $this->renderLayout();
 		}
 		catch (Exception $e) 
