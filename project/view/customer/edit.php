@@ -99,7 +99,7 @@ $customerAddress = $this->getAddress();
 			
 		<label for="billing"> Billing</label><br>
 
-		<input type="checkbox" name="address[shipping]" value="1" <?php echo ($customerAddress->getStatus($customerAddress->shiping)=='Active')?'checked':'' ?>>
+		<input type="checkbox" name="address[shiping]" value="1" <?php echo ($customerAddress->getStatus($customerAddress->shiping)=='Active')?'checked':'' ?>>
 		
 		<label for="shiping"> Shiping</label><br>
 	</div>

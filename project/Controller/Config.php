@@ -90,7 +90,7 @@ class Controller_Config extends Controller_Core_Action
 				{
 					throw new Exception("System is unable to Update.", 1);
 				}
-				$this->getMessage()->addMessage('updated Successfully.');
+				$this->getMessage()->addMessage('Updated Successfully.');
 			}
 			$this->redirect($this->getView()->getUrl('grid','config',[],true));
 		} 
@@ -121,6 +121,7 @@ class Controller_Config extends Controller_Core_Action
 			{
 				throw new Exception("Unable to Delete Record.", 1);
 			}
+			$this->getMessage()->addMessage('Deleted Successfully.');
 			$this->redirect($this->getView()->getUrl('grid','config',[],true));
 		} 
 		catch (Exception $e) 

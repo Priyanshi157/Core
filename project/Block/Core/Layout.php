@@ -38,6 +38,6 @@ class Block_Core_Layout extends Block_Core_Template
 			$child = Ccc::getBlock('Core_Layout_Content');
 			$this->addChild($child,'content');
 		}
-		return $child;	
+		return $child;
 	}
 }

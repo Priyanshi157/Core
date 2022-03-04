@@ -41,10 +41,9 @@ class Controller_Product extends Controller_Core_Action
 			if(!$productData)
 			{
 				throw new Exception("System is unable to find record.", 1);
-				
 			}
 			$content = $this->getLayout()->getContent();
-			$productEdit = Ccc::getBlock('Product_Edit')->setData(['product'=>$product]);
+			$productEdit = Ccc::getBlock('Product_Edit')->setData(['product'=>$productData]);
 			$content->addChild($productEdit,'Edit');
 			$menu = Ccc::getBlock('Core_Layout_Menu');
 			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');

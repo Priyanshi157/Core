@@ -179,7 +179,8 @@ class Controller_Customer extends Controller_Core_Action
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','customer',[],true));
+			print_r($e->getMessage());
+			//$this->redirect($this->getView()->getUrl('grid','customer',[],true));
 		}
 	}
 

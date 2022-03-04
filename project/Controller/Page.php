@@ -45,7 +45,6 @@ class Controller_Page extends Controller_Core_Action
 			$content = $this->getLayout()->getContent();
 			$pageEdit = Ccc::getBlock('Page_Edit')->setData(['page'=>$pageData]);
 			$content->addChild($pageEdit,'Edit');
-			$content->addChild($adminAdd,'Add');
 			$menu = Ccc::getBlock('Core_Layout_Menu');
 			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 			$this->renderLayout();
@@ -94,7 +93,7 @@ class Controller_Page extends Controller_Core_Action
 				{
 					throw new Exception("System is unable to fetch the record.", 1);
 				}
-				$this->getMessage()->addMessage('updated Successfully.');
+				$this->getMessage()->addMessage('Updated Successfully.');
 			}
 			$this->redirect($this->getView()->getUrl('grid','page',[],true));
 		} 

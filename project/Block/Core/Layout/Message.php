@@ -10,7 +10,7 @@ class Block_Core_Layout_Message extends Block_Core_Template
 	{
 		$messageModel = Ccc::getModel('Core_Message');
 		$messages = $messageModel->getMessages();
-		$messageModel->getSession()->destroy();
+		$messageModel->unsetMessages();
 		return $messages;
 	}
 }
