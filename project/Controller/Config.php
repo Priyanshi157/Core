@@ -4,13 +4,24 @@ class Controller_Config extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		Ccc::getBlock('Config_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$configGrid = Ccc::getBlock('Config_Grid');
+		$content->addChild($configGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$message = Ccc::getBlock('Core_Layout_Message');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
+		$this->renderLayout();
 	}
 
 	public function addAction()
 	{
 		$configModel = Ccc::getModel('Config');
-		Ccc::getBlock('Config_Edit')->setData(['config'=>$configModel])->toHtml();
+		$content = $this->getLayout()->getContent();
+		$configAdd = Ccc::getBlock('Config_Edit')->setData(['config'=>$configModel]);
+		$content->addChild($configAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+		$this->renderLayout();
 	}
 
 	public function editAction()
@@ -30,7 +41,12 @@ class Controller_Config extends Controller_Core_Action
 				throw new Exception("System is unable to find record.", 1);
 			}
 			
-			Ccc::getBlock('Config_Edit')->setData(['config'=>$config])->toHtml();
+			$content = $this->getLayout()->getContent();
+			$configEdit = Ccc::getBlock('Config_Edit')->setData(['config'=>$config]);
+			$content->addChild($configEdit,'Edit');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+			$this->renderLayout();
    		}	 
    		catch (Exception $e) 
    		{
@@ -61,6 +77,7 @@ class Controller_Config extends Controller_Core_Action
 				$config->createdAt = date('Y-m-d H:m:s');
 				unset($config->configId);
 				$config->save();
+				$this->getMessage()->addMessage('Added Successfully.');
 			}
 			else
 			{
@@ -73,6 +90,7 @@ class Controller_Config extends Controller_Core_Action
 				{
 					throw new Exception("System is unable to Update.", 1);
 				}
+				$this->getMessage()->addMessage('Updated Successfully.');
 			}
 			$this->redirect($this->getView()->getUrl('grid','config',[],true));
 		} 
@@ -103,6 +121,7 @@ class Controller_Config extends Controller_Core_Action
 			{
 				throw new Exception("Unable to Delete Record.", 1);
 			}
+			$this->getMessage()->addMessage('Deleted Successfully.');
 			$this->redirect($this->getView()->getUrl('grid','config',[],true));
 		} 
 		catch (Exception $e) 

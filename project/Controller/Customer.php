@@ -5,14 +5,25 @@ class Controller_Customer extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		Ccc::getBlock('Customer_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$customerGrid = Ccc::getBlock('Customer_Grid');
+		$content->addChild($customerGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$message = Ccc::getBlock('Core_Layout_Message');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
+		$this->renderLayout();
 	}
 
 	public function addAction()
 	{
 		$customerModel = Ccc::getModel('Customer');
 		$addressModel = Ccc::getModel('Customer_Address');
-		Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customerModel,'address'=>$addressModel])->toHtml();
+		$content = $this->getLayout()->getContent();
+		$customerAdd = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customerModel,'address'=>$addressModel]);
+		$content->addChild($customerAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+		$this->renderLayout();
 	}
 
 	public function editAction()
@@ -39,10 +50,15 @@ class Controller_Customer extends Controller_Core_Action
 
 			if(!$address)
 			{
-				$address = ['address' => null,
-						 'postalCode' => null,'city' => null, 'state' => null, 'country' => null, 'billing' => 2, 'shipping'=>2, 'customerId' => $customer['customerId']];	
+				$address = Ccc::getModel('customer_address');
 			}
-			Ccc::getBlock('Customer_Edit')->addData('customer',$customer)->addData('address',$address)->toHtml();
+			
+			$content = $this->getLayout()->getContent();
+			$customerEdit = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customer,'address'=>$address]);
+			$content->addChild($customerEdit,'Edit');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+			$this->renderLayout();
 		} 
 		catch (Exception $e) 
 		{
@@ -133,6 +149,7 @@ class Controller_Customer extends Controller_Core_Action
 			{
 				throw new Exception("System is unable to Insert.", 1);
 			}
+			$this->getMessage()->addMessage('Added Successfully.');
 		}
 		else
 		{		
@@ -143,6 +160,7 @@ class Controller_Customer extends Controller_Core_Action
 			{
 				throw new Exception("System is unable to Update.", 1);
 			}
+			$this->getMessage()->addMessage('updated Successfully.');
 		}
 	}
 
@@ -161,7 +179,8 @@ class Controller_Customer extends Controller_Core_Action
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','customer',[],true));
+			print_r($e->getMessage());
+			//$this->redirect($this->getView()->getUrl('grid','customer',[],true));
 		}
 	}
 
@@ -187,6 +206,7 @@ class Controller_Customer extends Controller_Core_Action
 			{
 				throw new Exception("Unable to Delet Record.", 1);
 			}
+			$this->getMessage()->addMessage('Deleted Successfully.');
 			$this->redirect($this->getView()->getUrl('grid','customer',[],true));
 		} 
 		catch (Exception $e) 

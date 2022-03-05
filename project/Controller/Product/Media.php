@@ -5,7 +5,10 @@ class Controller_Product_Media extends Controller_Core_Action{
 
 	public function gridAction()
 	{
-		Ccc::getBlock('product_Media_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$mediaGrid = Ccc::getBlock('Product_Media_Grid');
+		$content->addChild($mediaGrid,'Grid');
+		$this->renderLayout();
 	}
 
 	public function saveAction()
@@ -71,6 +74,7 @@ class Controller_Product_Media extends Controller_Core_Action{
 								unset($postData['media']['small']);
 							}
 						}
+						$this->getMessage()->addMessage('Image removed Successfully.');	
 					}
 	
 					if(array_key_exists('gallery',$postData['media']))
@@ -126,8 +130,9 @@ class Controller_Product_Media extends Controller_Core_Action{
 						}
 						unset($mediaData->small);
 					}
+					$this->getMessage()->addMessage('Image saved Successfully.');	
 				}
-			} 	
+			}
 			$this->redirect($this->getView()->getUrl('grid','product_media',['id' => $productId],true));	
 		}
 		catch (Exception $e) 

@@ -5,13 +5,24 @@ class Controller_Category extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-        Ccc::getBlock('Category_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+        $categoryGrid = Ccc::getBlock('Category_Grid');
+        $content->addChild($categoryGrid,'Grid');
+                $menu = Ccc::getBlock('Core_Layout_Menu');
+        $message = Ccc::getBlock('Core_Layout_Message');
+        $header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
+        $this->renderLayout();
 	}
 	
 	public function addAction()
 	{
-        $categoryModel = Ccc::getModel('Category');
-        Ccc::getBlock('Category_Edit')->setData(['category'=>$categoryModel])->toHtml();
+		$categoryModel = Ccc::getModel('Category');
+        $content = $this->getLayout()->getContent();
+        $categoryAdd = Ccc::getBlock('Category_Edit')->setData(['category'=>$categoryModel]);
+        $content->addChild($categoryAdd,'Add');
+        $menu = Ccc::getBlock('Core_Layout_Menu');
+        $header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+        $this->renderLayout();
 	}
 
 	public function editAction()
@@ -33,7 +44,12 @@ class Controller_Category extends Controller_Core_Action
 	        {
 	            throw new Exception("System is unable to find record.", 1);
 	        }
-        	Ccc::getBlock('Category_Edit')->setData(['category'=>$category])->toHtml();
+        	$content = $this->getLayout()->getContent();
+            $categoryEdit = Ccc::getBlock('Category_Edit')->setData(['category'=>$category]);
+            $content->addChild($categoryEdit,'Edit');
+            $menu = Ccc::getBlock('Core_Layout_Menu');
+            $header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+            $this->renderLayout();
 		}
 		catch (Exception $e) 
 		{
@@ -57,6 +73,7 @@ class Controller_Category extends Controller_Core_Action
 			{
 				throw new Exception("System is unable to delete record.", 1);
 			}
+            $this->getMessage()->addMessage('Deleted Successfully.');
 			$this->redirect($this->getView()->getUrl('grid','category',[],true));
 		} 
 		catch (Exception $e) 
@@ -154,6 +171,7 @@ class Controller_Category extends Controller_Core_Action
                         throw new Exception("Sysetm is unable to save your data", 1);   
                     }
                 }
+                $this->getMessage()->addMessage('Saved Successfully.');
                 $this->redirect($this->getView()->getUrl('grid','category',[],true));
             }
         } 

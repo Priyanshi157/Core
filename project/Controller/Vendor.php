@@ -5,14 +5,25 @@ class Controller_Vendor extends Controller_Core_Action
 {
 	public function gridAction()
 	{
-		Ccc::getBlock('Vendor_Grid')->toHtml();
+		$content = $this->getLayout()->getContent();
+		$vendorGrid = Ccc::getBlock('Vendor_Grid');
+		$content->addChild($vendorGrid,'Grid');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$message = Ccc::getBlock('Core_Layout_Message');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
+		$this->renderLayout();
 	}
 
 	public function addAction()
 	{
 		$vendorModel = Ccc::getModel('Vendor');
 		$addressModel = Ccc::getModel('Vendor_Address');
-		Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendorModel,'address'=>$addressModel])->toHtml();
+		$content = $this->getLayout()->getContent();
+		$vendorAdd = Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendorModel,'address'=>$addressModel]);
+		$content->addChild($vendorAdd,'Add');
+		$menu = Ccc::getBlock('Core_Layout_Menu');
+		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+		$this->renderLayout();
 	}
 
 	public function editAction()
@@ -41,7 +52,12 @@ class Controller_Vendor extends Controller_Core_Action
 			{
 				$address = Ccc::getModel('Vendor_Address');
 			}
-			Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address)->toHtml();
+			$content = $this->getLayout()->getContent();
+			$vendorEdit = Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address'=>$address]);
+			$content->addChild($vendorEdit,'Edit');
+			$menu = Ccc::getBlock('Core_Layout_Menu');
+			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
+			$this->renderLayout();
 		} 
 		catch (Exception $e) 
 		{
@@ -113,6 +129,7 @@ class Controller_Vendor extends Controller_Core_Action
 			{
 				throw new Exception("System is unable to Insert.", 1);
 			}
+			$this->getMessage()->addMessage('Added Successfully.');
 		}
 		else
 		{		
@@ -121,6 +138,7 @@ class Controller_Vendor extends Controller_Core_Action
 			{
 				throw new Exception("System is unable to Update.", 1);
 			}
+			$this->getMessage()->addMessage('Updated Successfully.');
 		}
 	}
 
@@ -139,8 +157,7 @@ class Controller_Vendor extends Controller_Core_Action
 		} 
 		catch (Exception $e) 
 		{
-			print_r($e->getMessage());
-			//$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+			$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
 		}
 	}
 
@@ -166,12 +183,12 @@ class Controller_Vendor extends Controller_Core_Action
 			{
 				throw new Exception("Unable to Delet Record.", 1);
 			}
+			$this->getMessage()->addMessage('Deleted Successfully.');
 			$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
 		} 
 		catch (Exception $e) 
 		{
-			print_r($e->getMessage());
-			//$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+			$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
 		}
 	}
 }
