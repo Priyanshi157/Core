@@ -43,22 +43,11 @@ $categories = $this->getCategories();
 	    	<label for="created" class="col-sm-2 col-form-label">Status</label>
 	    	<div class="row col-sm-10">
 		    	<div class="form-check col-sm-6">
-		    		<?php if($categoryData->status == 1){ ?>
-			  		<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault1" value="1" checked>
-			  		<?php }else{ ?>
-			  		<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault1" value="1">
-			  		<?php } ?>
-			  		<label class="form-check-label col-sm-2" for="flexRadioDefault1"> Active </label>		
-				</div>
-				<div class="form-check col-sm-6">
-					<?php if($categoryData->status == 2){ ?>
-			 		<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault2"  value="2" checked>
-			  		<?php }else{ ?>
-			  		<input class="form-check-input col-sm-4" type="radio" name="category[status]" id="flexRadioDefault2"  value="2" >
-				  	<?php } ?>
-			  		<label class="form-check-label col-sm-2" for="flexRadioDefault2"> InActive </label>
-				</div>
-	  		</div>
+	    		<select name="category[status]">
+				<option value="1" <?php echo ($category->getStatus($category->status)=='Active')?'selected':'' ?>>Active</option>
+				<option value="2" <?php echo ($category->getStatus($category->status)=='Inactive')?'selected':'' ?>>Inactive</option>
+			</select>
+  		</div>
 
 	  		<div class="row justify-content-center">
 	  		<button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>

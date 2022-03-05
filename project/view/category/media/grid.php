@@ -8,7 +8,6 @@
     <title>Media</title>
 </head>
 <body>
-
     <form action="<?php echo $this->getUrl('save','category_media') ?>" method="POST" align=center>
         <input type="submit" value="update">
         <button><a href="<?php echo $this->getUrl('grid','category',[],true); ?>">Cancel</a></button>
