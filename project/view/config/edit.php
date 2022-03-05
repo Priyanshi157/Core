@@ -37,7 +37,7 @@
 		  	<select name="config[status]">
 				<option value="1" <?php echo ($config->getStatus($config->status)=='Active')?'selected':'' ?>>Active</option>
 				<option value="2" <?php echo ($config->getStatus($config->status)=='Inactive')?'selected':'' ?>>Inactive</option>
-			</select>
+			  </select>
 
 		</div>
   </div>

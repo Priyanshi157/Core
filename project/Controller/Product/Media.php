@@ -73,8 +73,8 @@ class Controller_Product_Media extends Controller_Core_Action{
 							{
 								unset($postData['media']['small']);
 							}
-
 						}
+						$this->getMessage()->addMessage('Image removed Successfully.');	
 					}
 	
 					if(array_key_exists('gallery',$postData['media']))
@@ -130,8 +130,9 @@ class Controller_Product_Media extends Controller_Core_Action{
 						}
 						unset($mediaData->small);
 					}
+					$this->getMessage()->addMessage('Image saved Successfully.');	
 				}
-			} 	
+			}
 			$this->redirect($this->getView()->getUrl('grid','product_media',['id' => $productId],true));	
 		}
 		catch (Exception $e) 
