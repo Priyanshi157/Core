@@ -69,7 +69,7 @@ class Controller_Product extends Controller_Core_Action
 			$categoryData = $request->getPost('category');
 			if(!$postData)
 			{
-				throw new Exception("Invalid data posted.", 1);	
+				throw new Exception("Invalid data posted.", 1);
 			}
 
 			$product = $productModel;
@@ -81,7 +81,7 @@ class Controller_Product extends Controller_Core_Action
 				$insert = $product->save();
 				if(!$insert)
 				{
-					$this->getMessage()->addMessage('Unable to inserted.',3);
+					$this->getMessage()->addMessage('Unable to inserted.');
 					throw new Exception("System is unable to Insert.", 1);
 				}
 				foreach($categoryData as $categoryId)
@@ -111,8 +111,9 @@ class Controller_Product extends Controller_Core_Action
 				$categoryProduct = $categoryProductModel->fetchAll("SELECT * FROM `category_product` WHERE `productId` = '$product->productId' ");
 				foreach($categoryProduct as $category)
 				{
-					$categoryProductModel->load($category->entity_id)->delete();
+					$categoryProductModel->load($category->entityId)->delete();
 				}
+
 				foreach($categoryData as $categoryId)
 				{
 					$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
