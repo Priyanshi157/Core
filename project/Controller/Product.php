@@ -66,6 +66,7 @@ class Controller_Product extends Controller_Core_Action
 				throw new Exception("Invalid Request", 1);
 			}	
 			$postData = $request->getPost('product');
+			$categoryData = $request->getPost('category');
 			if(!$postData)
 			{
 				throw new Exception("Invalid data posted.", 1);	
@@ -77,11 +78,18 @@ class Controller_Product extends Controller_Core_Action
 			{
 				$product->createdAt = date('y-m-d h:m:s');
 				unset($product->productId);
-				$product->save();
 				$insert = $product->save();
 				if(!$insert)
 				{
+					$this->getMessage()->addMessage('Unable to inserted.',3);
 					throw new Exception("System is unable to Insert.", 1);
+				}
+				foreach($categoryData as $categoryId)
+				{
+					$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
+					$categoryProductModel->productId = $result;
+					$categoryProductModel->categoryId = $categoryId;
+					$categoryProductModel->save();
 				}
 				$this->getMessage()->addMessage('Added Successfully.');
 			}
@@ -96,8 +104,23 @@ class Controller_Product extends Controller_Core_Action
 				$update = $product->save();
 				if(!$update)
 				{
+					$this->getMessage()->addMessage('Unable to update.',3);
 					throw new Exception("System is unable to Update.", 1);
 				}
+				$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
+				$categoryProduct = $categoryProductModel->fetchAll("SELECT * FROM `category_product` WHERE `productId` = '$product->productId' ");
+				foreach($categoryProduct as $category)
+				{
+					$categoryProductModel->load($category->entity_id)->delete();
+				}
+				foreach($categoryData as $categoryId)
+				{
+					$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
+					$categoryProductModel->productId = $product->productId;
+					$categoryProductModel->categoryId = $categoryId;
+					$categoryProductModel->save();
+				}
+
 				$this->getMessage()->addMessage('Updated Successfully.');
 			}
 			$this->redirect($this->getView()->getUrl('grid','product',[],true));

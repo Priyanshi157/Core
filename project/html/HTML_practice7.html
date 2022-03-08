@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/HTML_exercise7.css">
+</head>
+<body>
+	<form action="success.html" method="post">
+		<fieldset>
+			<legend>Your address</legend>
+
+			<table style="width: 30%;border-spacing: 5px;">
+				<tr>
+					<td><label for="fname">First Name</label></td>
+					<td><input type="text" name="first name" id="fname"></td>
+				</tr>
+
+				<tr>
+					<td><label for="lname">Last Name</label></td>
+					<td><input type="text" name="last name" id="lname"></td>
+				</tr>
+
+				<tr>
+					<td><label for="street">Street</label></td>
+					<td><input type="text" name="street" id="street"></td>
+				</tr>
+
+				<tr>
+					<td><label for="city">City</label></td>
+					<td><input type="text" name="city" id="city"></td>
+				</tr>
+			</table>
+
+		</fieldset>
+
+		<fieldset>
+			<legend>Additional details</legend>
+
+			<table style="width: 50%;border-spacing: 5px;">
+				<tr>
+					<td><label for="biography">Biography</label></td>
+					<td><textarea id="biography" rows="4" cols="50"></textarea></td>
+				</tr>
+
+				<tr>
+					<td><label for="file-select">Image</label></td>
+					<td><input type="file" name="Image" id="file-select"></td>
+				</tr>
+
+				<tr>
+					<td><label for="age">Age group</label></td>
+					<td>
+						<select name="age-group" id="age">
+						<option value="0 to 9 years">0 to 9 years</option>
+						<option value="10 to 19 years">10 to 19 years</option>
+						<option value="20 to 29 years">20 to 29 years</option>
+						<option value="30 to 39 years">30 to 39 years</option>
+						<option value="40 to 49 years">40 to 49 years</option>
+						<option value="50 to 59 years">50 to 59 years</option>
+						<option value="above 59">Above 59 years</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+
+		</fieldset>
+
+		<fieldset>
+			<legend>Interests</legend>
+			<table>
+				<tr>
+					<td>
+						<label for="hobbies">Hobbies</label>
+					</td>
+					<td>
+						<select name="hobbies" multiple>
+							<option>Playing soccer</option>
+							<option>Dancing</option>
+							<option>Gardening</option>
+							<option>Watching movies</option>
+						</select>
+					</td>
+				</tr>
+
+				<tr>
+					<td><label>Favourite Car?</label></td>
+					<td>
+						<select name="car" id="car">
+							<option value="BMW">BMW</option>
+							<option value="farrari">Farrari</option>
+							<option value="baleno">Baleno</option>
+							<option value="mg5">MG5 Hector</option>
+						</select>
+					</td>
+				</tr>
+
+				<tr>
+					<td><label>Favourite public transport?</label></td>
+						<td>
+						  <label>
+						    <input type="radio" class="radio" value="1" name="transport"/>Ground</label><br>
+						  <label>
+						    <input type="radio" class="radio" value="1" name="transport" />Train</label><br>
+						  <label>
+						    <input type="radio" class="radio" value="1" name="transport" />Bus</label><br>
+						  <label>
+						    <input type="radio" class="radio" value="1" name="transport" />Water</label><br>
+						</td>
+				</tr>
+			</table>
+		</fieldset>
+		<input type="submit" name="submit" value="Submit">
+		<input type="reset" name="reset" value="Reset">
+	</form>
+</body>
+</html>

@@ -67,7 +67,7 @@ class Model_Core_Row
 		return Ccc::getModel($this->getResourceClassName());
 	}
 
-	public function save($column = null,$tableName = null)
+	public function save($column = null)
 	{
 		if(!$column)
 		{
@@ -76,20 +76,13 @@ class Model_Core_Row
 		if(array_key_exists($column, $this->data))
 		{
 			$id = $this->data[$column];
-			if(!$tableName)
-			{
-				$result = $this->getTable()->update($this->data, [$column=>$id]);
-			}	
-			else
-			{
-				$result = $this->getTable()->update($this->data, [$column=>$id],$tableName);
-			}
+			$result = $this->getTable()->update($this->data, [$column=>$id]);
 		}
 		else
 		{
 			$result = $this->getTable()->insert($this->data);
 		}
-		return $result;
+		return $this;
 	}
 
 	public function delete()

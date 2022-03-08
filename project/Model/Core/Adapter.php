@@ -4,8 +4,8 @@ class Model_Core_Adapter{
     public $config = [
         'host' => 'localhost',
         'user' => 'root',
-        'password' => 'root',
-        'dbname' => 'adapter'
+        'password' => '',
+        'dbname' => 'project_priyanshi'
     ];
     private $connect = NULL;
 

@@ -25,6 +25,14 @@ $categories = $this->getCategories();
       		<input type="text" class="form-control" id="name" name="category[name]" value="<?php echo $categoryData->name; ?>">
     	</div>
   	</div>
+
+  	
+
+  	
+  	<div class="row mb-3">
+    	<label for="created" class="col-sm-2 col-form-label">Status</label>
+    	<div class="row col-sm-10">
+	    	<div class="form-check col-sm-6">
 	    		<select name="category[status]">
 				<option value="1" <?php echo ($category->getStatus($category->status)=='Active')?'selected':'' ?>>Active</option>
 				<option value="2" <?php echo ($category->getStatus($category->status)=='Inactive')?'selected':'' ?>>Inactive</option>

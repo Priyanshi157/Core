@@ -1,0 +1,21 @@
+Different databases:
+
+Oracle 
+pros : latest innovations and features ,  tools are strong
+cons : cost is high
+
+MySQL -> easy to use interface , reliable system , budget friendly for small organization.
+pros : free till some level, can be made to work with other dbs.
+cons : no built in support for XML 
+
+Microsoft SQL Server
+pros : fast and stable , access visualizations on mobile 
+cons :  pricings are high , issues using SQl server integration services to impport files.
+
+MongoDB
+pros: fast and easy , supports json and NoSQl docs , data of any structure can be stored.
+cons: lengthy setup , not secure default settings.
+
+MariaDB
+DB2
+SAP HANA
