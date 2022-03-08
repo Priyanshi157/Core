@@ -28,7 +28,7 @@ $salesmen = $this->getSalesmen();
 			    <td><?php echo $salesman->lastName ?></td>
 			    <td><?php echo $salesman->email ?></td>
 			    <td><?php echo $salesman->mobile ?></td>
-			    <td><?php echo $salesman->status ?></td>
+			    <td><?php echo $salesman->getStatus($salesman->status) ?></td>
 			    <td><?php echo $salesman->createdAt ?></td>
 			    <td><?php echo $salesman->updatedAt ?></td>
 			    <td><a href="<?php echo $this->getUrl('edit','salesman',['id'=>$salesman->salesmanId],true); ?>">Edit</a></td>

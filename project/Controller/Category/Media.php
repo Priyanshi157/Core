@@ -31,6 +31,7 @@ class Controller_Category_Media extends Controller_Core_Action{
 					$fileName = str_replace(" ","_",$fileName);
 					$mediaData->name = $fileName;
 					$extension = array('jpg','jpeg','png','Jpg','Jpeg','Png','JPEG','JPG','PNG');
+				
 					if(in_array($fileExt, $extension))
 					{
 						$result = $mediaModel->save();
@@ -77,6 +78,7 @@ class Controller_Category_Media extends Controller_Core_Action{
 						$mediaData->gallery = 2;
 						$result = $mediaModel->save('categoryId');
 						$mediaData->gallery = 1;
+						
 						foreach ($postData['media']['gallery'] as $gallery) 
 						{
 							$mediaData->mediaId = $gallery;
@@ -97,7 +99,7 @@ class Controller_Category_Media extends Controller_Core_Action{
 
 					if(array_key_exists('base',$postData['media']))
 					{
-						$mediaData->base = $postData['media']['base'];
+						$mediaData->base = $postData['media']['base'];	
 						$result = $mediaModel->save('categoryId','category');
 						if(!$result)
 						{
@@ -136,3 +138,4 @@ class Controller_Category_Media extends Controller_Core_Action{
 		}	
 	}
 }
+
