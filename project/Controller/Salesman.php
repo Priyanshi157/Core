@@ -59,17 +59,16 @@ class Controller_Salesman extends Controller_Core_Action
 	{
 		try 
 		{
-			$salesmanModel = Ccc::getModel('salesman');
+			$salesman = Ccc::getModel('salesman');
 			$request = $this->getRequest();
 			$postData = $request->getPost('salesman');
 			if(!$postData)
 			{
+				$this->getMessage()->addMessage("Not able to find data.");
 				throw new Exception("System is unable to find record.", 1);
 			}		
 
-			$salesman = $salesmanModel;
 			$salesman->setData($postData);
-
 			if(!$salesman->salesmanId)
 			{
 				$salesman->createdAt = date('Y-m-d H:m:s');
@@ -77,6 +76,7 @@ class Controller_Salesman extends Controller_Core_Action
 				$insert = $salesman->save();
 				if(!$insert)
 				{
+					$this->getMessage()->addMessage("Unable to insert data.");
 					throw new Exception("System is unable to find record.", 1);
 				}
 				$this->getMessage()->addMessage('Added Successfully.');
@@ -91,6 +91,7 @@ class Controller_Salesman extends Controller_Core_Action
 				$update = $salesman->save();
 				if(!$update)
 				{
+					$this->getMessage()->addMessage("Unable to update data.");
 					throw new Exception("System is unable to fetch record.", 1);
 				}
 				$this->getMessage()->addMessage('Updated Successfully.');
@@ -130,4 +131,3 @@ class Controller_Salesman extends Controller_Core_Action
 		}
 	}
 }
-?>

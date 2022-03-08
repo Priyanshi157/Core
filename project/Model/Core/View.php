@@ -102,7 +102,7 @@ class Model_Core_View
 
 	public function getBaseUrl($subUrl = null)
     {
-        $url = "C:/xampp/htdocs/category-product/Core/project";
+        $url = "C:/xampp/htdocs/customer-salesman-price/Core/project";
         if($subUrl)
         {
             $url = $url."/".$subUrl;

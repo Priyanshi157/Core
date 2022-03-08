@@ -11,6 +11,8 @@ $products = $this->getProducts();
       <th scope="col">Thumb Image</th>
       <th scope="col">Small Image</th>
       <th scope="col">Price</th>
+      <th scope="col">MSP</th>
+      <th scope="col">Cost Price</th>
       <th scope="col">Quantity</th>
       <th scope="col">Status</th>
       <th scope="col">Created At</th>
@@ -44,6 +46,8 @@ $products = $this->getProducts();
 				<td>No Small Image</td>
 				<?php endif; ?>
 			    <td><?php echo $product->price ?></td>
+			    <td><?php echo $product->msp ?></td>
+			    <td><?php echo $product->costPrice ?></td>
 			    <td><?php echo $product->quantity ?></td>
 			    <td><?php echo $product->getStatus($product->status) ?></td>
 			    <td><?php echo $product->createdAt ?></td>

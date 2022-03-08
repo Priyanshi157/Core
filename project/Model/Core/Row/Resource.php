@@ -83,7 +83,7 @@ class Model_Core_Row_Resource
 		$result = $this->getAdapter()->update($query);
 		return $result;
 	}
-
+	
 	public function fetchAll($query)
 	{
 		$result = $this->getAdapter()->fetchAll($query);
