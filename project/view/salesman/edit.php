@@ -22,16 +22,23 @@
   </div>
 
   <div class="row mb-4">
-    <label for="price" class="col-sm-2 col-form-label">email</label>
+    <label for="price" class="col-sm-2 col-form-label">Email</label>
     <div class="col-md-10">
       <input type="email" class="form-control" id="email" name="salesman[email]" value="<?php echo $salesman->email?>">
     </div>
   </div>
 
   <div class="row mb-3">
-    <label for="qty" class="col-sm-2 col-form-label">mobile</label>
+    <label for="qty" class="col-sm-2 col-form-label">Mobile</label>
     <div class="col-md-10">
       <input type="text" class="form-control" id="mobile" name="salesman[mobile]" value="<?php echo $salesman->mobile ?>">
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <label for="qty" class="col-sm-2 col-form-label">Discount</label>
+    <div class="col-md-10">
+      <input type="text" class="form-control" id="discount" name="salesman[discount]" value="<?php echo $salesman->discount ?>">
     </div>
   </div>
 
@@ -48,6 +55,6 @@
 
   	<div class="row justify-content-center">
   		<button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
-  		<a href="<?php echo $this->getUrl('grid','salesman',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+  		<a href="<?php echo $this->getUrl('grid','salesman'); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
 	</div>
 </form>
