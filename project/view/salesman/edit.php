@@ -1,8 +1,4 @@
-<?php
-
-$salesman = $this->getsalesman();
-
-?>
+<?php $salesman = $this->getsalesman(); ?>
 <form method="POST" action="<?php echo $this->getUrl('save','salesman',['id'=>$salesman->salesmanId],true); ?>">
   <div class="row mb-4">
     <div class="col-md-10">
