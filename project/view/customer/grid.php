@@ -6,17 +6,17 @@ $addresses = $this->getAddresses();
 <table class="table table-bordered my-4">
   <thead>
     <tr>
-      <th scope="col">customer Id</th>
-      <th scope="col">First Name</th>
-      <th scope="col">Last Name</th>
-      <th scope="col">Email</th>
-      <th scope="col">Mobile</th>
-      <th scope="col">Status</th>
-      <th scope="col">Created At</th>
-      <th scope="col">Updated AT</th>
-      <th scope="col">Address</th>
-      <th scope="col">Edit</th>
-      <th scope="col">Delete</th>
+      <th>customer Id</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Email</th>
+      <th>Mobile</th>
+      <th>Status</th>
+      <th>Created At</th>
+      <th>Updated AT</th>
+      <th>Address</th>
+      <th>Edit</th>
+      <th>Delete</th>
     </tr>
   </thead>
   <tbody>
