@@ -68,9 +68,9 @@
       </tr>
       <?php else: ?>
       <?php foreach($categories as $category): ?>
-      
+      <?php $tag = ($this->selected($category->categoryId) == 'checked') ? 'exists' : 'new' ?>
       <tr>
-        <td> <input type="checkbox" name="category[]" value="<?php echo $category->categoryId ?>" <?php echo $this->selected($category->categoryId); ?>> </td>
+        <td> <input type="checkbox" name="category[<?php echo $tag ?>][]" value="<?php echo $category->categoryId ?>" <?php echo $this->selected($category->categoryId); ?>> </td>
         <td><?php echo $category->categoryId; ?></td>
         <td><?php echo $this->getPath($category->categoryId,$category->path) ?></td>
       </tr>

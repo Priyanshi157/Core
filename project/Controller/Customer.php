@@ -86,12 +86,6 @@ class Controller_Customer extends Controller_Core_Action
 		{
 			$customer->createdAt = date('y-m-d h:m:s');
 			unset($customer->customerId);
-			$insert = $customer->save();
-			if($insert==null)
-			{
-				throw new Exception("System is unable to Insert.", 1);
-			}
-			return $insert;
 		}
 		else
 		{
@@ -103,6 +97,12 @@ class Controller_Customer extends Controller_Core_Action
 			$customer->updatedAt = date('y-m-d h:m:s');
 			$update = $customer->save();
 		}	 
+		$result = $customer->save();
+		if($result==null)
+		{
+			$this->getMessage()->addMessage('System is unable to save data.',3);
+		}
+		return $result->customerId;
 	}
 
 	protected function saveAddress($customerId)
@@ -144,24 +144,19 @@ class Controller_Customer extends Controller_Core_Action
 		{
 			$address->customerId = $customerId;
 			unset($address->addressId);
-			$insert = $address->save();
-			if(!$insert)
-			{
-				throw new Exception("System is unable to Insert.", 1);
-			}
-			$this->getMessage()->addMessage('Added Successfully.');
 		}
 		else
 		{		
 			$address->customerId = $postData['customerId'];
 			$address->addressId = $postData['addressId'];
-			$update = $address->save();
-			if(!$update)
-			{
-				throw new Exception("System is unable to Update.", 1);
-			}
-			$this->getMessage()->addMessage('updated Successfully.');
 		}
+		
+		$result = $address->save();
+		if(!$result)
+		{
+			$this->getMessage()->addMessage('System is unable to save data.',3);
+		}
+		$this->getMessage()->addMessage('Data saved Successfully.',1);
 	}
 
 	public function saveAction()
@@ -175,12 +170,11 @@ class Controller_Customer extends Controller_Core_Action
 				$this->redirect($this->getView()->getUrl('grid','customer',[],true));
 			}
 			$this->saveAddress($customerId);
-			$this->redirect($this->getView()->getUrl('grid','customer',[],true));
+			$this->redirect('grid','customer',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			print_r($e->getMessage());
-			//$this->redirect($this->getView()->getUrl('grid','customer',[],true));
+			$this->redirect('grid','customer',[],true);
 		}
 	}
 
@@ -207,11 +201,11 @@ class Controller_Customer extends Controller_Core_Action
 				throw new Exception("Unable to Delet Record.", 1);
 			}
 			$this->getMessage()->addMessage('Deleted Successfully.');
-			$this->redirect($this->getView()->getUrl('grid','customer',[],true));
+			$this->redirect('grid','customer',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','customer',[],true));
+			$this->redirect('grid','customer',[],true);
 		}
 	}
 }

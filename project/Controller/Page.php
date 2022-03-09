@@ -19,7 +19,6 @@ class Controller_Page extends Controller_Core_Action
 		$content = $this->getLayout()->getContent();
 		$pageAdd = Ccc::getBlock('Page_Edit')->setData(['page'=>$pageModel]);
 		$content->addChild($pageAdd,'Add');
-		$content->addChild($adminAdd,'Add');
 		$menu = Ccc::getBlock('Core_Layout_Menu');
 		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
@@ -74,12 +73,6 @@ class Controller_Page extends Controller_Core_Action
 			{
 				$page->createdAt = date('Y-m-d H:m:s');
 				unset($page->pageId);
-				$insert = $page->save();
-				if(!$insert)
-				{
-					throw new Exception("System is unable to insert.", 1);
-				}
-				$this->getMessage()->addMessage('Added Successfully.');
 			}
 			else
 			{
@@ -88,18 +81,18 @@ class Controller_Page extends Controller_Core_Action
 					throw new Exception("Invalid Request.", 1);
 				}
 				$page->updatedAt = date('Y-m-d H:m:s');
-				$update = $page->save();
-				if(!$update)
-				{
-					throw new Exception("System is unable to fetch the record.", 1);
-				}
-				$this->getMessage()->addMessage('Updated Successfully.');
 			}
-			$this->redirect($this->getView()->getUrl('grid','page',[],true));
+			$result = $page->save();
+			if(!$result)
+			{
+				$this->getMessage()->addMessage('System is unable to save data.');
+			}
+			$this->getMessage()->addMessage('Added Successfully.');
+			$this->redirect('grid','page',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','page',[],true));
+			$this->redirect('grid','page',[],true);
 		}
 	}
 
@@ -121,11 +114,11 @@ class Controller_Page extends Controller_Core_Action
 				throw new Exception("System is unable to fetch record.", 1);
 			}
 			$this->getMessage()->addMessage('Deleted Successfully.');
-			$this->redirect($this->getView()->getUrl('grid','page',[],true));
+			$this->redirect('grid','page',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','page',[],true));
+			$this->redirect('grid','page',[],true);
 		}
 	}
 }

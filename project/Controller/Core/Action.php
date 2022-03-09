@@ -7,11 +7,11 @@ class Controller_Core_Action
 	protected $layout = null;
 	protected $message = null;
 
-	public function redirect($url)
-	{
-		header("Location: $url");
-		exit();
-	}
+	public function redirect($a=null,$c=null,array $data = [],$reset = false)
+    {
+        $url = Ccc::getModel('core_view')->getUrl($a,$c,$data,$reset);
+        header("location: $url");
+    }
 
 	public function getview()
 	{
