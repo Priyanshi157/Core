@@ -57,31 +57,6 @@ class Controller_Category extends Controller_Core_Action
 		}
 	}
 
-	public function deleteAction()
-	{
-		try 
-		{
-			$adminModel = Ccc::getModel('category');
-			$request = $this->getRequest();
-			if(!$request->getRequest('id'))
-			{
-				throw new Exception("Invalid Request", 1);
-			}	
-			$categoryId = $request->getRequest('id');
-			$result = $adminModel->load($categoryId)->delete();
-			if(!$result)
-			{
-				throw new Exception("System is unable to delete record.", 1);
-			}
-            $this->getMessage()->addMessage('Deleted Successfully.');
-			$this->redirect('grid','category',[],true);
-		} 
-		catch (Exception $e) 
-		{
-            $this->redirect('grid','category',[],true);
-		}
-	}
-
 	public function saveAction()
     {
         try 
@@ -89,24 +64,22 @@ class Controller_Category extends Controller_Core_Action
             $categoryModel = Ccc::getModel('Category');
             $request = $this->getRequest();
             $id = $request->getRequest('id');
-
             if($request->isPost())
             {
                 $postData = $request->getPost('category');
-                $category = $categoryModel->setData($postData);
-                
+                $categoryData = $categoryModel->setData($postData);
                 if(!empty($id))
                 {
-                    $category->categoryId = $id;
-                    $category->updatedAt = date('y-m-d h:m:s');
-                
+                    $categoryData->categoryId = $id;
+                    $categoryData->updatedAt = date('y-m-d h:m:s');
                     if(!$postData['parentId'])
                     {
-                        $category->parentId = NULL;
+                        $categoryData->parentId = NULL;
                     }
                     $result = $categoryModel->save();
                     if(!$result)
                     {
+                        $this->getMessage()->addMessage('unable to update.',1);
                         throw new Exception("Sysetm is unable to save your data", 1);   
                     }
                     
@@ -126,8 +99,7 @@ class Controller_Category extends Controller_Core_Action
                             }
                             array_shift($finalPath);
                         }
-                        if($path->parentId)
-                        {
+                        if($path->parentId){
                             $parentPath = $categoryModel->load($path->parentId);
                             $path->path = $parentPath->path ."/".implode('/',$finalPath);
                         }
@@ -137,47 +109,75 @@ class Controller_Category extends Controller_Core_Action
                         }
                         $result = $path->save();
                     }
+                    $this->getMessage()->addMessage('Data Updated Successfully.',1);
                 }
                 else
                 {
-                    $category->createdAt = date('y-m-d h:m:s');
-                    if(!$category->parentId)
-                    {
-                        unset($category->parentId);
-                        $insertId = $categoryModel->save();
-                        if(!$insertId)
+                    $categoryData->createdAt = date('y-m-d h:m:s');
+                    if(!$categoryData->parentId){
+                        unset($categoryData->parentId);
+                        print_r($categoryData);
+                        $insert = $categoryModel->save();
+                        $categoryId = $insert->categoryId;
+                        if(!$insert->categoryId)
                         {
+                            $this->getMessage()->addMessage('unable to Inser Data.',3);
                             throw new Exception("system is unabel to insert your data", 1);
                         }
-                        $category->resetData();
-                        $category->path = $insertId;
-                        $category->categoryId = $insertId;
+                        $categoryData->resetData();
+                        $categoryData->path = $categoryId;
+                        $categoryData->categoryId = $categoryId;
                         $result = $categoryModel->save();
+                        $this->getMessage()->addMessage('data inserted successfully',1);
                     }
-                    else
-                    {
-                        $insertId = $categoryModel->save();
-                        if(!$insertId)
-                        {
+                    else{
+                        $insert = $categoryModel->save();
+                        if(!$insert->categoryId){
                             throw new Exception("system is unabel to insert your data", 1);
                         }
-                        $category->categoryId = $insertId;
-                        $parentPath = $categoryModel->load($category->parentId);
-                        $category->path = $parentPath->path."/". $insertId;
-                        $result = $category->save();
+                        $categoryData->categoryId = $insert->categoryId;
+                        $parentPath = $categoryModel->load($categoryData->parentId);
+                        $categoryData->path = $parentPath->path."/". $insert->categoryId;
+                        $result = $categoryData->save();
                     }
                     if(!$result)
                     {
+                        $this->getMessage()->addMessage('unable to insert data.',3);
                         throw new Exception("Sysetm is unable to save your data", 1);   
                     }
                 }
-                $this->getMessage()->addMessage('Data saved Successfully.');
+                $this->getMessage()->addMessage('data inserted successfully',1);
                 $this->redirect('grid','category',[],true);
             }
         } 
         catch (Exception $e) 
         {
             echo $e->getMessage();
+        }
+    }
+
+    public function deleteAction()
+    {
+        try 
+        {
+            $adminModel = Ccc::getModel('category');
+            $request = $this->getRequest();
+            if(!$request->getRequest('id'))
+            {
+                throw new Exception("Invalid Request", 1);
+            }   
+            $categoryId = $request->getRequest('id');
+            $result = $adminModel->load($categoryId)->delete();
+            if(!$result)
+            {
+                throw new Exception("System is unable to delete record.", 1);
+            }
+            $this->getMessage()->addMessage('Deleted Successfully.');
+            $this->redirect('grid','category',[],true);
+        } 
+        catch (Exception $e) 
+        {
+            $this->redirect('grid','category',[],true);
         }
     }
 }
