@@ -32,21 +32,23 @@ class Controller_Customer_Price extends Controller_Core_Action
 						$customerPriceModel->load($customer->customerId,'customerId')->delete();
 					}
 				}
+				
 				$customerData = $request->getPost('product');
 				$customerPriceModel->customerId = $customerId;
 				foreach($customerData as $customer)
 				{
-					$minimunPrize = (float)$customer['price'] - (float)$customer['price']*(float)$customer['discount']/100;
-					if($minimunPrize >= (float)$customer['msp'])
+					if($customer['salesmanPrice'] <= $customer['price'])
 					{
-						$customerPriceModel->discount = $customer['discount'];
+						$customerPriceModel->price = $customer['price'];
 					}
 					else
 					{
-						$customerPriceModel->discount = 100 - (float)$customer['msp']*100/(float)$customer['price'];
+						$customerPriceModel->price = $customer['salesmanPrice'];
 					}
 					$customerPriceModel->productId = $customer['productId'];
+				
 					$customerPriceModel->save();
+					unset($customerPriceModel->entityId);
 				}
 			}
 			$this->getMessage()->addMessage('Discount set successfully');
