@@ -16,6 +16,7 @@ class Controller_Category_Media extends Controller_Core_Action{
 		try 
 		{
 			$mediaModel = Ccc::getModel('Category_Media');
+			$categoryModel = Ccc::getModel('Category');
 			$request = $this->getRequest();
 			$id = $request->getRequest('id');
 			if($request->isPost())
@@ -44,6 +45,8 @@ class Controller_Category_Media extends Controller_Core_Action{
 				}
 				else
 				{
+					$categoryData = $categoryModel;
+					$categoryData->categoryId = $id;
 					$mediaData = $mediaModel;
 					$mediaData->categoryId = $id;
 					$postData = $request->getPost();
@@ -99,42 +102,44 @@ class Controller_Category_Media extends Controller_Core_Action{
 
 					if(array_key_exists('base',$postData['media']))
 					{
-						$mediaData->base = $postData['media']['base'];	
-						$result = $mediaModel->save('categoryId','category');
+						$categoryData->base = $postData['media']['base'];	
+						$result = $categoryModel->save();
 						if(!$result)
 						{
-							throw new Exception("System is unabel to set base", 1);
+							throw new Exception("System is unable to set base", 1);
 						}
-						unset($mediaData->base);
+						unset($categoryData->base);
 					}
+
 					if(array_key_exists('thumb',$postData['media']))
 					{
-						$mediaData->thumb = $postData['media']['thumb'];
-						$result = $mediaModel->save('categoryId','category');
+						$categoryData->thumb = $postData['media']['thumb'];
+						$result = $categoryModel->save();
 						if(!$result)
 						{
-							throw new Exception("System is unabel to set thumb", 1);
+							throw new Exception("System is unable to set thumb", 1);
 						}
-						unset($mediaData->thumb);
+						unset($categoryData->thumb);
 					}
+
 					if(array_key_exists('small',$postData['media']))
 					{
-						$mediaData->small = $postData['media']['small'];
-						$result = $mediaModel->save('categoryId','category');
+						$categoryData->small = $postData['media']['small'];
+						$result = $categoryModel->save();
 						if(!$result)
 						{
-							throw new Exception("System is unabel to set small", 1);
+							throw new Exception("System is unable to set small", 1);
 						}
-						unset($mediaData->small);
+						unset($categoryData->small);
 					}
 				}
 			}
 			$this->getMessage()->addMessage('Image saved Successfully.'); 	
-			$this->redirect($this->getView()->getUrl('grid','category_media',['id' => $id],true));	
+			$this->redirect('grid','category_media',['id' => $id],true);	
 		}
 		catch (Exception $e) 
 		{
-			echo $e->getMessage();
+			$this->redirect('grid','category_media',['id' => $id],true);
 		}	
 	}
 }

@@ -50,11 +50,11 @@ class Controller_Customer_Price extends Controller_Core_Action
 				}
 			}
 			$this->getMessage()->addMessage('Discount set successfully');
-			$this->redirect($this->getView()->getUrl('grid','customer_price',[],false));
+			$this->redirect('grid','customer',[],false);
 		}
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','customer_price',[],false));
+			$this->redirect('grid','customer',[],false);
 		}
 	}
 }

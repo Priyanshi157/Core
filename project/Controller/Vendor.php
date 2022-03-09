@@ -85,12 +85,6 @@ class Controller_Vendor extends Controller_Core_Action
 		{
 			$vendor->createdAt = date('y-m-d h:m:s');
 			unset($vendor->vendorId);
-			$insert = $vendor->save();
-			if($insert==null)
-			{
-				throw new Exception("System is unable to Insert.", 1);
-			}
-			return $insert;
 		}
 		else
 		{
@@ -100,9 +94,13 @@ class Controller_Vendor extends Controller_Core_Action
 			}
 			$vendor->vendorId = $postData["vendorId"];
 			$vendor->updatedAt = date('y-m-d h:m:s');
-			$update = $vendor->save();
-			return $vendor->vendorId;
 		}	 
+		$result = $vendor->save();
+		if(!$result)
+		{
+			$this->getMessage()->getMessage("System is unable to save the data.",3);
+		}
+		return $result->vendorId;
 	}
 
 	protected function saveAddress($vendorId)
@@ -123,23 +121,20 @@ class Controller_Vendor extends Controller_Core_Action
 		$address->vendorId = $vendorId;
 		if(!($address->addressId))
 		{
+			$address->vendorId = $vendorId;
 			unset($address->addressId);
-			$insert = $address->save();
-			if(!$insert)
-			{
-				throw new Exception("System is unable to Insert.", 1);
-			}
-			$this->getMessage()->addMessage('Added Successfully.');
 		}
 		else
 		{		
-			$update = $address->save();
-			if(!$update)
-			{
-				throw new Exception("System is unable to Update.", 1);
-			}
-			$this->getMessage()->addMessage('Updated Successfully.');
+			$address->vendorId = $postData['vendorId'];
+			$address->addressId = $postData['addressId'];
 		}
+		$result = $address->save();
+		if(!$result)
+		{
+			$this->getMessage()->addMessage('Systme is unable to save data.');
+		}
+		$this->getMessage()->addMessage('Data saved successfully.');
 	}
 
 	public function saveAction()
@@ -150,14 +145,14 @@ class Controller_Vendor extends Controller_Core_Action
 			$request = $this->getRequest();
 			if(!$request->getPost('address')['postalCode'] )
 			{
-				$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+				$this->redirect('grid','vendor',[],true);
 			}
 			$this->saveAddress($vendorId);
-			$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+			$this->redirect('grid','vendor',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+			$this->redirect('grid','vendor',[],true);
 		}
 	}
 
@@ -184,11 +179,11 @@ class Controller_Vendor extends Controller_Core_Action
 				throw new Exception("Unable to Delet Record.", 1);
 			}
 			$this->getMessage()->addMessage('Deleted Successfully.');
-			$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+			$this->redirect('grid','vendor',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','vendor',[],true));
+			$this->redirect('grid','vendor',[],true);
 		}
 	}
 }

@@ -32,5 +32,26 @@ class Model_Product extends Model_Core_Row
 		}
 		return $statuses[self::STATUS_DEFAULT];
 	}
+
+	public function saveCategories(array $categoryIds)
+	{
+		$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
+		$categoryProduct = $categoryProductModel->fetchAll("SELECT * FROM `category_product` WHERE `productId` = '$this->productId' ");
+		foreach($categoryProduct as $category)
+		{
+			if(in_array($category->categoryId,$categoryIds['exists']))
+			{
+				$categoryProductModel->load($category->entityId)->delete();
+			}
+		}
+
+		foreach($categoryIds['new'] as $categoryId)
+		{
+			$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
+			$categoryProductModel->productId = $this->productId;
+			$categoryProductModel->categoryId = $categoryId;
+			$categoryProductModel->save();
+		}
+	}
 }
 ?>

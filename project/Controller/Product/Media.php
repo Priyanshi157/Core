@@ -16,15 +16,15 @@ class Controller_Product_Media extends Controller_Core_Action{
 		try 
 		{
 			$mediaModel = Ccc::getModel('Product_Media');
+			$productModel = Ccc::getModel('Product');
 			$request = $this->getRequest();
-			$productId = $request->getRequest('id');
-		
+			$id = $request->getRequest('id');
 			if($request->isPost())
 			{
 				if(!$request->getPost())
 				{
 					$mediaData = $mediaModel;
-					$mediaData->productId = $productId;
+					$mediaData->productId = $id;
 					$file = $request->getFile();
 					$ext = explode('.',$file['name']['name']);
 					$fileExt = end($ext);
@@ -46,8 +46,10 @@ class Controller_Product_Media extends Controller_Core_Action{
 				}
 				else
 				{
+					$productData = $productModel;
+					$productData->productId = $id;
 					$mediaData = $mediaModel;
-					$mediaData->productId = $productId;
+					$mediaData->productId = $id;
 					$postData = $request->getPost();
 					if(array_key_exists('remove',$postData['media']))
 					{
@@ -102,42 +104,42 @@ class Controller_Product_Media extends Controller_Core_Action{
 
 					if(array_key_exists('base',$postData['media']))
 					{
-						$mediaData->base = $postData['media']['base'];
-						$result = $mediaModel->save('productId','product');
+						$productData->base = $postData['media']['base'];
+						$result = $productModel->save();
 						if(!$result)
 						{
 							throw new Exception("System is unabel to set base", 1);
 						}
-						unset($mediaData->base);
+						unset($productData->base);
 					}
 					if(array_key_exists('thumb',$postData['media']))
 					{
-						$mediaData->thumb = $postData['media']['thumb'];
-						$result = $mediaModel->save('productId','product');
+						$productData->thumb = $postData['media']['thumb'];
+						$result = $productModel->save();
 						if(!$result)
 						{
 							throw new Exception("System is unabel to set thumb", 1);
 						}
-						unset($mediaData->thumb);
+						unset($productData->thumb);
 					}
 					if(array_key_exists('small',$postData['media']))
 					{
-						$mediaData->small = $postData['media']['small'];
-						$result = $mediaModel->save('productId','product');
+						$productData->small = $postData['media']['small'];
+						$result = $productModel->save();
 						if(!$result)
 						{
 							throw new Exception("System is unabel to set small", 1);
 						}
-						unset($mediaData->small);
+						unset($productData->small);
 					}
-					$this->getMessage()->addMessage('Image saved Successfully.');	
+					$this->getMessage()->addMessage('Image saved Successfully.');
 				}
 			}
-			$this->redirect($this->getView()->getUrl('grid','product_media',['id' => $productId],true));	
+			$this->redirect('grid','product_media',['id' => $id],true);	
 		}
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','product_media',['id' => $productId],true));
+			$this->redirect('grid','product_media',['id' => $id],true);
 		}
 	}
 

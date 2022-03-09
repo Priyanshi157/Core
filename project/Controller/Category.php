@@ -74,11 +74,11 @@ class Controller_Category extends Controller_Core_Action
 				throw new Exception("System is unable to delete record.", 1);
 			}
             $this->getMessage()->addMessage('Deleted Successfully.');
-			$this->redirect($this->getView()->getUrl('grid','category',[],true));
+			$this->redirect('grid','category',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','category',[],true));
+            $this->redirect('grid','category',[],true);
 		}
 	}
 
@@ -171,8 +171,8 @@ class Controller_Category extends Controller_Core_Action
                         throw new Exception("Sysetm is unable to save your data", 1);   
                     }
                 }
-                $this->getMessage()->addMessage('Saved Successfully.');
-                $this->redirect($this->getView()->getUrl('grid','category',[],true));
+                $this->getMessage()->addMessage('Data saved Successfully.');
+                $this->redirect('grid','category',[],true);
             }
         } 
         catch (Exception $e) 

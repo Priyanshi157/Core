@@ -52,12 +52,9 @@ class Model_Core_Row_Resource
 	}
 
 
-	public function update(array $updateArray, array $updateWhere,$tableName = null)
+	public function update(array $updateArray, array $updateWhere)
 	{
-		$date = date('Y-m-d H:i:s');
-		if(!$tableName){
-			$tableName = $this->getTableName();
-		}
+		$tableName = $this->getTableName();
 		$valueArray = [];
 		$nullValueArray = [];
 		$key = key($updateWhere);
@@ -71,10 +68,10 @@ class Model_Core_Row_Resource
 			else 
 			{
 				$valueArray[] = "$columnName='$columnValue'";
-			}
-			
+			}	
 		}
-		foreach ($nullValueArray as $nullColumnName) {
+		foreach ($nullValueArray as $nullColumnName) 
+		{
 			$query2 = "UPDATE {$tableName} SET {$nullColumnName} = null WHERE $key = $value";
 			$result = $this->getAdapter()->update($query2);
 		}
@@ -105,5 +102,4 @@ class Model_Core_Row_Resource
 		$result = $this->getAdapter()->delete($query);
 		return $result;
 	}
-
 }

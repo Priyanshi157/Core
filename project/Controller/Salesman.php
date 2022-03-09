@@ -73,13 +73,6 @@ class Controller_Salesman extends Controller_Core_Action
 			{
 				$salesman->createdAt = date('Y-m-d H:m:s');
 				unset($salesman->salesmanId);
-				$insert = $salesman->save();
-				if(!$insert)
-				{
-					$this->getMessage()->addMessage("Unable to insert data.");
-					throw new Exception("System is unable to find record.", 1);
-				}
-				$this->getMessage()->addMessage('Added Successfully.');
 			}
 			else
 			{
@@ -88,19 +81,18 @@ class Controller_Salesman extends Controller_Core_Action
 					throw new Exception("Invalid Request.", 1);
 				}
 				$salesman->updatedAt = date('Y-m-d H:m:s');
-				$update = $salesman->save();
-				if(!$update)
-				{
-					$this->getMessage()->addMessage("Unable to update data.");
-					throw new Exception("System is unable to fetch record.", 1);
-				}
-				$this->getMessage()->addMessage('Updated Successfully.');
 			}
-			$this->redirect($this->getView()->getUrl('grid','salesman',[],true));
+			$result = $salesman->save();
+			if(!$result)
+			{
+				$this->getMessage()->addMessage("Unable to save data.");
+			}
+			$this->getMessage()->addMessage('Added Successfully.');
+			$this->redirect('grid','salesman',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','salesman',[],true));
+			$this->redirect('grid','salesman',[],true);
 		}	
 	}
 
@@ -109,6 +101,8 @@ class Controller_Salesman extends Controller_Core_Action
 		try 
 		{
 			$salesmanModel = Ccc::getModel('Salesman');
+			$customerPriceModel = Ccc::getModel('Customer_Price');
+			$customerModel = Ccc::getModel('Customer');
 			$request = $this->getRequest();
 			$id = $request->getRequest('id');
 			if(!$id)
@@ -117,17 +111,26 @@ class Controller_Salesman extends Controller_Core_Action
 			}
 
 			$salesman = $salesmanModel;
+			$customers = $customerModel->fetchAll("SELECT * FROM `customer` WHERE `salesmanId` = {$id}");
+			foreach($customers as $customer)
+			{
+				$customerPrices = $customerPriceModel->fetchAll("SELECT `entityId` FROM `customer_price` WHERE `customerId` = {$customer->customerId}");
+				foreach ($customerPrices as $customerPrice) 
+				{
+					$customerPriceModel->load($customerPrice->entityId)->delete();
+				}
+			}
 			$salesmanData = $salesman->load($id)->delete();
 			if(!$salesmanData)
 			{
 				throw new Exception("System is unable to find record.", 1);
 			}
 			$this->getMessage()->addMessage('Deleted Successfully.');
-			$this->redirect($this->getView()->getUrl('grid','salesman',[],true));
+			$this->redirect('grid','salesman',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','salesman',[],true));
+			$this->redirect('grid','salesman',[],true);
 		}
 	}
 }

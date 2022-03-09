@@ -23,7 +23,8 @@ class Block_Product_Media_Grid extends Block_Core_Template
         $productId = $request->getRequest('id');
         $productModel = Ccc::getModel('Product');
         $select = $productModel->fetchAll("SELECT * FROM `product` WHERE `$column` = '$mediaId'");
-        if($select){
+        if($select)
+        {
             return 'checked';
         }
     }

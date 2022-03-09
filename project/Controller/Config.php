@@ -76,8 +76,6 @@ class Controller_Config extends Controller_Core_Action
 			{
 				$config->createdAt = date('Y-m-d H:m:s');
 				unset($config->configId);
-				$config->save();
-				$this->getMessage()->addMessage('Added Successfully.');
 			}
 			else
 			{
@@ -85,18 +83,19 @@ class Controller_Config extends Controller_Core_Action
 				{
 					throw new Exception("Invalid Request.", 1);
 				}
-				$update = $config->save();
-				if(!$update)
-				{
-					throw new Exception("System is unable to Update.", 1);
-				}
-				$this->getMessage()->addMessage('Updated Successfully.');
+				$config->configId = $postData["configId"];
 			}
-			$this->redirect($this->getView()->getUrl('grid','config',[],true));
+			$result = $config->save();
+			if(!$result)
+			{
+				throw new Exception("System is unable to Update.", 1);
+			}
+			$this->getMessage()->addMessage('Data saved Successfully.');
+			$this->redirect('grid','config',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','config',[],true));
+			$this->redirect('grid','config',[],true);
 		}
 	}
 
@@ -122,11 +121,11 @@ class Controller_Config extends Controller_Core_Action
 				throw new Exception("Unable to Delete Record.", 1);
 			}
 			$this->getMessage()->addMessage('Deleted Successfully.');
-			$this->redirect($this->getView()->getUrl('grid','config',[],true));
+			$this->redirect('grid','config',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','config',[],true));
+			$this->redirect('grid','config',[],true);
 		}
 	}
 }

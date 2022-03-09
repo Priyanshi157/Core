@@ -76,8 +76,6 @@ class Controller_Admin extends Controller_Core_Action
 			{
 				$admin->createdAt = date('Y-m-d H:m:s');
 				unset($admin->adminId);
-				$admin->save();
-				$this->getMessage()->addMessage('Added Successfully.');
 			}
 			else
 			{
@@ -86,19 +84,22 @@ class Controller_Admin extends Controller_Core_Action
 					throw new Exception("Invalid Request.", 1);
 				}
 				
+				$admin->adminId = $postData["adminId"];
 				$admin->updatedAt = date('Y-m-d H:m:s');
-				$update = $admin->save();
-				if(!$update)
-				{
-					throw new Exception("System is unable to Update.", 1);
-				}
 				$this->getMessage()->addMessage('updated Successfully.');
 			}
-			$this->redirect($this->getView()->getUrl('grid','admin',[],true));
+			$result = $admin->save();
+			if(!$result)
+			{
+				$this->getMessage()->addMessage('Unable to save.',3);
+			}
+			
+			$this->getMessage()->addMessage('Data saved Successfully.');
+			$this->redirect('grid','admin',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','admin',[],true));
+			$this->redirect('grid','admin',[],true);
 		}
 	}
 
@@ -125,11 +126,11 @@ class Controller_Admin extends Controller_Core_Action
 				
 			}
 			$this->getMessage()->addMessage('Deleted Successfully.');
-			$this->redirect($this->getView()->getUrl('grid','admin',[],true));
+			$this->redirect('grid','admin',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect($this->getView()->getUrl('grid','admin',[],true));
+			$this->redirect('grid','admin',[],true);
 		}
 	}
 }
