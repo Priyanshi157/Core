@@ -47,7 +47,7 @@
     <label for="created" class="col-sm-2 col-form-label">Status</label>
     <div class="row col-sm-10">
       <div class="form-check col-sm-6">
-        <select name="customer[status]">
+        <select name="product[status]">
         <option value="1" <?php echo ($product->getStatus($product->status)=='Active')?'selected':'' ?>>Active</option>
         <option value="2" <?php echo ($product->getStatus($product->status)=='Inactive')?'selected':'' ?>>Inactive</option>
       </select>
