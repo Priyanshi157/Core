@@ -10,6 +10,23 @@ class Model_Core_Message
 	const MESSAGE_ERROR_LBL = 'error';
 
 	protected $session = null;
+	protected $sessionClassName = null;
+
+	public function __construct()
+	{
+		
+	}
+
+	public function getSessionClassName()
+	{
+		return $this->sessionClassName;
+	}
+
+	public function setSessionClassName($sessionClassName)
+	{
+		$this->sessionClassName = $sessionClassName;
+		return $this;
+	}
 
 	public function addMessage($message,$type = null)
 	{
@@ -34,15 +51,19 @@ class Model_Core_Message
 	{
 		if(!$this->session)
 		{
-			$this->setSession(Ccc::getModel('Core_Session'));
+			$this->setSession();
 		}
 		return $this->session;
 	}
 
-	public function setSession($session)
+	public function setSession($session = null)
 	{
-		$this->session = $session;
-		return $this;
+		if(!$session)
+		{
+			$session = 'Core_Session';
+		}
+		$this->session = Ccc::getModel($session);
+		return $this->session;
 	}
 
 	public function getMessages()

@@ -1,7 +1,7 @@
-<?php Ccc::loadClass('Controller_Core_Action'); ?>
+<?php Ccc::loadClass('Controller_Admin_Action'); ?>
 <?php 
 
-class Controller_Category extends Controller_Core_Action
+class Controller_Category extends Controller_Admin_Action
 {
 	public function gridAction()
 	{
@@ -80,7 +80,7 @@ class Controller_Category extends Controller_Core_Action
                     if(!$result)
                     {
                         $this->getMessage()->addMessage('unable to update.',1);
-                        throw new Exception("Sysetm is unable to save your data", 1);   
+                        throw new Exception("System is unable to save your data", 1);   
                     }
                     
                     $allPath = $categoryModel->fetchAll("SELECT * FROM `category` WHERE `path` LIKE '%$id%' ");
@@ -99,7 +99,8 @@ class Controller_Category extends Controller_Core_Action
                             }
                             array_shift($finalPath);
                         }
-                        if($path->parentId){
+                        if($path->parentId)
+                        {
                             $parentPath = $categoryModel->load($path->parentId);
                             $path->path = $parentPath->path ."/".implode('/',$finalPath);
                         }
@@ -114,26 +115,28 @@ class Controller_Category extends Controller_Core_Action
                 else
                 {
                     $categoryData->createdAt = date('y-m-d h:m:s');
-                    if(!$categoryData->parentId){
+                    if(!$categoryData->parentId)
+                    {
                         unset($categoryData->parentId);
-                        print_r($categoryData);
                         $insert = $categoryModel->save();
                         $categoryId = $insert->categoryId;
                         if(!$insert->categoryId)
                         {
-                            $this->getMessage()->addMessage('unable to Inser Data.',3);
-                            throw new Exception("system is unabel to insert your data", 1);
+                            $this->getMessage()->addMessage('System is unable to Insert Data.',3);
+                            throw new Exception("System is unable to insert your data");
                         }
                         $categoryData->resetData();
                         $categoryData->path = $categoryId;
                         $categoryData->categoryId = $categoryId;
                         $result = $categoryModel->save();
-                        $this->getMessage()->addMessage('data inserted successfully',1);
+                        $this->getMessage()->addMessage('Data inserted successfully',1);
                     }
-                    else{
+                    else
+                    {
                         $insert = $categoryModel->save();
-                        if(!$insert->categoryId){
-                            throw new Exception("system is unabel to insert your data", 1);
+                        if(!$insert->categoryId)
+                        {
+                            throw new Exception("System is unable to insert your data", 1);
                         }
                         $categoryData->categoryId = $insert->categoryId;
                         $parentPath = $categoryModel->load($categoryData->parentId);
@@ -142,11 +145,11 @@ class Controller_Category extends Controller_Core_Action
                     }
                     if(!$result)
                     {
-                        $this->getMessage()->addMessage('unable to insert data.',3);
+                        $this->getMessage()->addMessage('Unable to insert data.',3);
                         throw new Exception("Sysetm is unable to save your data", 1);   
                     }
                 }
-                $this->getMessage()->addMessage('data inserted successfully',1);
+                $this->getMessage()->addMessage('Data inserted successfully',1);
                 $this->redirect('grid','category',[],true);
             }
         } 

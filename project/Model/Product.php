@@ -33,24 +33,30 @@ class Model_Product extends Model_Core_Row
 		return $statuses[self::STATUS_DEFAULT];
 	}
 
-	public function saveCategories(array $categoryIds)
+	public function saveCategories($categoryIds)
 	{
 		$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
 		$categoryProduct = $categoryProductModel->fetchAll("SELECT * FROM `category_product` WHERE `productId` = '$this->productId' ");
+		if(!$categoryIds || !array_key_exists('exists',$categoryIds))
+		{
+			$categoryIds['exists'] = [];
+		}
 		foreach($categoryProduct as $category)
 		{
-			if(in_array($category->categoryId,$categoryIds['exists']))
+			if(!in_array($category->categoryId, $categoryIds['exists']))
 			{
 				$categoryProductModel->load($category->entityId)->delete();
 			}
 		}
-
-		foreach($categoryIds['new'] as $categoryId)
+		if(array_key_exists('new',$categoryIds))
 		{
-			$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
-			$categoryProductModel->productId = $this->productId;
-			$categoryProductModel->categoryId = $categoryId;
-			$categoryProductModel->save();
+			foreach($categoryIds['new'] as $categoryId)
+			{
+				$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
+				$categoryProductModel->productId = $this->productId;
+				$categoryProductModel->categoryId = $categoryId;
+				$categoryProductModel->save();
+			}
 		}
 	}
 }

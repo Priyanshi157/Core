@@ -3,7 +3,6 @@ Ccc::loadClass('Model_Core_View');
 
 class Controller_Core_Action 
 {
-	protected $view = null;
 	protected $layout = null;
 	protected $message = null;
 
@@ -13,26 +12,11 @@ class Controller_Core_Action
         header("location: $url");
     }
 
-	public function getview()
-	{
-		if (!$this->view) 
-		{
-			$this->setview(new Model_Core_View());
-		}
-		return $this->view;
-	}
-
-	public function setview($view)
-	{
-		$this->view = $view;
-		return $this;
-	}
-
 	public function getmessage()
 	{
 		if (!$this->message) 
 		{
-			$this->setmessage(Ccc::getModel('Core_Message'));
+			$this->setmessage(Ccc::getModel('Admin_Message'));
 		}
 		return $this->message;
 	}

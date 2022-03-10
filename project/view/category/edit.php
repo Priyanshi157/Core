@@ -26,21 +26,20 @@ $categories = $this->getCategories();
     	</div>
   	</div>
 
-  	
-
-  	
   	<div class="row mb-3">
     	<label for="created" class="col-sm-2 col-form-label">Status</label>
-    	<div class="row col-sm-10">
-	    	<div class="form-check col-sm-6">
-	    		<select name="category[status]">
-				<option value="1" <?php echo ($category->getStatus($category->status)=='Active')?'selected':'' ?>>Active</option>
-				<option value="2" <?php echo ($category->getStatus($category->status)=='Inactive')?'selected':'' ?>>Inactive</option>
-			</select>
-  		</div>
+	    <div class="row col-sm-10">
+	      <div class="form-check col-sm-6">
+	        <select name="category[status]">
+	        <option value="1" <?php echo ($category->getStatus($category->status)=='Active')?'selected':'' ?>>Active</option>
+	        <option value="2" <?php echo ($category->getStatus($category->status)=='Inactive')?'selected':'' ?>>Inactive</option>
+	      </select>
+	    </div>
+	  </div>
 
-  		<div class="row justify-content-center">
-  		<button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
-  		<a href="<?php echo $this->getUrl('grid','category',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+
+	<div class="row justify-content-center">
+	<button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
+	<a href="<?php echo $this->getUrl('grid','category',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
 	</div>
 </form>

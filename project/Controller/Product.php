@@ -1,7 +1,7 @@
-<?php Ccc::loadClass('Controller_Core_Action'); ?>
+<?php Ccc::loadClass('Controller_Admin_Action'); ?>
 <?php 
 
-class Controller_Product extends Controller_Core_Action
+class Controller_Product extends Controller_Admin_Action
 {
 	public function gridAction()
 	{
@@ -85,7 +85,6 @@ class Controller_Product extends Controller_Core_Action
 				{
 					throw new Exception("Invalid Request.", 1);
 				}
-				$product->productId = $postData["productId"];
 				$product->updatedAt = date('y-m-d h:m:s');
 			}
 
@@ -99,7 +98,7 @@ class Controller_Product extends Controller_Core_Action
 			{
 				$categoryIds['exists'] = [];
 			}
-
+			
 			$product->saveCategories($categoryIds);
 			$this->getMessage()->addMessage('Data saved Successfully.',1);
 			$this->redirect('grid','product',[],true);
