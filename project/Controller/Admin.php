@@ -2,6 +2,14 @@
 <?php
 class Controller_Admin extends Controller_Admin_Action
 {
+	public function __construct()
+	{
+		if(!$this->authentication())
+		{
+			$this->redirect('login','admin_login');
+		}
+	}
+	
 	public function gridAction()
 	{
 		$content = $this->getLayout()->getContent();
@@ -72,6 +80,7 @@ class Controller_Admin extends Controller_Admin_Action
 
 			$admin = $adminModel;
 			$admin->setData($postData);
+			$admin->password = md5($postData['password']);
 			if(!($admin->adminId))
 			{
 				$admin->createdAt = date('Y-m-d H:m:s');
