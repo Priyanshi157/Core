@@ -102,7 +102,7 @@ class Model_Core_View
 
 	public function getBaseUrl($subUrl = null)
     {
-        $url = "C:/xampp/htdocs/main-model-save/Core/project";
+        $url = "C:/xampp/htdocs/admin-login/Core/project";
         if($subUrl)
         {
             $url = $url."/".$subUrl;
