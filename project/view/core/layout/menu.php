@@ -47,7 +47,7 @@
 	            		<a class="nav-link" href="<?php echo $this->getUrl('grid','vendor',[],true) ?>">Vendor</a>
 	          		</li>
 	        	</ul>
-	        	<a class="nav-link" href="<?php echo $this->getUrl('loginPost','admin_login') ?>">Logout</a>
+	        	<a class="nav-link" href="<?php echo $this->getUrl('logout','admin_login') ?>">Logout</a>
 	      	</div>
 	    </div>
 	</nav>

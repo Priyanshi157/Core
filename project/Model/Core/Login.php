@@ -36,7 +36,7 @@ class Model_Core_Login
         return $this->getSession()->login;
     }
 
-    public function logOut()
+    public function logout()
     {
         if(!$this->getSession()->login)
         {

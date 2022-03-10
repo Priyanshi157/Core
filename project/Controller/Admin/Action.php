@@ -15,5 +15,5 @@ class Controller_Admin_Action extends Controller_Core_Action
 			return false;
 		}
 		return true;
-	}	
+	}
 }

@@ -52,7 +52,7 @@ class Controller_Admin_Login extends Controller_Admin_Action
 	public function logoutAction()
 	{
 		$loginModel = Ccc::getModel('Admin_Login');
-		if($loginModel->getLogin())
+		if($loginModel->isLogedIn())
 		{
 			$loginModel->logout();
 		}
