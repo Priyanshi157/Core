@@ -55,6 +55,12 @@ class Model_Core_View
 		return $this;
 	}
 
+	public function getAdapter()
+	{
+		global $adapter;
+		return $adapter;
+	}
+
 	public function getUrl($a=null,$c=null,array $data = [],$reset = false)
 	{
 		$info = [];

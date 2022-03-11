@@ -122,11 +122,6 @@ class Model_Core_Pager
 		return $this->endLimit;
 	}
 
-	public function getAdapter()
-	{
-		global $adapter;
-		return $adapter;
-	}
 
 	public function execute($totalCount, $current)
 	{
