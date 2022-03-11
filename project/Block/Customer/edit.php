@@ -17,4 +17,3 @@ class Block_Customer_Edit extends Block_Core_Template
    		return $this->getData('address');
    	}
 }
-?>

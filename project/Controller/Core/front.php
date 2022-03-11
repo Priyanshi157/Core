@@ -39,4 +39,3 @@ class Controller_Core_Front
 	}
 }
 
-?>

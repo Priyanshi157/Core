@@ -1,7 +1,19 @@
-<?php
-$pages = $this->getPages();
-?>
+<?php $pages = $this->getPages(); ?>
+
 <a href="<?php echo $this->getUrl('add','page',[],true); ?>"><button type="button" class="btn btn-primary">Add</button></a>
+
+<div>    		
+<button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getStart()]); ?>" style="<?php echo ($this->getPager()->getStart() == NULL) ? "pointer-events: none;" : "" ?> ">Start</a></button>
+
+<button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getPrev()]); ?>">Prev</a></button>
+
+<button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getCurrent()]); ?>">Current</a></button>
+
+<button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getNext()]); ?>" style="<?php echo ($this->getPager()->getNext() == NULL) ? "pointer-events: none;" : "" ?>">Next</a></button>
+
+<button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getEnd()]); ?>" style="<?php echo ($this->getPager()->getEnd() == NULL) ? "pointer-events: none;" : "" ?> ">End</a></button>
+</div>
+
 <table class="table border my-4">
   <thead>
     <tr>

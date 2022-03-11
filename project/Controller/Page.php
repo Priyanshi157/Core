@@ -130,4 +130,3 @@ class Controller_Page extends Controller_Admin_Action
 		}
 	}
 }
-?>

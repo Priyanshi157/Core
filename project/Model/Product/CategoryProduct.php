@@ -9,5 +9,3 @@ class Model_Product_CategoryProduct extends Model_Core_Row
 	}
 
 }
-
-?>
