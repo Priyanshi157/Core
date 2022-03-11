@@ -149,5 +149,4 @@ class Controller_Product_Media extends Controller_Admin_Action
 			$this->redirect('grid','product_media',['id' => $id],true);
 		}
 	}
-
 }

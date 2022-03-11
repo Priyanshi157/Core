@@ -138,4 +138,3 @@ class Controller_Config extends Controller_Admin_Action
 	}
 }
 
-?>

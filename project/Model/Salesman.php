@@ -32,4 +32,3 @@ class Model_Salesman extends Model_Core_Row
 		return $statuses[self::STATUS_DEFAULT];
 	}
 }
-?>

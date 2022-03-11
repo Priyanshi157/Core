@@ -63,15 +63,12 @@ class Model_Core_Request
 
 	public function getActionName()
 	{
-		//$actionName = (isset($_GET['a'])) ? $_GET['a'].'Action' : 'error';
 		return $this->getRequest('a','index').'Action';
 	}
 
 	public function getControllerName()
 	{
-		//$controllerName = (isset($_GET['c'])) ? ucfirst($_GET['c']) : 'Customer';
 		return $this->getRequest('c','customer');
 	}
 }
 
-?>

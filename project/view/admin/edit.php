@@ -30,10 +30,12 @@
   </div>
 
   <div class="row mb-3">
+    <?php if(!$admin->password): ?>
     <label for="qty" class="col-sm-2 col-form-label">Password</label>
-    <div class="col-md-10">
+    <div class="col-md-10" >
       <input type="password" class="form-control" id="password" name="admin[password]" value="<?php echo $admin->password;?>">
     </div>
+  <?php endif; ?>
   </div>
 
   <div class="row mb-3">

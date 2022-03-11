@@ -16,4 +16,3 @@ class Block_Vendor_Edit extends Block_Core_Template
    		return $this->getData('address');
    	}
 }
-?>

@@ -70,4 +70,3 @@ class Controller_Customer_Price extends Controller_Admin_Action
 	}
 }
 
-?>

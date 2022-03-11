@@ -107,21 +107,22 @@ class Model_Core_Adapter{
         return $result;
     }
 
-    public function fetchOne($query)
-    {
-        $result = $this->fetchAll($query);
-        if(!$result)
-        {
-            return false;
-        }
-        $key = $result['0']['0'];
-        return $key;
-    }
-    
+    // public function fetchOne($query)
+    // {
+    //     $result = $this->fetchAll($query);
+    //     if(!$result)
+    //     {
+    //         return false;
+    //     }
+    //     $key = $result['0']['0'];
+    //     return $key;
+    // }
+
     public function fetchAssos($query)
     {
         $result = $this->query($query);
-        if($result->num_rows){
+        if($result->num_rows)
+        {
             return $result->fetch_assoc();
         }
         return false;

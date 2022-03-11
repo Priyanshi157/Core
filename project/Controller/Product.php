@@ -157,4 +157,3 @@ class Controller_Product extends Controller_Admin_Action
 	}
 }
 
-?>

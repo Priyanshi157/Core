@@ -11,4 +11,3 @@ class Block_Salesman_Edit extends Block_Core_Template
 		return $this->getData('salesman');
 	}
 }
-?>

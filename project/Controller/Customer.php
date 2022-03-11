@@ -217,4 +217,3 @@ class Controller_Customer extends Controller_Admin_Action
 		}
 	}
 }
-?>

@@ -195,4 +195,3 @@ class Controller_Vendor extends Controller_Admin_Action
 		}
 	}
 }
-?>

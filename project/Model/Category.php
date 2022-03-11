@@ -32,4 +32,3 @@ class Model_Category extends Model_Core_Row
 	}
 }
 
-?>

@@ -80,9 +80,9 @@ class Controller_Admin extends Controller_Admin_Action
 
 			$admin = $adminModel;
 			$admin->setData($postData);
-			$admin->password = md5($postData['password']);
 			if(!($admin->adminId))
 			{
+				$admin->password = md5($postData['password']);
 				$admin->createdAt = date('Y-m-d H:m:s');
 				unset($admin->adminId);
 			}
@@ -92,10 +92,10 @@ class Controller_Admin extends Controller_Admin_Action
 				{
 					throw new Exception("Invalid Request.", 1);
 				}
-				
+				unset($admin->password);
 				$admin->adminId = $postData["adminId"];
 				$admin->updatedAt = date('Y-m-d H:m:s');
-				$this->getMessage()->addMessage('updated Successfully.');
+				$this->getMessage()->addMessage('Updated Successfully.');
 			}
 			$result = $admin->save();
 			if(!$result)
@@ -144,4 +144,3 @@ class Controller_Admin extends Controller_Admin_Action
 	}
 }
 
-?>
