@@ -7,7 +7,7 @@
 
 <button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getPrev()]); ?>">Prev</a></button>
 
-<button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getCurrent()]); ?>">Current</a></button>
+<button><?php echo $this->getPager()->getCurrent(); ?></button>
 
 <button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getNext()]); ?>" style="<?php echo ($this->getPager()->getNext() == NULL) ? "pointer-events: none;" : "" ?>">Next</a></button>
 
