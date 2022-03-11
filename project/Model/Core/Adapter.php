@@ -107,16 +107,16 @@ class Model_Core_Adapter{
         return $result;
     }
 
-    // public function fetchOne($query)
-    // {
-    //     $result = $this->fetchAll($query);
-    //     if(!$result)
-    //     {
-    //         return false;
-    //     }
-    //     $key = $result['0']['0'];
-    //     return $key;
-    // }
+    public function fetchOne($query)
+    {
+        $result = $this->fetchAll($query,MYSQLI_NUM);
+        if(!$result)
+        {
+            return false;
+        }
+        $key = $result['0']['0'];
+        return $key;
+    }
 
     public function fetchAssos($query)
     {

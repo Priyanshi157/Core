@@ -15,11 +15,11 @@ class Block_Customer_Price_Grid extends Block_Core_Template
         $productModel = Ccc::getModel('product');
         $customerModel = Ccc::getModel('customer');
         $customer = $customerModel->fetchAll("SELECT * FROM `customer` WHERE `customerId` = {$customerId} AND `salesmanId` IS NOT NULL");
-        
         if(!$customer)
         {
             return $productModel->getData();
         }
+
         $products = $productModel->fetchAll("SELECT * FROM `product` WHERE `status` = '1' ");
         return $products;
     }
@@ -51,7 +51,7 @@ class Block_Customer_Price_Grid extends Block_Core_Template
             if($salesman)
             {
                 $product = $productModel->fetchAll("SELECT * FROM `product` WHERE `productId` = {$productId}");
-            return $product[0]->price - $product[0]->price*$salesman[0]->discount/100;
+                return $product[0]->price - $product[0]->price * $salesman[0]->discount/100;
             }
         }
     }
