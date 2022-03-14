@@ -13,6 +13,7 @@ class Controller_Customer extends Controller_Admin_Action
 
 	public function gridAction()
 	{
+		$this->setTitle('Customer_Grid');
 		$content = $this->getLayout()->getContent();
 		$customerGrid = Ccc::getBlock('Customer_Grid');
 		$content->addChild($customerGrid,'Grid');
@@ -24,6 +25,7 @@ class Controller_Customer extends Controller_Admin_Action
 
 	public function addAction()
 	{
+		$this->setTitle('Customer_Add');
 		$customerModel = Ccc::getModel('Customer');
 		$addressModel = Ccc::getModel('Customer_Address');
 		$content = $this->getLayout()->getContent();
@@ -38,6 +40,7 @@ class Controller_Customer extends Controller_Admin_Action
 	{
 		try 
 		{
+			$this->setTitle('Customer_Edit');
 			$customerModel = Ccc::getModel('Customer');
 			$request = $this->getRequest();
 			$id = (int)$request->getRequest('id');

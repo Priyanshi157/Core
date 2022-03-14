@@ -1,4 +1,4 @@
 <?php $children = $this->getChildren(); ?>
 <?php foreach ($children as $child): ?>
-<?php $child->toHtml(); ?>
+<?php echo $child->toHtml(); ?>
 <?php endforeach; ?>

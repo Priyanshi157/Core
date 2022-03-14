@@ -54,7 +54,7 @@
   	</div>
 
   	<div class="row justify-content-center">
-  		<button type="submit" class="btn btn-primary col-sm-2 m-1">Update</button>
+  		<button type="submit" class="btn btn-primary col-sm-2 m-1">Save</button>
   		<a href="<?php echo $this->getUrl('grid','salesman'); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
 	</div>
 </form>

@@ -17,6 +17,7 @@ class Controller_Admin_Login extends Controller_Admin_Action
 	{
 		try 
 		{
+			$this->setTitle('Admin_Login');
 			$adminModel = Ccc::getModel('Admin');
 			$loginModel = Ccc::getModel('Admin_Login');
 			$request = $this->getRequest();

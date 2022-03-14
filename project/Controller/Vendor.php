@@ -13,6 +13,7 @@ class Controller_Vendor extends Controller_Admin_Action
 
 	public function gridAction()
 	{
+		$this->setTitle('Vendor_Grid');
 		$content = $this->getLayout()->getContent();
 		$vendorGrid = Ccc::getBlock('Vendor_Grid');
 		$content->addChild($vendorGrid,'Grid');
@@ -24,6 +25,7 @@ class Controller_Vendor extends Controller_Admin_Action
 
 	public function addAction()
 	{
+		$this->setTitle('Vendor_Add');
 		$vendorModel = Ccc::getModel('Vendor');
 		$addressModel = Ccc::getModel('Vendor_Address');
 		$content = $this->getLayout()->getContent();
@@ -38,6 +40,7 @@ class Controller_Vendor extends Controller_Admin_Action
 	{
 		try 
 		{
+			$this->setTitle('Vendor_Edit');
 			$vendorModel = Ccc::getModel('Vendor');
 			$request = $this->getRequest();
 			$id = (int)$request->getRequest('id');

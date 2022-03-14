@@ -13,6 +13,7 @@ class Controller_Category_Media extends Controller_Admin_Action
 	
 	public function gridAction()
 	{
+		$this->setTitle('Category_Media_Grid');
 		$content = $this->getLayout()->getContent();
 		$mediaGrid = Ccc::getBlock('Category_Media_Grid');
 		$content->addChild($mediaGrid,'Grid');
@@ -23,6 +24,7 @@ class Controller_Category_Media extends Controller_Admin_Action
 	{
 		try 
 		{
+			$this->setTitle('Category_Media_Save');
 			$mediaModel = Ccc::getModel('Category_Media');
 			$categoryModel = Ccc::getModel('Category');
 			$request = $this->getRequest();
@@ -48,7 +50,7 @@ class Controller_Category_Media extends Controller_Admin_Action
 						{
 							throw new Exception("System is unable to save your data.", 1);
 						}	
-						move_uploaded_file($file['name']['tmp_name'],$this->getView()->getBaseUrl("Media/category/").$fileName);
+						move_uploaded_file($file['name']['tmp_name'],Ccc::getModel('Core_View')->getBaseUrl("Media/category/").$fileName);
 					}
 				}
 				else
@@ -68,7 +70,7 @@ class Controller_Category_Media extends Controller_Admin_Action
 							{
 								throw new Exception("Invalid request", 1);
 							}
-							unlink($this->getView()->getBaseUrl("Media/category/"). $media->name);
+							unlink(Ccc::getModel('Core_View')->getBaseUrl("Media/category/"). $media->name);
 							if($postData['media']['base'] == $remove)
 							{
 								unset($postData['media']['base']);

@@ -1,14 +1,15 @@
-<?php 
+<?php Ccc::loadClass('Model_Core_View');
+
 class Block_Core_Template extends Model_Core_View
 {
 	protected $children = [];
-
+	
 	public function getChildren()
 	{
 		return $this->children;
 	}
 
-	public function setChildren()
+	public function setChildren(array $children)
 	{
 		$this->children = $children;
 		return $this;
@@ -37,5 +38,4 @@ class Block_Core_Template extends Model_Core_View
 		}
 		return $this;
 	}
-
 }

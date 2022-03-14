@@ -13,6 +13,7 @@ class Controller_Salesman_SalesmanCustomer extends Controller_Admin_Action
     
 	public function gridAction()
 	{
+        $this->setTitle('Salesman_Customer_Grid');
         $content = $this->getLayout()->getContent();
         $salesmanGrid = Ccc::getBlock("Salesman_SalesmanCustomer_Grid");
         $content->addChild($salesmanGrid);
@@ -24,6 +25,7 @@ class Controller_Salesman_SalesmanCustomer extends Controller_Admin_Action
 
     public function saveAction()
     {
+        $this->setTitle('Salesman_Customer_Edit');
         $customerModel = Ccc::getModel('Customer');
         $request = $this->getRequest();
         $salesmanId = $request->getRequest('id');

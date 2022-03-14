@@ -1,5 +1,4 @@
-<?php 
-Ccc::loadClass('Model_Core_View');
+<?php Ccc::loadClass('Model_Core_View');
 
 class Controller_Core_Action 
 {
@@ -10,6 +9,11 @@ class Controller_Core_Action
     {
         $url = Ccc::getModel('core_view')->getUrl($a,$c,$data,$reset);
         header("location: $url");
+    }
+
+    protected function setTitle($title)
+    {
+        $this->getLayout()->getHead()->setTitle($title);
     }
 
 	public function getmessage()
@@ -36,7 +40,7 @@ class Controller_Core_Action
 		return $this->layout;
 	}
 
-	public function setlayout($layout)
+	public function setLayout($layout)
 	{
 		$this->layout = $layout;
 		return $this;
@@ -44,11 +48,16 @@ class Controller_Core_Action
 
 	public function renderLayout()
 	{
-		$this->getLayout()->toHtml();
+		$this->getResponse()->setHeader('Content-type', 'text/html')->render($this->getLayout()->toHtml());
 	}
 
 	public function getRequest()
 	{
 		return Ccc::getFront()->getRequest();
 	}
+
+	public function getResponse()
+    {
+        return Ccc::getFront()->getResponse();
+    }
 }
