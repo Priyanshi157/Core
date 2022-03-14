@@ -12,6 +12,7 @@ class Controller_Page extends Controller_Admin_Action
 	
 	public function gridAction()
 	{
+		$this->setTitle('Page_Grid');
 		$content = $this->getLayout()->getContent();
 		$pageGrid = Ccc::getBlock('Page_Grid');
 		$content->addChild($pageGrid,'Grid');
@@ -23,6 +24,7 @@ class Controller_Page extends Controller_Admin_Action
 
 	public function addAction()
 	{
+		$this->setTitle('Page_Add');
 		$pageModel = Ccc::getModel('Page');
 		$content = $this->getLayout()->getContent();
 		$pageAdd = Ccc::getBlock('Page_Edit')->setData(['page'=>$pageModel]);
@@ -36,6 +38,7 @@ class Controller_Page extends Controller_Admin_Action
 	{
 		try 
 		{
+			$this->setTitle('Page_Edit');
 			$pageModel = Ccc::getModel('Page');
 			$request = $this->getRequest();
 			$id = $request->getRequest('id');
@@ -96,7 +99,7 @@ class Controller_Page extends Controller_Admin_Action
 				$this->getMessage()->addMessage('System is unable to save data.');
 			}
 			$this->getMessage()->addMessage('Added Successfully.');
-			$this->redirect('grid','page',[],true);
+			$this->redirect('grid','page');
 		} 
 		catch (Exception $e) 
 		{

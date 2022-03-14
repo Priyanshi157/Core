@@ -3,14 +3,33 @@
 
 class Block_Customer_Price_Grid extends Block_Core_Template
 {
+    protected $pager = null;
     public function __construct()
     {
         $this->setTemplate("view/customer/price/grid.php");
     }
 
+    public function getPager()
+    {
+        if(!$this->pager)
+        {
+            $this->setPager($this->pager);
+        }
+        return $this->pager;
+    }
+
+    public function setPager($pager)
+    {
+        $this->pager = $pager;
+        return $this;
+    }
+
     public function getProducts()
     {
         $request = Ccc::getFront()->getRequest();
+        $page = (int)$request->getRequest('p', 1);
+        $ppr = (int)$request->getRequest('ppr',20);
+        $pagerModel = Ccc::getModel('Core_Pager');
         $customerId = $request->getRequest('id');
         $productModel = Ccc::getModel('product');
         $customerModel = Ccc::getModel('customer');
@@ -20,7 +39,10 @@ class Block_Customer_Price_Grid extends Block_Core_Template
             return $productModel->getData();
         }
 
-        $products = $productModel->fetchAll("SELECT * FROM `product` WHERE `status` = '1' ");
+        $totalCount = $this->getAdapter()->fetchOne("SELECT count(productId) FROM `product` WHERE `status` = '1'");
+        $pagerModel->execute($totalCount,$page,$ppr);
+        $this->setPager($pagerModel);
+        $products = $productModel->fetchAll("SELECT * FROM `product` WHERE `status` = '1' LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
         return $products;
     }
 
@@ -40,6 +62,9 @@ class Block_Customer_Price_Grid extends Block_Core_Template
     public function getSalesmanPrice($productId)
     {
         $request = Ccc::getFront()->getRequest();
+        $page = (int)$request->getRequest('p', 1);
+        $ppr = (int)$request->getRequest('ppr',20);
+        $pagerModel = Ccc::getModel('Core_Pager');
         $customerId = $request->getRequest('id');
         $productModel = Ccc::getModel('product');
         $salesmanModel = Ccc::getModel('salesman');

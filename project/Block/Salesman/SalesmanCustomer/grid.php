@@ -3,16 +3,39 @@
 
 class Block_Salesman_SalesmanCustomer_Grid extends Block_Core_Template
 {
+    protected $pager = null;
     public function __construct()
     {
         $this->setTemplate("view/salesman/salesmancustomer/grid.php");
     }
 
+    public function getPager()
+    {
+        if(!$this->pager)
+        {
+            $this->setPager($this->pager);
+        }
+        return $this->pager;
+    }
+
+    public function setPager($pager)
+    {
+        $this->pager = $pager;
+        return $this;
+    }
+
     public function getCustomers()
     {
-        $salesmanId = Ccc::getFront()->getRequest()->getRequest('id');
+        $request = Ccc::getModel('Core_Request');
+        $page = (int)$request->getRequest('p', 1);
+        $ppr = (int)$request->getRequest('ppr',20);
+        $pagerModel = Ccc::getModel('Core_Pager');
+        $salesmanId = $request->getRequest('id');
         $customerModel = Ccc::getModel('Customer');
-        $customers = $customerModel->fetchAll("SELECT * FROM `customer` WHERE (`salesmanId` is null OR `salesmanId` = '$salesmanId') AND `status` = '1' ");
+        $totalCount = $this->getAdapter()->fetchOne("SELECT count(customerId) FROM `customer` WHERE (`salesmanId` is null OR `salesmanId` = '$salesmanId') AND `status` = '1'");
+        $pagerModel->execute($totalCount,$page,$ppr);
+        $this->setPager($pagerModel);
+        $customers = $customerModel->fetchAll("SELECT * FROM `customer` WHERE (`salesmanId` is null OR `salesmanId` = '$salesmanId') AND `status` = '1' LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}");
         return $customers;
     }
 

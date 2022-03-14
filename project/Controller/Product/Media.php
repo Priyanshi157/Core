@@ -12,6 +12,7 @@ class Controller_Product_Media extends Controller_Admin_Action
 	}
 	public function gridAction()
 	{
+		$this->setTitle('Product_Media_Grid');
 		$content = $this->getLayout()->getContent();
 		$mediaGrid = Ccc::getBlock('Product_Media_Grid');
 		$content->addChild($mediaGrid,'Grid');
@@ -22,6 +23,7 @@ class Controller_Product_Media extends Controller_Admin_Action
 	{
 		try 
 		{
+			$this->setTitle('Product_Media_Edit');
 			$mediaModel = Ccc::getModel('Product_Media');
 			$productModel = Ccc::getModel('Product');
 			$request = $this->getRequest();
@@ -48,7 +50,7 @@ class Controller_Product_Media extends Controller_Admin_Action
 						{
 							throw new Exception("System is unable to save your data.", 1);
 						}	
-						move_uploaded_file($file['name']['tmp_name'],$this->getView()->getBaseUrl("Media/Product/").$fileName);
+						move_uploaded_file($file['name']['tmp_name'],Ccc::getModel('Core_View')->getBaseUrl("Media/Product/").$fileName);
 					}
 				}
 				else
@@ -68,7 +70,7 @@ class Controller_Product_Media extends Controller_Admin_Action
 							{
 								throw new Exception("Invalid request", 1);
 							}
-							unlink($this->getView()->getBaseUrl("Media/Product/"). $media->name);
+							unlink(Ccc::getModel('Core_View')->getBaseUrl("Media/Product/"). $media->name);
 							
 							if($postData['media']['base'] == $remove)
 							{

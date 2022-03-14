@@ -1,14 +1,15 @@
 <?php 
 date_default_timezone_set("Asia/Kolkata");
-class Model_Core_Adapter{
-    public $config = [
-        'host' => 'localhost',
-        'user' => 'root',
-        'password' => '',
-        'dbname' => 'project_priyanshi'
-    ];
+class Model_Core_Adapter
+{
+    private $config = [];
     private $connect = NULL;
 
+    public function __construct()
+    {
+        $this->setConfig(Ccc::getConfig('connection'));
+    }
+    
     public function connect()
     {
         $connect = mysqli_connect($this->config['host'],$this->config['user'],$this->config['password'],$this->config['dbname']);

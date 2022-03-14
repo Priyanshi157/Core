@@ -1,8 +1,9 @@
 <?php 
 class Model_Core_Pager
 {
-	protected $perPageCount = 20;
-	protected $totalCount = null;
+	protected $perPageCountOption = [10,20,30,40,50];
+    protected $perPageCount = null;
+	protected $totalCount = 0;
 	protected $pageCount = null;
 	protected $start = 1;
 	protected $end = null;
@@ -10,8 +11,18 @@ class Model_Core_Pager
 	protected $next = null;
 	protected $current = null;
 	protected $startLimit = null;
-	protected $endLimit = 20;
+	protected $endLimit = null;
 
+	public function getPerPageCountOption()
+    {
+        return $this->perPageCountOption;
+    }
+
+    public function setPerPageCountOption($perPageCountOption)
+    {
+        $this->perPageCountOption = $perPageCountOption;
+    }
+    
 	public function setPerPageCount($perPageCount)
 	{
 		$this->perPageCount = $perPageCount;
@@ -122,15 +133,19 @@ class Model_Core_Pager
 		return $this->endLimit;
 	}
 
-	public function getAdapter()
-	{
-		global $adapter;
-		return $adapter;
-	}
 
-	public function execute($totalCount, $current)
+	public function execute($totalCount, $current, $perPageCountOption)
 	{
-		$this->setTotalCount($totalCount);
+        $this->setPageCount($perPageCountOption);
+        $this->setEnd($perPageCountOption);
+        $this->setPrev($perPageCountOption);
+        $this->setNext($perPageCountOption);
+        $this->setCurrent($perPageCountOption);
+        $this->setStartLimit($perPageCountOption);
+        $this->setEndLimit($perPageCountOption);
+        $this->setPerPageCount($perPageCountOption);
+
+        $this->setTotalCount((int)(($totalCount < 1) ? 1 : $totalCount));
         $this->setPageCount(ceil($this->getTotalCount() / $this->getPerPageCount()));
         $this->setCurrent(($current > $this->getPageCount()) ? $this->getPageCount() : $current);
         $this->setCurrent(($current < $this->getStart()) ? $this->getStart() : $this->getCurrent());
@@ -140,5 +155,4 @@ class Model_Core_Pager
         $this->setPrev(($this->getCurrent() == 1) ? null : $this->getCurrent() - 1);
         $this->setNext(($this->getCurrent() == $this->getPageCount()) ? null : $this->getCurrent() + 1);
 	}
-
 }

@@ -12,6 +12,7 @@ class Controller_Config extends Controller_Admin_Action
 
 	public function gridAction()
 	{
+		$this->setTitle('Config_Grid');
 		$content = $this->getLayout()->getContent();
 		$configGrid = Ccc::getBlock('Config_Grid');
 		$content->addChild($configGrid,'Grid');
@@ -23,6 +24,7 @@ class Controller_Config extends Controller_Admin_Action
 
 	public function addAction()
 	{
+		$this->setTitle('Config_Add');
 		$configModel = Ccc::getModel('Config');
 		$content = $this->getLayout()->getContent();
 		$configAdd = Ccc::getBlock('Config_Edit')->setData(['config'=>$configModel]);
@@ -36,6 +38,7 @@ class Controller_Config extends Controller_Admin_Action
 	{
 		try 
    		{
+   			$this->setTitle('Config_Edit');
    			$configModel = Ccc::getModel('Config');
 			$request = $this->getRequest();
 			$id = (int)$request->getRequest('id');

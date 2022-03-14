@@ -13,6 +13,7 @@ class Controller_Category extends Controller_Admin_Action
     
 	public function gridAction()
 	{
+        $this->setTitle('Category_Grid');
 		$content = $this->getLayout()->getContent();
         $categoryGrid = Ccc::getBlock('Category_Grid');
         $content->addChild($categoryGrid,'Grid');
@@ -24,6 +25,7 @@ class Controller_Category extends Controller_Admin_Action
 	
 	public function addAction()
 	{
+        $this->setTitle('Category_Add');
 		$categoryModel = Ccc::getModel('Category');
         $content = $this->getLayout()->getContent();
         $categoryAdd = Ccc::getBlock('Category_Edit')->setData(['category'=>$categoryModel]);
@@ -35,6 +37,7 @@ class Controller_Category extends Controller_Admin_Action
 
 	public function editAction()
 	{
+        $this->setTitle('Category_Edit');
 		$categoryModel = Ccc::getModel('Category');
 		$request = $this->getRequest();
 		$adapter = new Model_Core_Adapter();

@@ -13,6 +13,7 @@ class Controller_Product extends Controller_Admin_Action
 	
 	public function gridAction()
 	{
+		$this->setTitle('Product_Grid');
 		$content = $this->getLayout()->getContent();
 		$productGrid = Ccc::getBlock('Product_Grid');
 		$content->addChild($productGrid,'Grid');
@@ -24,6 +25,7 @@ class Controller_Product extends Controller_Admin_Action
 
 	public function addAction()
 	{
+		$this->setTitle('Product_Add');
 		$productModel = Ccc::getModel('Product');
 		$content = $this->getLayout()->getContent();
 		$productAdd = Ccc::getBlock('Product_Edit')->setData(['product'=>$productModel]);
@@ -37,6 +39,7 @@ class Controller_Product extends Controller_Admin_Action
 	{
 		try 
 		{
+			$this->setTitle('Product_Edit');
 			$productModel = Ccc::getModel('Product');
 			$request = $this->getRequest();
 			$pid = (int)$request->getRequest('id');
