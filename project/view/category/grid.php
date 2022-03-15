@@ -1,36 +1,7 @@
-<?php 
-$categories = $this->getCategories();
-?>
+<?php  $categories = $this->getCategories(); ?>
 <a href="<?php echo $this->getUrl('add','category') ?>"><button type="button" class="btn btn-primary">Add</button></a>
 
 <div>
-<script type="text/javascript">
-function ppr() 
-{
-  const pprValue = document.getElementById('ppr').selectedOptions[0].value;
-  let url = window.location.href;
-  if(!url.includes('ppr'))
-  {
-    url += '&ppr=20';
-  }
-
-  const myArray = url.split("&");
-  for(i = 0 ; i < myArray.length ; i++)
-  {
-    if(myArray[i].includes('p='))
-    {
-      myArray[i] = 'p=1';
-    }
-
-    if(myArray[i].includes('ppr='))
-    {
-      myArray[i] = 'ppr='+pprValue;
-    }
-  }
-  const str = myArray.join("&");
-  location.replace(str);
-}
-</script>
 <select onchange="ppr()" id="ppr">
   <option>Select</option>
   <?php foreach($this->getPager()->getPerPageCountOption() as $perPageCount) :?>  
@@ -74,19 +45,19 @@ function ppr()
 			    <td><?php  echo $category->categoryId; ?></td>
                 <td><?php echo $this->getPath($category->categoryId,$category->path); ?></td>
                 <?php if($category->base ): ?>
-                <td><img src="<?php echo 'Media/Category/'.$this->getMedia($category->base)['name']; ?>" alt="No Image found" width=50 height=50></td>
+                <td><img src="<?php echo 'Media/Category/'.$category->getBase()->name; ?>" alt="No Image found" width=50 height=50></td>
                 <?php else: ?>
                 <td>No base image</td>
                 <?php endif; ?>
 
                 <?php if($category->thumb ): ?>
-                <td><img src="<?php echo 'Media/Category/'.$this->getMedia($category->thumb)['name']; ?>" alt="No Image found" width=50 height=50></td>
+                <td><img src="<?php echo 'Media/Category/'.$category->getThumb()->name; ?>" alt="No Image found" width=50 height=50></td>
                 <?php else: ?>
                 <td>No thumb image</td>
                 <?php endif; ?>
 
                 <?php if($category->small ): ?>
-                <td><img src="<?php echo 'Media/Category/'.$this->getMedia($category->small)['name']; ?>" alt="No Image found" width=50 height=50></td>
+                <td><img src="<?php echo 'Media/Category/'.$category->getSmall()->name; ?>" alt="No Image found" width=50 height=50></td>
                 <?php else: ?>
                 <td>No small image</td>
                 <?php endif; ?>
@@ -101,3 +72,31 @@ function ppr()
 	<?php endif; ?>
   </tbody>
 </table>
+
+<script type="text/javascript">
+function ppr() 
+{
+  const pprValue = document.getElementById('ppr').selectedOptions[0].value;
+  let url = window.location.href;
+  if(!url.includes('ppr'))
+  {
+    url += '&ppr=20';
+  }
+
+  const myArray = url.split("&");
+  for(i = 0 ; i < myArray.length ; i++)
+  {
+    if(myArray[i].includes('p='))
+    {
+      myArray[i] = 'p=1';
+    }
+
+    if(myArray[i].includes('ppr='))
+    {
+      myArray[i] = 'ppr='+pprValue;
+    }
+  }
+  const str = myArray.join("&");
+  location.replace(str);
+}
+</script>

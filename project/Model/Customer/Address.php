@@ -2,6 +2,7 @@
 
 class Model_Customer_Address extends Model_Core_Row
 {
+	protected $customer = null;
 	const STATUS_ENABLED = 1;
 	const STATUS_DISABLED = 2;
 	const STATUS_DEFAULT = 2;
@@ -31,6 +32,34 @@ class Model_Customer_Address extends Model_Core_Row
 			return $statuses[$key];
 		}
 		return $statuses[self::STATUS_DEFAULT];
+	}
+
+	public function getCustomer($reload=false)
+	{
+		$customerModel = Ccc::getModel('Customer');
+		if(!$this->customerId)
+		{
+			return null;
+		}
+
+		if($this->customer && !$reload)
+		{
+			return $this->customer;
+		}
+
+		$customer = $customerModel->fetchRow("SELECT * FROM `customer` WHERE `customerId` = {$this->customerId}");
+		if(!$customer)
+		{
+			return $customerModel;
+		}
+		$this->setCustomer($customer);
+		return $this->customer;
+	}
+
+	public function setCustomer(Mode_Customer $customer)
+	{
+		$this->customer = $customer;
+		return $this;
 	}
 
 }

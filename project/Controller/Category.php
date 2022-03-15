@@ -26,7 +26,8 @@ class Controller_Category extends Controller_Admin_Action
 	public function addAction()
 	{
         $this->setTitle('Category_Add');
-		$categoryModel = Ccc::getModel('Category');
+        $mediaModel = Ccc::getModel('Category_Media');
+		$categoryModel = Ccc::getModel('Category')->setMedia($mediaModel);
         $content = $this->getLayout()->getContent();
         $categoryAdd = Ccc::getBlock('Category_Edit')->setData(['category'=>$categoryModel]);
         $content->addChild($categoryAdd,'Add');
@@ -49,8 +50,7 @@ class Controller_Category extends Controller_Admin_Action
 				throw new Exception("Invalid Request.", 1);
 			}
 
-			$category = $categoryModel->load($id);
-	        
+			$category = $categoryModel->load($id);        
 	        if(!$category)
 	        {
 	            throw new Exception("System is unable to find record.", 1);

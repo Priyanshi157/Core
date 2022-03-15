@@ -111,41 +111,32 @@ class Controller_Vendor extends Controller_Admin_Action
 		{
 			$this->getMessage()->getMessage("System is unable to save the data.",3);
 		}
-		return $result->vendorId;
+		return $result;
 	}
 
-	protected function saveAddress($vendorId)
+	protected function saveAddress($vendor)
 	{
-		$addressModel = Ccc::getModel('Vendor_Address');
 		$request = $this->getRequest();
-		if(!$request->getPost('address'))
-		{
-			throw new Exception("Invalid Request", 1);
-		}	
+		$address = $vendor->getAddress();
 		$postData = $request->getPost('address');
 		if(!$postData)
 		{
-			throw new Exception("Invalid data posted.", 1);	
+			throw new Exception("Invalid Request.", 1);
+			
 		}
-		$address = $addressModel;
-		$address->setData($postData);
-		$address->vendorId = $vendorId;
-		if(!($address->addressId))
+
+		if(!$address->addressId)
 		{
-			$address->vendorId = $vendorId;
 			unset($address->addressId);
 		}
-		else
-		{		
-			$address->vendorId = $postData['vendorId'];
-			$address->addressId = $postData['addressId'];
-		}
-		$result = $address->save();
-		if(!$result)
+		$address->setData($postData);
+		$address->vendorId=$vendor->vendorId;
+		$save = $address->save();
+		if(!$save->addressId)
 		{
-			$this->getMessage()->addMessage('Systme is unable to save data.');
+			$this->getMessage()->addMessage('Address Inserted succesfully.',1);
+			throw new Exception("Unable to Save.", 1);	
 		}
-		$this->getMessage()->addMessage('Data saved successfully.');
 	}
 
 	public function saveAction()
@@ -154,10 +145,6 @@ class Controller_Vendor extends Controller_Admin_Action
 		{
 			$vendorId = $this->saveVendor();
 			$request = $this->getRequest();
-			if(!$request->getPost('address')['postalCode'] )
-			{
-				$this->redirect('grid','vendor',[],true);
-			}
 			$this->saveAddress($vendorId);
 			$this->redirect('grid','vendor',[],true);
 		} 

@@ -50,10 +50,6 @@ $vendorAddress = $this->getAddress();
 	</div>
 	</div>
 
-<input type="hidden" class="form-control" id="vendorid" name="address[vendorId]" value="<?php echo $vendorAddress->vendorId;?>">
-
-	<input type="hidden" class="form-control" id="addressId" name="address[addressId]" value="<?php echo $vendorAddress->addressId?>">
-
 	<div class="row mb-3">
     <label for="qty" class="col-sm-2 col-form-label">Address</label>
     <div class="col-md-10">

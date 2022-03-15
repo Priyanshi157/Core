@@ -26,7 +26,6 @@ class Controller_Category_Media extends Controller_Admin_Action
 		{
 			$this->setTitle('Category_Media_Save');
 			$mediaModel = Ccc::getModel('Category_Media');
-			$categoryModel = Ccc::getModel('Category');
 			$request = $this->getRequest();
 			$id = $request->getRequest('id');
 			if($request->isPost())
@@ -55,6 +54,7 @@ class Controller_Category_Media extends Controller_Admin_Action
 				}
 				else
 				{
+					$categoryModel = $mediaModel->getCategory();
 					$categoryData = $categoryModel;
 					$categoryData->categoryId = $id;
 					$mediaData = $mediaModel;
