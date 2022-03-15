@@ -1,36 +1,8 @@
 <?php $customers = $this->getCustomers(); ?>
-<?php $addresses = $this->getAddresses(); ?>
 
 <a href="<?php echo $this->getUrl('add','customer',[],true); ?>"><button type="button" class="btn btn-primary">Add</button></a>
 
 <div>
-<script type="text/javascript">
-function ppr() 
-{
-	const pprValue = document.getElementById('ppr').selectedOptions[0].value;
-	let url = window.location.href;
-	if(!url.includes('ppr'))
-	{
-		url += '&ppr=20';
-	}
-
-	const myArray = url.split("&");
-	for(i = 0 ; i < myArray.length ; i++)
-	{
-		if(myArray[i].includes('p='))
-		{
-			myArray[i] = 'p=1';
-		}
-
-		if(myArray[i].includes('ppr='))
-		{
-			myArray[i] = 'ppr='+pprValue;
-		}
-	}
-	const str = myArray.join("&");
-	location.replace(str);
-}
-</script>
 <select onchange="ppr()" id="ppr">
 	<option>Select</option>
 	<?php foreach($this->getPager()->getPerPageCountOption() as $perPageCount) :?>	
@@ -80,11 +52,8 @@ function ppr()
 			    <td><?php echo $customer->getStatus($customer->status) ?></td>
 			    <td><?php echo $customer->createdAt ?></td>
 			    <td><?php echo $customer->updatedAt ?></td>
-			    <?php foreach ($addresses as $address): ?>
-			    	<?php if($address->customerId == $customer->customerId): ?>
-			    		<td><?php echo $address->address ?></td>
-			    	<?php endif; ?>
-			    <?php endforeach; ?>
+			    <td><?php echo $customer->getBillingAddress()->address; ?></td>
+			    
 				<td><a href="<?php echo $this->getUrl('edit','customer',['id'=>$customer->customerId],true); ?>">Edit</a></td>
 				<td><a href="<?php echo $this->getUrl('delete','customer',['id'=>$customer->customerId],true); ?>">Delete</a></td>
 				<td><a href="<?php echo $this->getUrl('grid','customer_price',['id' => $customer->customerId],true); ?>">Price</a></td>
@@ -93,3 +62,31 @@ function ppr()
 	<?php endif; ?>
   </tbody>
 </table>
+
+<script type="text/javascript">
+function ppr() 
+{
+	const pprValue = document.getElementById('ppr').selectedOptions[0].value;
+	let url = window.location.href;
+	if(!url.includes('ppr'))
+	{
+		url += '&ppr=20';
+	}
+
+	const myArray = url.split("&");
+	for(i = 0 ; i < myArray.length ; i++)
+	{
+		if(myArray[i].includes('p='))
+		{
+			myArray[i] = 'p=1';
+		}
+
+		if(myArray[i].includes('ppr='))
+		{
+			myArray[i] = 'ppr='+pprValue;
+		}
+	}
+	const str = myArray.join("&");
+	location.replace(str);
+}
+</script>

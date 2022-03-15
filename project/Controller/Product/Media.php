@@ -25,7 +25,7 @@ class Controller_Product_Media extends Controller_Admin_Action
 		{
 			$this->setTitle('Product_Media_Edit');
 			$mediaModel = Ccc::getModel('Product_Media');
-			$productModel = Ccc::getModel('Product');
+			$productModel = $mediaModel->getProduct();
 			$request = $this->getRequest();
 			$id = $request->getRequest('id');
 			if($request->isPost())

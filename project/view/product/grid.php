@@ -4,33 +4,6 @@ $products = $this->getProducts();
 <a href="<?php echo $this->getUrl('add','product',[],true); ?>"><button type="button" class="btn btn-primary">Add</button></a>
 
 <div>
-<script type="text/javascript">
-function ppr() 
-{
-	const pprValue = document.getElementById('ppr').selectedOptions[0].value;
-	let url = window.location.href;
-	if(!url.includes('ppr'))
-	{
-		url += '&ppr=20';
-	}
-
-	const myArray = url.split("&");
-	for(i = 0 ; i < myArray.length ; i++)
-	{
-		if(myArray[i].includes('p='))
-		{
-			myArray[i] = 'p=1';
-		}
-
-		if(myArray[i].includes('ppr='))
-		{
-			myArray[i] = 'ppr='+pprValue;
-		}
-	}
-	const str = myArray.join("&");
-	location.replace(str);
-}
-</script>
 <select onchange="ppr()" id="ppr">
 	<option>Select</option>
 	<?php foreach($this->getPager()->getPerPageCountOption() as $perPageCount) :?>	
@@ -78,17 +51,17 @@ function ppr()
 			    <td><?php echo $product->productId ?></td>
 			    <td><?php echo $product->name ?></td>
 			    <?php if($product->base): ?>
-				<td><img src="<?php echo "Media/Product/".$this->getMedia($product->base)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
+				<td><img src="<?php echo "Media/Product/".$product->getBase()->name  ?>" alt="No Image Found" width="50" height="50"></td>
 				<?php else: ?>
 				<td>No Base Image</td>
 				<?php endif; ?>	
 				<?php if($product->thumb): ?>
-				<td><img src="<?php echo "Media/Product/".$this->getMedia($product->thumb)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
+				<td><img src="<?php echo "Media/Product/".$product->getThumb()->name  ?>" alt="No Image Found" width="50" height="50"></td>
 				<?php else: ?>
 				<td>No Thumb Image</td>
 				<?php endif; ?>	
 				<?php if($product->small): ?>
-				<td><img src="<?php echo "Media/Product/".$this->getMedia($product->small)['name']  ?>" alt="No Image Found" width="50" height="50"></td>
+				<td><img src="<?php echo "Media/Product/".$product->getSmall()->name  ?>" alt="No Image Found" width="50" height="50"></td>
 				<?php else: ?>
 				<td>No Small Image</td>
 				<?php endif; ?>
@@ -107,3 +80,30 @@ function ppr()
 	<?php endif; ?>
   </tbody>
 </table>
+<script type="text/javascript">
+function ppr() 
+{
+	const pprValue = document.getElementById('ppr').selectedOptions[0].value;
+	let url = window.location.href;
+	if(!url.includes('ppr'))
+	{
+		url += '&ppr=20';
+	}
+
+	const myArray = url.split("&");
+	for(i = 0 ; i < myArray.length ; i++)
+	{
+		if(myArray[i].includes('p='))
+		{
+			myArray[i] = 'p=1';
+		}
+
+		if(myArray[i].includes('ppr='))
+		{
+			myArray[i] = 'ppr='+pprValue;
+		}
+	}
+	const str = myArray.join("&");
+	location.replace(str);
+}
+</script>
