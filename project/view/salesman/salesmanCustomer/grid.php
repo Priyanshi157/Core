@@ -27,34 +27,7 @@
     </table>
 </form>
 <div>
-<script type="text/javascript">
-function ppr() 
-{
-    const pprValue = document.getElementById('ppr').selectedOptions[0].value;
-    let url = window.location.href;
-    if(!url.includes('ppr'))
-    {
-        url += '&ppr=20';
-    }
-
-    const myArray = url.split("&");
-    for(i = 0 ; i < myArray.length ; i++)
-    {
-        if(myArray[i].includes('p='))
-        {
-            myArray[i] = 'p=1';
-        }
-
-        if(myArray[i].includes('ppr='))
-        {
-            myArray[i] = 'ppr='+pprValue;
-        }
-    }
-    const str = myArray.join("&");
-    location.replace(str);
-}
-</script>
-<select onchange="ppr()" id="ppr">
+<select onchange="ppr(this.value)" id="ppr">
     <option>Select</option>
     <?php foreach($this->getPager()->getPerPageCountOption() as $perPageCount) :?>  
         <option value="<?php echo $perPageCount ?>" ><?php echo $perPageCount ?></option>
@@ -71,3 +44,10 @@ function ppr()
 
 <button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getEnd()]); ?>" style="<?php echo ($this->getPager()->getEnd() == NULL) ? "pointer-events: none;" : "" ?> ">End</a></button>
 </div>
+
+<script type="text/javascript">
+function ppr(val) 
+{
+  window.location = "<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getStart(),'ppr'=>null]);?>&ppr="+val;
+}
+</script>
