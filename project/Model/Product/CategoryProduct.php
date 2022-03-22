@@ -7,5 +7,4 @@ class Model_Product_CategoryProduct extends Model_Core_Row
 		$this->setResourceClassName('Product_CategoryProduct_Resource');
 		parent::__construct();
 	}
-
 }
