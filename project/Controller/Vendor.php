@@ -150,6 +150,7 @@ class Controller_Vendor extends Controller_Admin_Action
 		} 
 		catch (Exception $e) 
 		{
+			$this->getMessage()->addMessage($e->getMessage(),3);
 			$this->redirect('grid','vendor',[],true);
 		}
 	}

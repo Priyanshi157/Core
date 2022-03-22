@@ -40,6 +40,9 @@
 	          		<li class="nav-item">
 	            		<a class="nav-link" href="<?php echo $this->getUrl('grid','vendor',['p'=>1],true) ?>">Vendor</a>
 	          		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="<?php echo $this->getUrl('grid','cart',['p'=>1],true) ?>">Cart</a>
+	          		</li>
 	        	</ul>
 	        	<a class="nav-link" href="<?php echo $this->getUrl('logout','admin_login') ?>">Logout</a>
 	      	</div>

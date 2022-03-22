@@ -119,6 +119,7 @@ class Controller_Customer extends Controller_Admin_Action
 		{
 			unset($billing->addressId);
 		}
+		
 		if(!$shiping->addressId)
 		{
 			unset($shiping->addressId);
