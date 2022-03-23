@@ -44,6 +44,23 @@
   </div>
 
   <div class="row mb-3">
+    <label for="qty" class="col-sm-2 col-form-label">Tax</label>
+    <div class="col-md-10">
+      <input type="number" class="form-control" id="tax" name="product[tax]" value="<?php echo $product->tax?>">
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <label for="created" class="col-sm-2 col-form-label">Discount</label>
+    <div class="row col-sm-10">
+      <div class="form-check col-sm-6">
+        <input type="text" name="product[discount]" value="<?php echo $product->discount ?>">
+        In Percentage:<input type="radio" name="discountMethod" value="1">&nbsp;&nbsp;&nbsp;
+        In Money:<input type="radio" name="discountMethod" value="2" checked >
+    </div>
+  </div>
+
+  <div class="row mb-3">
     <label for="created" class="col-sm-2 col-form-label">Status</label>
     <div class="row col-sm-10">
       <div class="form-check col-sm-6">

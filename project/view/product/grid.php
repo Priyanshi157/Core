@@ -34,6 +34,8 @@ $products = $this->getProducts();
       <th scope="col">MSP</th>
       <th scope="col">Cost Price</th>
       <th scope="col">Quantity</th>
+      <th scope="col">Tax</th>
+      <th scope="col">Discount</th>
       <th scope="col">Status</th>
       <th scope="col">Created At</th>
       <th scope="col">Updated AT</th>
@@ -51,17 +53,17 @@ $products = $this->getProducts();
 			    <td><?php echo $product->productId ?></td>
 			    <td><?php echo $product->name ?></td>
 			    <?php if($product->base): ?>
-				<td><img src="<?php echo "Media/Product/".$product->getBase()->name  ?>" alt="No Image Found" width="50" height="50"></td>
+				<td><img src="<?php echo $product->getBase()->getImagePath();  ?>" alt="No Image Found" width="50" height="50"></td>
 				<?php else: ?>
 				<td>No Base Image</td>
 				<?php endif; ?>	
 				<?php if($product->thumb): ?>
-				<td><img src="<?php echo "Media/Product/".$product->getThumb()->name  ?>" alt="No Image Found" width="50" height="50"></td>
+				<td><img src="<?php echo $product->getThumb()->getImagePath()  ?>" alt="No Image Found" width="50" height="50"></td>
 				<?php else: ?>
 				<td>No Thumb Image</td>
 				<?php endif; ?>	
 				<?php if($product->small): ?>
-				<td><img src="<?php echo "Media/Product/".$product->getSmall()->name  ?>" alt="No Image Found" width="50" height="50"></td>
+				<td><img src="<?php echo $product->getSmall()->getImagePath()  ?>" alt="No Image Found" width="50" height="50"></td>
 				<?php else: ?>
 				<td>No Small Image</td>
 				<?php endif; ?>
@@ -69,6 +71,8 @@ $products = $this->getProducts();
 			    <td><?php echo $product->msp ?></td>
 			    <td><?php echo $product->costPrice ?></td>
 			    <td><?php echo $product->quantity ?></td>
+			    <td><?php echo $product->tax ?></td>
+			    <td><?php echo $product->discount ?></td>
 			    <td><?php echo $product->getStatus($product->status) ?></td>
 			    <td><?php echo $product->createdAt ?></td>
 			    <td><?php echo $product->updatedAt ?></td>

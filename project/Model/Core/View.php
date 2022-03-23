@@ -119,7 +119,7 @@ class Model_Core_View
 
 	public function getBaseUrl($subUrl = null)
     {
-        $url = "C:/xampp/htdocs/orm-methods/Core/project";
+        $url = getcwd();
         if($subUrl)
         {
             $url = $url."/".$subUrl;

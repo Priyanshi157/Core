@@ -1,26 +1,29 @@
-<?php $cart = $this->getCart(); ?>
 <?php $customers = $this->getCustomers();  ?>
+<?php $cart = $this->getCart(); ?>
 <?php $customer = $cart->customer; ?>
 <?php $billingAddress = $cart->billingAddress; ?>
 <?php $shipingAddress = $cart->shipingAddress; ?>
-<?php $products = $this->getProducts(); ?>
 <?php $item = $cart->item; ?>
+<?php $products = $this->getProducts(); ?>
 <?php $items = $this->getItems(); ?>
-<?php $disabled = (!$items)?'disabled':""; ?>
+<?php $disabled = (!$items) ? 'disabled' : ""; ?>
 
 <select onchange="change(this.value)">
 	<option value="">Select</option>
 	<?php foreach($customers as $cust): ?>
-	<option value="<?php echo $cust->customerId ?>"><?php echo $cust->firstName." ".$cust->email; ?></option>
+	<option value="<?php echo $cust->customerId ?>"><?php echo $cust->customerId."  ".$cust->firstName." ".$cust->lastName; ?></option>
 	<?php endforeach; ?>
 </select>
-<h3>Customer Data</h3>
+
+<button><a href="<?php echo $this->getUrl('grid','cart',[],true); ?>">Cancel</a></button>
+
+<h2><b>Customer Data</b></h2>
 <table>
 	<tr>
 		<td>First Name</td>
-		<td><input type="text" name="" value="<?php echo $customer->firstName; ?>"></td>
+		<td><input type="text" value="<?php echo $customer->firstName; ?>"></td>
 		<td>Last Name</td>
-		<td><input type="text" name="" value="<?php echo $customer->lastName; ?>"></td>
+		<td><input type="text" value="<?php echo $customer->lastName; ?>"></td>
 	</tr>
 </table><br>
 
@@ -75,42 +78,42 @@
 			</td>
 			<td>
 				<table border="1">
-						<tr>
-							<input type="hidden" name="shipingAddress[billing]" value="2">
-							<input type="hidden" name="shipingAddress[shiping]" value="1">
-							<td>First Name</td>
-							<td><input type="text" name="shipingAddress[firstName]" id="firstName1" value="<?php echo $shipingAddress->firstName; ?>"></td>
-						</tr>
-						<tr>
-							<td>Last Name</td>
-							<td><input type="text" name="shipingAddress[lastName]" id="lastName1" value="<?php echo $shipingAddress->lastName; ?>"></td>
-						</tr>
-						<tr>
-							<td>Address</td>
-							<td><input type="text" name="shipingAddress[address]" id="address1" value="<?php echo $shipingAddress->address; ?>"></td>
-						</tr>
-						<tr>
-							<td>City</td>
-							<td><input type="text" name="shipingAddress[city]" id="city1" value="<?php echo $shipingAddress->city; ?>"></td>
-						</tr>
-						<tr>
-							<td>State</td>
-							<td><input type="text" name="shipingAddress[state]" id="state1" value="<?php echo $shipingAddress->state; ?>"></td>
-						</tr>
-						<tr>
-							<td>Postal Code</td>
-							<td><input type="text" name="shipingAddress[postalCode]" id="postalCode1" value="<?php echo $shipingAddress->postalCode; ?>"></td>
-						</tr>
-						<tr>
-							<td>Country</td>
-							<td><input type="text" name="shipingAddress[country]" id="country1" value="<?php echo $shipingAddress->country; ?>"></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td>
-								<input type="checkbox" name="saveInShipingBook">save in address book
-							</td>
-						</tr>
+					<tr>
+						<input type="hidden" name="shipingAddress[billing]" value="2">
+						<input type="hidden" name="shipingAddress[shiping]" value="1">
+						<td>First Name</td>
+						<td><input type="text" name="shipingAddress[firstName]" id="firstName1" value="<?php echo $shipingAddress->firstName; ?>"></td>
+					</tr>
+					<tr>
+						<td>Last Name</td>
+						<td><input type="text" name="shipingAddress[lastName]" id="lastName1" value="<?php echo $shipingAddress->lastName; ?>"></td>
+					</tr>
+					<tr>
+						<td>Address</td>
+						<td><input type="text" name="shipingAddress[address]" id="address1" value="<?php echo $shipingAddress->address; ?>"></td>
+					</tr>
+					<tr>
+						<td>City</td>
+						<td><input type="text" name="shipingAddress[city]" id="city1" value="<?php echo $shipingAddress->city; ?>"></td>
+					</tr>
+					<tr>
+						<td>State</td>
+						<td><input type="text" name="shipingAddress[state]" id="state1" value="<?php echo $shipingAddress->state; ?>"></td>
+					</tr>
+					<tr>
+						<td>Postal Code</td>
+						<td><input type="text" name="shipingAddress[postalCode]" id="postalCode1" value="<?php echo $shipingAddress->postalCode; ?>"></td>
+					</tr>
+					<tr>
+						<td>Country</td>
+						<td><input type="text" name="shipingAddress[country]" id="country1" value="<?php echo $shipingAddress->country; ?>"></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<input type="checkbox" name="saveInShipingBook">save in address book
+						</td>
+					</tr>
 				</table>
 			</td>
 		</tr>
@@ -225,18 +228,22 @@
 			<td><?php echo $this->getTotal(); ?></td>
 		</tr>
 		<tr>
-			<td>Shiping Charge</td>
+			<td>Shiping Cost</td>
 			<td><?php echo $cart->cart->shipingCost; ?></td>
 		</tr><tr>
 			<td>Tax</td>
-			<td><?php echo $this->getTotal() * 20 / 100; ?></td>
+			<td><?php echo $this->getTax($cart->cart->cartId); ?></td>
 		</tr><tr>
 			<td>Discount</td>
-			<td>50</td>
+			<td><?php echo $cart->cart->discount; ?></td>
 		</tr><tr>
-			<td>Grand Total</td>
-			<td><?php echo $this->getTotal() + $cart->cart->shipingCost + $this->getTotal() * 20 / 100 + 50; ?></td>
-			<input type="hidden" name="grandTotal" value="<?php echo $this->getTotal() + $cart->cart->shipingCost + $this->getTotal() * 20 / 100 + 50; ?>">
+			<td width="70%" align="right">Grand Total</td>
+
+            <input type="hidden" name="grandTotal" value="<?php echo $this->getTotal() + ($cart->cart->shippingCost) + $this->getTax($cart->cart->cartId) - $cart->cart->discount; ?>">
+
+            <input type="hidden" name="discount" value="<?php echo $cart->cart->discount;    ?>">
+            <input type="hidden" name="taxAmount" value="<?php echo $this->getTax($cart->cart->cartId); ?>">
+            <td><?php echo $this->getTotal() + ($cart->cart->shipingCost) + $this->getTax($cart->cart->cartId) - $cart->cart->discount; ?></td>
 		</tr>
 		<tr>
 			<td></td>

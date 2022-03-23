@@ -76,6 +76,7 @@ class Controller_Product extends Controller_Admin_Action
 			{
 				throw new Exception("Invalid Request", 1);
 			}	
+
 			$postData = $request->getPost('product');
 			$categoryIds = $request->getPost('category');
 			if(!$postData)
@@ -84,7 +85,19 @@ class Controller_Product extends Controller_Admin_Action
 			}
 
 			$product = $productModel;
+			$type = $request->getPost('discountMethod');
 			$product->setData($postData);
+			if($type == 1)
+			{
+				$product->discount = $product->price * $product->discount / 100 ;
+			}
+
+			if(!($product->costPrice <= ($product->price-$product->discount) && $product->price-$product->discount <= $product->price) || $product->discount<0)
+			{
+				$this->getMessage()->addMessage('Not Valid Discount.',3);
+				throw new Exception("Discount not valid.", 1);
+			}
+
 			if(!($product->productId))
 			{
 				$product->createdAt = date('y-m-d h:m:s');

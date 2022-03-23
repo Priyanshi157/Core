@@ -76,13 +76,12 @@ class Model_Customer extends Model_Core_Row
 		{
 			return $this->shipingAddress;
 		}
-
+		
 		$address = $addressModel->fetchRow("SELECT * FROM `address` WHERE `customerId` = {$this->customerId } AND `shiping` = 1 ");
 		if(!$address)
 		{
 			return $addressModel;
 		}
-
 		$this->setShipingAddress($address);
 		return $address;
 	}

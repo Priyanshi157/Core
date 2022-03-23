@@ -2,8 +2,10 @@
 
 class Model_Order extends Model_Core_Row
 {
-	protected $billingAdress;
+	protected $billingAddress;
 	protected $shipingAddress;
+	protected $items;
+
 	const STATUS_ENABLED = 1;
 	const STATUS_DISABLED = 2;
 	const STATUS_DEFAULT = 1;
@@ -46,6 +48,7 @@ class Model_Order extends Model_Core_Row
 			return $this->billingAddress;
 		}
 		$address = $addressModel->fetchRow("SELECT * FROM `order_address` WHERE `orderId` = {$this->orderId} AND `billing` = 1");
+		
 		if(!$address)
 		{
 			return $addressModel;
@@ -87,6 +90,36 @@ class Model_Order extends Model_Core_Row
 	public function setShipingAddress(Model_Order_Address $address)
 	{
 		$this->shipingAddress = $address;
+		return $this;
+	}
+
+	public function getItems($reload = false)
+	{
+
+		$itemModel = Ccc::getModel('Order_Item');
+		if(!$this->orderId)
+		{
+			return $itemModel;
+		}
+
+		if($this->items && !$reload)
+		{
+			return $this->items;
+		}
+
+		$items=$itemModel->fetchAll("SELECT * FROM `order_item` WHERE `orderId` = {$this->orderId}");
+		if(!$items)
+		{
+			return $itemModel;
+		}
+		
+		$this->setItems($items);
+		return $this->items;
+	}
+
+	public function setItems($items)
+	{
+		$this->items = $items;
 		return $this;
 	}
 }

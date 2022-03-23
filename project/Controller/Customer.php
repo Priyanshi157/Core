@@ -129,7 +129,6 @@ class Controller_Customer extends Controller_Admin_Action
 		$billing->customerId = $customer->customerId;
 		$shiping->setData($postShiping);	
 		$shiping->customerId = $customer->customerId;
-
 		$result = $billing->save();
 		if(!$result)
 		{
