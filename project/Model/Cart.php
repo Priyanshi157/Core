@@ -135,7 +135,7 @@ class Model_Cart extends Model_Core_Row
 		{
 			return $this->shipingAddress;
 		}
-
+		
 		$address=$addressModel->fetchRow("SELECT * FROM `cart_address` WHERE `cartId` = {$this->cartId} AND `shiping` = 1");
 		if(!$address)
 		{

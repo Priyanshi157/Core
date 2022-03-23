@@ -27,7 +27,7 @@ class Controller_Cart extends Controller_Admin_Action
 		$this->setTitle('Cart_Add');
 		$cartModel = Ccc::getModel('Cart');
 		$content = $this->getLayout()->getContent();
-		$cartAdd = Ccc::getBlock('Cart_Edit'); //->setData(['cart'=>$cartModel]);
+		$cartAdd = Ccc::getBlock('Cart_Edit'); 
 		$cartModel = $cartAdd->cart = $cartModel;
 		$content->addChild($cartAdd);
 		$menu = Ccc::getBlock('Core_Layout_Menu');
@@ -43,7 +43,6 @@ class Controller_Cart extends Controller_Admin_Action
 		$menu = Ccc::getBlock('Core_Layout_Menu');
 		$message = Ccc::getBlock('Core_Layout_Message');
 		$header->addChild($menu,'menu')->addChild($message,'message');
-
 		$cartModel = Ccc::getModel('Cart');
 		$content = $this->getLayout()->getContent();
 		if(!$customerId)
@@ -62,7 +61,6 @@ class Controller_Cart extends Controller_Admin_Action
 			$billingAddress = $cart->getBillingAddress(true);
 			$shipingAddress = $cart->getShipingAddress(true);
 		}
-
 		$cartModel->customer = $customer;
 		$cartModel->item = $item;
 		$cartModel->billingAddress = $billingAddress;
@@ -89,6 +87,7 @@ class Controller_Cart extends Controller_Admin_Action
 			else
 			{
 				$cartModel->customerId = $customerId;
+				$cartModel->status = 1;
 				$cart = $cartModel->save();
 				if(!$cart)
 				{
@@ -105,43 +104,48 @@ class Controller_Cart extends Controller_Admin_Action
 	}
 
 	public function saveAddressAction($cart)
-	{
-		try 
-		{
-			$request = $this->getRequest();
-			$customerId = $request->getRequest('id');
-			$customer = $cart->getCustomer();
-			$customerBillingAddress = $customer->getBillingAddress();
-			$customerShipingAddress = $customer->getShipingAddress();
-			if($customerBillingAddress)
-			{
-				$billingAddress = $cart->getBillingAddress();
-				$billingAddress->cartId = $cart->cartId;
-				$billingAddress->firstName = $customer->firstName;
-				$billingAddress->lastName = $customer->lastName;
-				$billingAddress->setData($customerBillingAddress->getData());
-				unset($billingAddress->addressId);
-				unset($billingAddress->customerId);
-				$billingAddress->save();
-			}
-
-			if($customerShipingAddress)
-			{
-				$shipingAddress = $cart->getShipingAddress();
-				$shipingAddress->cartId = $cart->cartId;
-				$shipingAddress->firstName = $customer->firstName;
-				$shipingAddress->lastName = $customer->lastName;
-				$shipingAddress->setData($customerShipingAddress->getData());
-				unset($shipingAddress->addressId);
-				unset($shipingAddress->customerId);
-				$shipingAddress->save();
-			}		
-		} 
-		catch (Exception $e) 
-		{
-			echo $e->getMessage();
-		}
-	}
+    {
+        try
+        {
+            $request = $this->getRequest();
+            $customerId = $request->getRequest('id');
+            if(!$customerId)
+            {
+                throw new Exception("Request Invalid.");
+            }
+            $customer = $cart->getCustomer();
+            $customerBillingAddress = $customer->getBillingAddress();
+            $customerShipingAddress = $customer->getShipingAddress();
+            if($customerBillingAddress)
+            {
+                $billingAddress = $cart->getBillingAddress();
+                $billingAddress->cartId = $cart->cartId;
+                $billingAddress->firstName = $customer->firstName;
+                $billingAddress->lastName = $customer->lastName;
+                $billingAddress->setData($customerBillingAddress->getData());
+                unset($billingAddress->addressId);
+                unset($billingAddress->customerId);
+                $billingAddress->save();
+            }
+            if($customerShipingAddress)
+            {
+                $shipingAddress = $cart->getShipingAddress();
+                $shipingAddress->cartId = $cart->cartId;
+                $shipingAddress->firstName = $customer->firstName;
+                $shipingAddress->lastName = $customer->lastName;
+                $shipingAddress->setData($customerShipingAddress->getData());
+                unset($shipingAddress->addressId);
+                unset($shipingAddress->customerId);
+                $shipingAddress->save();
+            }
+            $this->getMessage()->addMessage("Address Saved.");
+        }
+        catch (Exception $e)
+        {
+            $this->getMessage()->addMessage($e->getMessage(),3);
+            $this->redirect('grid');
+        }
+    }
 
 	public function saveCartAddressAction()
 	{
@@ -159,6 +163,7 @@ class Controller_Cart extends Controller_Admin_Action
 			$shipingAddress->setData($shipingData);
 			$billingAddress->save();
 			$shipingAddress->save();
+
 
 			if($request->getPost('saveInBillingBook'))
 			{
@@ -237,8 +242,7 @@ class Controller_Cart extends Controller_Admin_Action
 		catch (Exception $e) 
 		{
 			$this->redirect('edit');	
-		}
-		
+		}	
 	}
 
 	public function addCartItemAction()
@@ -255,25 +259,40 @@ class Controller_Cart extends Controller_Admin_Action
 			$item->cartId = $cart->cartId;
 			foreach($cartData as $cartItem)
 			{
-				if(array_key_exists('productId',$cartItem)){
+				if(array_key_exists('productId',$cartItem))
+				{
 					$product = $productModel->load($cartItem['productId']);
 					if($product->quantity > $cartItem['quantity'])
 					{
 						unset($item->itemId);
-						$item->setData($cartItem);
-						$item->itemTotal = $product->price * $cartItem['quantity'];
-						$item->save();
-						unset($item->itemId);
+                        $item->setData($cartItem);
+                        $item->itemTotal = $product->price * $cartItem['quantity'];
+                        $item->tax = $product->tax;
+                        $item->taxAmount = ($product->price * $product->tax / 100) * $cartItem['quantity'];
+                        $item->discount = ($product->discount * $cartItem['quantity']); 
+                        $item->save();
+                        $taxAmount += ($product->price * $product->tax / 100) * $cartItem['quantity'];
+                        $discount +=($product->discount * $cartItem['quantity']);
+                        unset($item->itemId);
 					}
 				}
 			}
+			$subTotal = $item->fetchRow("SELECT sum(`itemTotal`) as subTotal FROM `cart_item`");
+            $cart->subTotal = $subTotal->subTotal;
+            $cart->taxAmount = $taxAmount;
+            $cart->discount = $discount;
+            $result = $cart->save();
+            if(!$result)
+            {
+                throw new Exception("subTotal not updated", 1);
+            }
+
 			$this->redirect('edit');
 		} 
 		catch (Exception $e) 
 		{
 			$this->redirect('edit');	
 		}
-		
 	}
 
 	public function cartItemUpdateAction()
@@ -293,10 +312,25 @@ class Controller_Cart extends Controller_Admin_Action
 				if($product->quantity > $cartItem['quantity'])
 				{
 					$item->setData($cartItem);
-					$item->itemTotal = $product->price * $cartItem['quantity'];
-					$item->save();
+                    $item->itemTotal = $product->price * $cartItem['quantity'];
+                    $item->discount = $product->discount * $cartItem['quantity'];
+                    $item->tax = $product->tax;
+                    $item->taxAmount = ($product->price * $product->tax / 100) * $cartItem['quantity'];
+                    $taxAmount += ($product->price * $product->tax / 100) * $cartItem['quantity'];
+                    $discount += $product->discount * $cartItem['quantity'];
+                    $item->save();
 				}
 			}
+			$subTotal = $item->fetchRow("SELECT sum(`itemTotal`) as subTotal FROM `cart_item`");
+            $cart->subTotal = $subTotal->subTotal;
+            $cart->taxAmount = $taxAmount;
+            $cart->discount = $discount;
+            $result = $cart->save();
+            if(!$result)
+            {
+                throw new Exception("subTotal not updated", 1);
+            }
+
 			$this->redirect('edit');
 		} 
 		catch (Exception $e) 
@@ -335,7 +369,7 @@ class Controller_Cart extends Controller_Admin_Action
 			$cartModel = Ccc::getModel('Cart');
 			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customerId` = {$customerId}");
 			$customer = $cart->getCustomer();
-			$orderModel = Ccc::getModel('order');
+			$orderModel = Ccc::getModel('order');			
 			$orderModel->customerId = $customerId;
 			$orderModel->firstName = $customer->firstName;
 			$orderModel->lastName = $customer->lastName;
@@ -345,6 +379,8 @@ class Controller_Cart extends Controller_Admin_Action
 			$orderModel->shipingCost = $cart->shipingCost;
 			$orderModel->paymentId = $cart->paymentMethod;
 			$orderModel->grandTotal = $request->getPost('grandTotal');
+			$orderModel->taxAmount = $request->getPost('taxAmount');
+			$orderModel->discount = $request->getPost('discount');
 			$order = $orderModel->save();
 			$items = $cart->getItems();
 
@@ -357,6 +393,9 @@ class Controller_Cart extends Controller_Admin_Action
 				$itemModel->name = $product->name;
 				$itemModel->sku = $product->sku;
 				$itemModel->price = $item->itemTotal;
+				$itemModel->tax = $product->tax;
+				$itemModel->taxAmount = ($product->price * $product->tax / 100) * $item->quantity;
+				$itemModel->discount = $item->discount;
 				$itemModel->quantity = $item->quantity;
 				$result = $itemModel->save();
 				if($result)
@@ -398,7 +437,7 @@ class Controller_Cart extends Controller_Admin_Action
 			{
 				$cart->delete();
 			}
-			
+			$this->getMessage()->addMessage('Order placed successfully.');
 			$this->redirect('grid','cart',[],true);
 		} 
 		catch (Exception $e) 

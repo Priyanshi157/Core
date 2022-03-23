@@ -70,7 +70,7 @@
 	  <div class="row mb-3">
     	<label for="qty" class="col-sm-2 col-form-label">Postal Code</label>
     	<div class="col-md-10">
-    		<input type="text" class="form-control" id="billingpostalcode" name="billingAddress[postalCode]" value="<?php echo $billingAddress->postalCode?>">
+    		<input type="number" class="form-control" id="billingpostalcode" name="billingAddress[postalCode]" value="<?php echo $billingAddress->postalCode?>">
     	</div>
   	</div>
 
@@ -117,7 +117,7 @@
     <div class="row mb-3">
       <label for="qty" class="col-sm-2 col-form-label">Postal Code</label>
       <div class="col-md-10">
-        <input type="text" class="form-control" id="shipingpostalcode" name="shipingAddress[postalCode]" value="<?php echo $shipingAddress->postalCode?>">
+        <input type="number" class="form-control" id="shipingpostalcode" name="shipingAddress[postalCode]" value="<?php echo $shipingAddress->postalCode?>">
       </div>
     </div>
 
