@@ -6,5 +6,5 @@ return [
         'password' => "",
         'dbname' => "project_priyanshi"
 	],
-	'baseUrl' => "http://localhost/cart/core/project/"
+	'baseUrl' => "http://localhost/order-app/core/project/"
 ];

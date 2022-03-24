@@ -68,4 +68,18 @@ class Block_Cart_Edit extends Block_Core_Template
         }
         return null;
     }
+
+    public function getPaymentMethods()
+    {
+        $cartModel = Ccc::getModel('Cart');
+        $methods = $cartModel->fetchAll("SELECT * FROM `payment_method`");
+        return $methods;
+    }
+
+    public function getShipingMethods()
+    {
+        $cartModel = Ccc::getModel('Cart');
+        $methods = $cartModel->fetchAll("SELECT * FROM `shiping_method`");
+        return $methods;
+    }
 }

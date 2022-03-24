@@ -64,7 +64,7 @@ class Controller_Customer extends Controller_Admin_Action
 		} 
 		catch (Exception $e) 
 		{
-			throw new Exception("System is unable to find record.", 1);	
+			echo $e->getMessage();
 		}
 	}
 

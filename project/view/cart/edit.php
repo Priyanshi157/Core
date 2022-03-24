@@ -6,6 +6,8 @@
 <?php $item = $cart->item; ?>
 <?php $products = $this->getProducts(); ?>
 <?php $items = $this->getItems(); ?>
+<?php $payment = $this->getPaymentMethods(); ?>
+<?php $shiping = $this->getShipingMethods(); ?>
 <?php $disabled = (!$items) ? 'disabled' : ""; ?>
 
 <select onchange="change(this.value)">
@@ -130,21 +132,27 @@
 		<th>Payment Method</th>
 		<th>Shiping Method</th>
 	</tr>
+
 	<tr>
 		<td>
 			<form action="<?php echo $this->getUrl('savePaymentMethod') ?>" method="post">
-				<input type="radio" name="paymentMethod" value="1">Credit/Debit <br>
-				<input type="radio" name="paymentMethod" value="2">UPI <br>
-				<input type="radio" name="paymentMethod" value="3">QR <br>
-				<input type="radio" name="paymentMethod" value="4" checked>Cash On Delivery <br>
+				<?php foreach ($payment as $paymentMethod) : ?>
+                    
+                        <input type="radio" name="paymentMethod" value="<?php echo $paymentMethod->methodId ?>" <?php echo ($paymentMethod->methodId == $cart->cart->paymentMethod)?'checked' : '' ?>><?php echo $paymentMethod->name ?>
+                    <br>
+                <?php endforeach;?>
 				<input type="submit" value="Update">
 			</form>
 		</td>
+
 		<td>
 			<form action="<?php echo $this->getUrl('saveShipingMethod') ?>" method="post">
-				<input type="radio" name="shipingMethod" value="100">Same Day Delivery <br>
-				<input type="radio" name="shipingMethod" value="70">Express Delivery <br>
-				<input type="radio" name="shipingMethod" value="50" checked>Normal Delivery <br><br>
+				<?php foreach ($shiping as $shipingMethod) : ?>
+                    
+                        <input type="radio" name="shipingMethod" value="<?php echo $shipingMethod->methodId ?>" <?php echo ($shipingMethod->methodId == $cart->cart->shipingMethod)?'checked' : '' ?>><?php echo $shipingMethod->name ?>
+                        <?php echo $shipingMethod->charge ?>
+                    	<br>
+                <?php endforeach;?><br>
 				<input type="submit" value="Update">
 			</form>
 		</td>

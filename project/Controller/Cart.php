@@ -12,6 +12,7 @@ class Controller_Cart extends Controller_Admin_Action
 	
 	public function gridAction()
 	{
+		$this->getCart()->unsetCart();
 		$this->setTitle('Cart_Grid');
 		$content = $this->getLayout()->getContent();
 		$cartGrid = Ccc::getBlock('Cart_Grid');
@@ -38,14 +39,23 @@ class Controller_Cart extends Controller_Admin_Action
 	public function editAction()
 	{
 		$request = $this->getRequest();
-		$customerId = $request->getRequest('id');
+		$cartModel = Ccc::getModel('Cart');
+		if($this->getCart()->getCart())
+		{
+			$cartId = $this->getCart()->getCart()['cartId'];
+			$cart = $cartModel->load($cartId);
+		}
+		else
+		{
+			$cartId = null;
+		}
+
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Menu');
 		$message = Ccc::getBlock('Core_Layout_Message');
 		$header->addChild($menu,'menu')->addChild($message,'message');
-		$cartModel = Ccc::getModel('Cart');
 		$content = $this->getLayout()->getContent();
-		if(!$customerId)
+		if(!$cartId)
 		{
 			$customer = $cartModel->getCustomer();
 			$item = $cartModel->getItem();
@@ -55,7 +65,7 @@ class Controller_Cart extends Controller_Admin_Action
 		}
 		else
 		{
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customerId` = {$customerId}");
+			$cart = $cart;
 			$customer = $cart->getCustomer(true);
 			$item = $cart->getItem(true);
 			$billingAddress = $cart->getBillingAddress(true);
@@ -78,22 +88,31 @@ class Controller_Cart extends Controller_Admin_Action
 		{
 			$request = $this->getRequest();
 			$customerId = $request->getRequest('id');
-			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customerId` = {$customerId} ");
-			if($cart)
+			if($this->getCart()->getCart())
 			{
 				$this->redirect('edit');
 			}
 			else
 			{
-				$cartModel->customerId = $customerId;
-				$cartModel->status = 1;
-				$cart = $cartModel->save();
-				if(!$cart)
+				$cartModel = Ccc::getModel('Cart');
+				$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customerId` = {$customerId} ");
+				if($cart)
 				{
-					$this->getMessage()->addmessage("Cart not added.");
+					$this->getCart()->addCart($cart->cartId);
+					$this->redirect('edit');
 				}
-				$this->saveAddressAction($cart);
+				else
+				{
+					$cartModel->customerId = $customerId;
+					$cartModel->status = 1;
+					$cart = $cartModel->save();
+					if(!$cart)
+					{
+						$this->getMessage()->addmessage("Cart not added.");
+					}
+					$this->saveAddressAction($cart);
+					$this->getCart()->addCart($cart->cartId);
+				}
 			}
 			$this->redirect('edit');	
 		} 
@@ -152,9 +171,9 @@ class Controller_Cart extends Controller_Admin_Action
 		try 
 		{
 			$request = $this->getRequest();
-			$customerId = $request->getRequest('id');
+			$cartId = $this->getCart()->getCart()['cartId'];
 			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customerId` = {$customerId}");
+			$cart = $cartModel->load($cartId);
 			$billingData = $request->getPost('billingAddress');
 			$shipingData = $request->getPost('shipingAddress');
 			$billingAddress = $cart->getBillingAddress();
@@ -184,11 +203,11 @@ class Controller_Cart extends Controller_Admin_Action
 				unset($customerShipingAddress->lastName);
 				$customerShipingAddress->save();
 			}
-			$this->redirect('edit');
+			$this->redirect('edit','cart',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('edit');	
+			$this->redirect('edit','cart',[],true);
 		}
 		
 	}
@@ -198,17 +217,17 @@ class Controller_Cart extends Controller_Admin_Action
 		try 
 		{
 			$request = $this->getRequest();
-			$customerId = $request->getRequest('id');
+			$cartId = $this->getCart()->getCart()['cartId'];
 			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customerId` = {$customerId}");
+			$cart = $cartModel->load($cartId);
 			$paymentData = $request->getPost('paymentMethod');
 			$cart->setData(['paymentMethod' => $paymentData]);
 			$cart->save();
-			$this->redirect('edit');	
+			$this->redirect('edit','cart',[],true);	
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('edit');	
+			$this->redirect('edit','cart',[],true);	
 		}
 		
 	}
@@ -218,30 +237,31 @@ class Controller_Cart extends Controller_Admin_Action
 		try 
 		{
 			$request = $this->getRequest();
-			$customerId = $request->getRequest('id');
+			$cartId = $this->getCart()->getCart()['cartId'];
 			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customerId` = {$customerId}");
-			$shipingCost = $request->getPost('shipingMethod');
-			if($shipingCost == 100)
+			$cart = $cartModel->load($cartId);
+			$shipingMethod = $request->getPost('shipingMethod');
+
+			if($shipingMethod == '1')
 			{
-				$shipingMethod = '1';
+				$shipingCost = 100;
 			}
-			elseif($shipingCost == 70)
+			elseif($shipingMethod == '2')
 			{
-				$shipingMethod = '2';
+				$shipingCost = 70;
 			}
 			else
 			{
-				$shipingMethod = '3';
+				$shipingCost = 50;
 			}
 
 			$cart->setData(['shipingMethod' => $shipingMethod, 'shipingCost' => $shipingCost]);
 			$cart->save();
-			$this->redirect('edit');	
+			$this->redirect('edit','cart',[],true);	
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('edit');	
+			$this->redirect('edit','cart',[],true);	
 		}	
 	}
 
@@ -250,10 +270,10 @@ class Controller_Cart extends Controller_Admin_Action
 		try 
 		{
 			$request = $this->getRequest();
-			$productModel = Ccc::getModel('Product');
-			$customerId = $request->getRequest('id');
+			$cartId = $this->getCart()->getCart()['cartId'];
 			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customerId` = {$customerId}");
+			$cart = $cartModel->load($cartId);
+			$productModel = Ccc::getModel('Product');
 			$cartData = $request->getPost('cartItem');
 			$item = $cart->getItem();
 			$item->cartId = $cart->cartId;
@@ -279,19 +299,19 @@ class Controller_Cart extends Controller_Admin_Action
 			}
 			$subTotal = $item->fetchRow("SELECT sum(`itemTotal`) as subTotal FROM `cart_item`");
             $cart->subTotal = $subTotal->subTotal;
-            $cart->taxAmount = $taxAmount;
-            $cart->discount = $discount;
+            $cart->taxAmount += $taxAmount;
+            $cart->discount += $discount;
             $result = $cart->save();
             if(!$result)
             {
                 throw new Exception("subTotal not updated", 1);
             }
 
-			$this->redirect('edit');
+			$this->redirect('edit','cart',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('edit');	
+			$this->redirect('edit','cart',[],true);
 		}
 	}
 
@@ -300,10 +320,10 @@ class Controller_Cart extends Controller_Admin_Action
 		try 
 		{
 			$request = $this->getRequest();
-			$productModel = Ccc::getModel('Product');
-			$customerId = $request->getRequest('id');
+			$cartId = $this->getCart()->getCart()['cartId'];
 			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customerId` = {$customerId}");
+			$cart = $cartModel->load($cartId);
+			$productModel = Ccc::getModel('Product');
 			$cartData = $request->getPost('cartItem');
 			$item = $cart->getItem();
 			foreach($cartData as $cartItem)
@@ -328,14 +348,14 @@ class Controller_Cart extends Controller_Admin_Action
             $result = $cart->save();
             if(!$result)
             {
-                throw new Exception("subTotal not updated", 1);
+                throw new Exception("SubTotal not updated", 1);
             }
 
-			$this->redirect('edit');
+			$this->redirect('edit','cart',[],true);
 		} 
 		catch (Exception $e) 
 		{	
-			$this->redirect('edit');
+			$this->redirect('edit','cart',[],true);
 		}
 	}
 
@@ -346,17 +366,24 @@ class Controller_Cart extends Controller_Admin_Action
 			$request = $this->getRequest();
 			$itemId = $request->getRequest('itemId');
 			$item = Ccc::getModel('Cart_Item');
+			$cart = $item->getCart();
+			$cart->subTotal = $cart->subTotal - $item->itemTotal;
+			$cart->taxAmount = $cart->taxAmount - $item->taxAmount;
+			$cart->discount = $cart->discount - $item->discount;
+			$cart->save();
 			$result = $item->load($itemId)->delete();
-			if($result)
+			if(!$result)
 			{
-				$this->redirect('edit',null,['itemId' => null]);
+				$this->getMessage()->addMessage("Unable to fetchand delete cart items.");
+				throw new Exception("Cart item not deleted.", 1);
 			}
-			$this->redirect('edit',null,['itemId' => null]);	
+			$this->getMessage()->addMessage("Cart deleted successfully.");
+			$this->redirect('edit',null,['itemId' => null],true);	
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('edit',null,['itemId' => null]);		
-		}	
+			$this->redirect('edit',null,['itemId' => null],true);		
+		}
 	}
 
 	public function placeOrderAction()
@@ -364,13 +391,13 @@ class Controller_Cart extends Controller_Admin_Action
 		try 
 		{
 			$request = $this->getRequest();
-			$productModel = Ccc::getModel('Product');
-			$customerId = $request->getRequest('id');
+			$cartId = $this->getCart()->getCart()['cartId'];
 			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customerId` = {$customerId}");
+			$cart = $cartModel->load($cartId);
+			$productModel = Ccc::getModel('Product');
 			$customer = $cart->getCustomer();
 			$orderModel = Ccc::getModel('order');			
-			$orderModel->customerId = $customerId;
+			$orderModel->customerId = $customer->customerId;
 			$orderModel->firstName = $customer->firstName;
 			$orderModel->lastName = $customer->lastName;
 			$orderModel->email = $customer->email;
