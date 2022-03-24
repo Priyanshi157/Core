@@ -4,6 +4,7 @@ class Controller_Core_Action
 {
 	protected $layout = null;
 	protected $message = null;
+	protected $cart = null;
 
 	public function redirect($a=null,$c=null,array $data = [],$reset = false)
     {
@@ -28,6 +29,21 @@ class Controller_Core_Action
 	public function setmessage($message)
 	{
 		$this->message = $message;
+		return $this;
+	}
+
+	public function getcart()
+	{
+		if (!$this->cart) 
+		{
+			$this->setCart(Ccc::getModel('Admin_cart'));
+		}
+		return $this->cart;
+	}
+
+	public function setCart($cart)
+	{
+		$this->cart = $cart;
 		return $this;
 	}
 

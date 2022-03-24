@@ -1,5 +1,5 @@
 <?php $orders = $this->getOrders(); ?>
-<a href="<?php echo $this->getUrl('edit','cart') ?>"><button>Add New Item</button></a>
+<a href="<?php echo $this->getUrl('edit','cart') ?>"><button>Add New Order</button></a>
 
 <table border="1">
     <tr>
