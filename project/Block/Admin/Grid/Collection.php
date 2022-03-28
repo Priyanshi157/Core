@@ -24,7 +24,7 @@ class Block_Admin_Grid_Collection extends Block_Core_Grid_Collection
         $array=[];
         foreach($admins as $admin)
         {
-            $array1=[];   
+            $array1=[]; 
             foreach($admin->getData() as $key => $value)
             {
                 $array1[]=$value;

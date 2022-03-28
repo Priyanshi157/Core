@@ -41,7 +41,7 @@ class Block_Core_Grid extends Block_Core_Template
         return $object;
     }
     
-    public function getActionUrl($title,$id)
+    public function getActionUrl($title,$id = null)
     {
         return $this->getUrl($title,null,['id'=> $id],true);
     }

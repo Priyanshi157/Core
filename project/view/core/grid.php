@@ -3,8 +3,7 @@
 <?php $columns = $this->getCollection()->getColumns(); ?>
 <?php $actions = $this->getCollection()->getActions(); ?>
 
-<a href="<?php echo $this->getUrl('add',null,[],true); ?>"><button type="button" class="btn btn-primary">Add</button></a><br><br>
-
+<a href="<?php echo $this->getActionUrl('add'); ?>"><button type="button" class="btn btn-primary">Add</button></a><br><br>
 
 <div>
 <select onchange="ppr(this.value)" id="ppr">
