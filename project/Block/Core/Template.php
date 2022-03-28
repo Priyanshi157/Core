@@ -3,7 +3,14 @@
 class Block_Core_Template extends Model_Core_View
 {
 	protected $children = [];
-	
+	protected $layout = null;
+	protected $pager = null;
+
+	public function __construct()
+	{
+			
+	}
+
 	public function getChildren()
 	{
 		return $this->children;
@@ -15,11 +22,38 @@ class Block_Core_Template extends Model_Core_View
 		return $this;
 	}
 
-	public function addChild($value,$key = null)
+	public function getLayout()
 	{
-		$this->children[$key]  = $value;
+		return $this->layout;
+	}
+
+	public function setLayout($layout)
+	{
+		$this->layout = $layout;
 		return $this;
 	}
+
+	public function getPager()
+	{
+		return $this->pager;
+	}
+
+	public function setPager($pager)
+	{
+		$this->pager = $pager;
+		return $this;
+	}
+
+	public function addChild($object, $key = null)
+    {
+        if(!$key)
+        {
+            $key = get_class($object);
+        }
+        $this->children[$key] = $object;
+        $this->setLayout($this->getLayout());
+        return $this;
+    }
 
 	public function getChild($key)
 	{

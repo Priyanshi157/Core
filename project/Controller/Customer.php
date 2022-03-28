@@ -30,7 +30,10 @@ class Controller_Customer extends Controller_Admin_Action
 		$billingAddress = $customerModel->getBillingAddress();
 		$shipingAddress = $customerModel->getShipingAddress();
 		$content = $this->getLayout()->getContent();
-		$customerAdd = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customerModel,'billingAddress'=>$billingAddress , 'shipingAddress'=>$shipingAddress]);
+		$customerAdd = Ccc::getBlock('Customer_Edit');
+		Ccc::register('customer',$customerModel);
+		Ccc::register('billingAddress',$billingAddress);
+		Ccc::register('shipingAddress',$shipingAddress);
 		$content->addChild($customerAdd,'Add');
 		$menu = Ccc::getBlock('Core_Layout_Menu');
 		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
@@ -56,7 +59,10 @@ class Controller_Customer extends Controller_Admin_Action
 				throw new Exception("System is unable to find record.", 1);	
 			}
 			$content = $this->getLayout()->getContent();
-			$customerEdit = Ccc::getBlock('Customer_Edit')->setData(['customer'=>$customer]);
+			$customerEdit = Ccc::getBlock('Customer_Edit');
+			Ccc::register('customer',$customer);
+			Ccc::register('billingAddress',$customer->getBillingAddress());
+			Ccc::register('shipingAddress',$customer->getShipingAddress());
 			$content->addChild($customerEdit,'Edit');
 			$menu = Ccc::getBlock('Core_Layout_Menu');
 			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
@@ -85,21 +91,16 @@ class Controller_Customer extends Controller_Admin_Action
 
 		$customer = $customerModel;
 		$customer->setData($postData);
-		if(!($customer->customerId))
+		print_r($customer);
+		if(!(int)$customer->customerId)
 		{
 			$customer->createdAt = date('y-m-d h:m:s');
 			unset($customer->customerId);
 		}
 		else
 		{
-			if(!(int)$postData['customerId'])
-			{
-				throw new Exception("Invalid Request.", 1);
-			}
-			$customer->customerId = $postData["customerId"];
 			$customer->updatedAt = date('y-m-d h:m:s');
-			$update = $customer->save();
-		}	 
+		}
 		$result = $customer->save();
 		if($result==null)
 		{
@@ -108,11 +109,26 @@ class Controller_Customer extends Controller_Admin_Action
 		return $result;
 	}
 
-	protected function saveAddress($customer)
+	protected function saveAddress($customer = null)
 	{
+		if(!$customer)
+		{
+			$customerId = $this->getRequest()->getRequest('id');
+			if(!$customerId)
+			{
+				$this->getMessage()->addMessage("Customer not added.");
+				throw new Exception("System is unable to save.", 1);
+				
+			}
+			$customer = Ccc::getModel('customer')->load($customerId);
+			$customer->updatedAt = date('y-m-d h:m:s');
+			$customer->save();
+		}
+		
 		$request = $this->getRequest();	
 		$postBilling = $request->getPost('billingAddress');
 		$postShiping = $request->getPost('shipingAddress');
+		$customer->updatedAt = date('y-m-d h:m:s');
 		$billing = $customer->getBillingAddress();
 		$shiping = $customer->getShipingAddress();
 		if(!$billing->addressId)
@@ -125,9 +141,25 @@ class Controller_Customer extends Controller_Admin_Action
 			unset($shiping->addressId);
 		}
 
-		$billing->setData($postBilling);
+		if($postBilling)
+		{
+			$billing->setData($postBilling);
+		}
+		else
+		{	
+			$billing->billing = 1;
+			$billing->shiping = 2;
+		}
 		$billing->customerId = $customer->customerId;
-		$shiping->setData($postShiping);	
+		if($postShiping)
+		{
+			$shiping->setData($postShiping);
+		}
+		else
+		{
+			$shiping->shiping = 1;
+			$shiping->billing = 2;
+		}	
 		$shiping->customerId = $customer->customerId;
 		$result = $billing->save();
 		if(!$result)
@@ -147,13 +179,26 @@ class Controller_Customer extends Controller_Admin_Action
 	{
 		try
 		{
-			$customer = $this->saveCustomer();
-			$this->saveAddress($customer);
-			$this->redirect('grid','customer',[],true);
+			if($this->getRequest()->getPost('customer'))
+			{
+				$customer=$this->saveCustomer();
+				if(!$customer)
+				{
+					$this->getMessage()->addMessage('Customer Details Not Saved.',3);
+					throw new Exception("System is unable to Save.", 1);
+				}
+				$this->saveAddress($customer);
+			}
+
+			if($this->getRequest()->getPost('billingAddress') || $this->getRequest()->getPost('shipingAddress'))
+			{
+				$this->saveAddress();	
+			}
+			$this->redirect('grid',null,[],true);	
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('grid','customer',[],true);
+			$this->redirect('grid',null,[],true);
 		}
 	}
 

@@ -27,7 +27,8 @@ class Controller_Admin extends Controller_Admin_Action
 		$this->setTitle('Admin_Add');
 		$adminModel = Ccc::getModel('Admin');
 		$content = $this->getLayout()->getContent();
-		$adminAdd = Ccc::getBlock('Admin_Edit')->setData(['admin'=>$adminModel]);
+		$adminAdd = Ccc::getBlock('Admin_Edit'); 
+		Ccc::register('admin',$adminModel);
 		$content->addChild($adminAdd,'Add');
 		$menu = Ccc::getBlock('Core_Layout_Menu');
 		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
@@ -53,7 +54,8 @@ class Controller_Admin extends Controller_Admin_Action
 			}
 			
 			$content = $this->getLayout()->getContent();
-			$adminEdit = Ccc::getBlock('Admin_Edit')->setData(['admin'=>$admin]);
+			$adminEdit = Ccc::getBlock('Admin_Edit');
+			Ccc::register('admin',$admin);
 			$content->addChild($adminEdit,'Edit');
 			$menu = Ccc::getBlock('Core_Layout_Menu');
 			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
