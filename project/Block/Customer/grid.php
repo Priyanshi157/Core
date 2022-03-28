@@ -76,12 +76,18 @@ class Block_Customer_Grid extends Block_Core_Grid
     {
         $customerModel = Ccc::getModel('Customer');
         $request = Ccc::getModel('Core_Request');
-        $this->setPager(Ccc::getModel('Core_Pager'));
-        $current = $request->getRequest('p',1);
-        $perPageCount = $request->getRequest('ppc',20);
-        $totalCount = $this->getAdapter()->fetchOne("SELECT COUNT('customerId') FROM `customer`");
-        $this->getPager()->execute($totalCount,$current,$perPageCount);
+        $page = (int)$request->getRequest('p', 1);
+        $ppr = (int)$request->getRequest('ppr',10);
+        $pagerModel = Ccc::getModel('Core_Pager');
+        $totalCount = $this->getAdapter()->fetchOne("SELECT count(pageId) FROM `page`");
+        $pagerModel->execute($totalCount, $page, $ppr);
+        $this->setPager($pagerModel);
         $customers = $customerModel->fetchAll("SELECT * FROM `customer` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
+        if(!$customers)
+        {
+        	return null;
+        }
+        
         $customerColumn = [];
         foreach ($customers as $customer) 
         {

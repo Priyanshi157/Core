@@ -1,9 +1,7 @@
 <?php $admin = $this->getAdmin(); ?>
-<div class="row mb-4">
-  <div class="col-md-10">
-    <input type="hidden" class="form-control" id="adminId" name="admin[adminId]" value="<?php echo $admin->adminId; ?>">
-  </div>
-</div>
+
+
+<input type="hidden" class="form-control" id="adminId" name="admin[adminId]" value="<?php echo $admin->adminId; ?>">
 
 
 <div class="row mb-4">

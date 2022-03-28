@@ -27,7 +27,8 @@ class Controller_Page extends Controller_Admin_Action
 		$this->setTitle('Page_Add');
 		$pageModel = Ccc::getModel('Page');
 		$content = $this->getLayout()->getContent();
-		$pageAdd = Ccc::getBlock('Page_Edit')->setData(['page'=>$pageModel]);
+		$pageAdd = Ccc::getBlock('Page_Edit');
+		Ccc::register('page',$pageModel);
 		$content->addChild($pageAdd,'Add');
 		$menu = Ccc::getBlock('Core_Layout_Menu');
 		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
@@ -53,7 +54,8 @@ class Controller_Page extends Controller_Admin_Action
 				throw new Exception("SYstem is unable to fetch record.", 1);
 			}
 			$content = $this->getLayout()->getContent();
-			$pageEdit = Ccc::getBlock('Page_Edit')->setData(['page'=>$pageData]);
+			$pageEdit = Ccc::getBlock('Page_Edit');
+			Ccc::register('page',$pageData);
 			$content->addChild($pageEdit,'Edit');
 			$menu = Ccc::getBlock('Core_Layout_Menu');
 			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');

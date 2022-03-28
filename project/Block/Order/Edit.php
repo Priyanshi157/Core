@@ -13,4 +13,3 @@ class Block_Order_Edit extends Block_Core_Template
 		return $order;
 	}
 }
-?>
