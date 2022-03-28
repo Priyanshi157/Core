@@ -2,24 +2,6 @@
 
 <a href="<?php echo $this->getUrl('add','page',[],true); ?>"><button type="button" class="btn btn-primary">Add</button></a>
 
-<div>
-<select onchange="ppr(this.value)" id="ppr">
-	<option>Select</option>
-	<?php foreach($this->getPager()->getPerPageCountOption() as $perPageCount) :?>	
-		<option value="<?php echo $perPageCount ?>" ><?php echo $perPageCount ?></option>
-	<?php endforeach;?>
-</select>
-
-<button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getStart()]); ?>" style="<?php echo ($this->getPager()->getStart() == NULL) ? "pointer-events: none;" : "" ?> ">Start</a></button>
-
-<button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getPrev()]); ?>" style="<?php echo ($this->getPager()->getPrev() == NULL) ? "pointer-events: none;" : "" ?>">Prev</a></button>
-
-<button>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->getPager()->getCurrent(); ?> &nbsp;&nbsp;&nbsp;&nbsp;</button>
-
-<button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getNext()]); ?>" style="<?php echo ($this->getPager()->getNext() == NULL) ? "pointer-events: none;" : "" ?>">Next</a></button>
-
-<button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getEnd()]); ?>" style="<?php echo ($this->getPager()->getEnd() == NULL) ? "pointer-events: none;" : "" ?> ">End</a></button>
-</div>
 
 <table class="table border my-4">
   <thead>

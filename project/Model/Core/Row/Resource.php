@@ -48,6 +48,7 @@ class Model_Core_Row_Resource
 		$values = '\''.implode("','",array_values($data)).'\'';
 
 		$query = "INSERT INTO `{$this->getTableName()}` ({$keys}) VALUES ({$values});";
+		
 		return $this->getAdapter()->insert($query);
 	}
 
