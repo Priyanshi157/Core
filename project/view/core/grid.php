@@ -1,9 +1,9 @@
-<?php $pager = $this->getCollection()->getPagerModel(); ?>
-<?php $headers = $this->getCollection()->getHeaders(); ?>
-<?php $columns = $this->getCollection()->getColumns(); ?>
-<?php $actions = $this->getCollection()->getActions(); ?>
+<?php $pager = $this->getPager(); ?>
+<?php $collections = $this->getCollection(); ?>
+<?php $columns = $this->getColumns();  ?>
+<?php $actions = $this->getActions(); ?>
 
-<a href="<?php echo $this->getActionUrl('add'); ?>"><button type="button" class="btn btn-primary">Add</button></a><br><br>
+<a href="<?php echo $this->getUrl('add'); ?>"><button type="button" class="btn btn-primary">Add</button></a><br><br>
 
 <div>
 <select onchange="ppr(this.value)" id="ppr">
@@ -27,8 +27,8 @@
 <table class="table table-bordered my-4">
     <thead>
         <tr>
-            <?php foreach ($headers as $header) :?>
-                <th><?php echo $header ?></th>
+            <?php foreach ($columns as $key => $column) :?>
+                <th><?php echo $column['title'] ?></th>
             <?php endforeach; ?>
             <?php foreach ($actions as $title => $action) :?>
                 <th><?php echo $title ?></th>
@@ -36,16 +36,20 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($columns as $columnData) :?>
-        <tr>
-            <?php foreach ($columnData as $column):?>
-                <td><?php echo $column ?></td>
+        <?php if(!$columns): ?>
+            <td>No Data Available.</td>
+        <?php else: ?>
+            <?php foreach ($collections as $collection) :?>
+            <tr>
+                <?php foreach ($columns as $column):?>
+                    <td><?php echo $this->getColumnData($column,$collection); ?></td>
+                <?php endforeach; ?>
+                <?php foreach ($actions as $action) :?>
+                    <td><a href="<?php echo $collection->getActionUrl($action); ?>"><?php echo $action['title'] ?></td>
+                <?php endforeach; ?> 
+            </tr>
             <?php endforeach; ?>
-            <?php foreach ($actions as $action) :?>
-                <td><a href="<?php echo $this->getActionUrl($action['title'],$columnData[0]); ?>"><?php echo $action['title'] ?></td>
-            <?php endforeach; ?> 
-        </tr>
-        <?php endforeach; ?>
+        <?php endif; ?>
     </tbody> 
 </table>
 
