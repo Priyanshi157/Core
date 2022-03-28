@@ -1,5 +1,5 @@
 <?php $configs = $this->getConfigs(); ?>
-<a href="<?php echo $this->getUrl('add','config',[],true); ?>"><button type="button" class="btn btn-primary">Add</button></a>
+<a href="<?php echo $this->getUrl('add',null,[],true); ?>"><button type="button" class="btn btn-primary">Add</button></a>
 
 <div>
 

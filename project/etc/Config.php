@@ -6,5 +6,5 @@ return [
         'password' => "",
         'dbname' => "project_priyanshi"
 	],
-	'baseUrl' => "http://localhost/order-app/core/project/"
+	'baseUrl' => "http://localhost/core-tab-grid/core/project/"
 ];

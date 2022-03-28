@@ -82,20 +82,20 @@ class Model_Core_View
 		
 		if($a == null)
 		{
-			$a = Ccc::getFront()->getRequest()->getRequest('a');
+			$info['a'] = Ccc::getFront()->getRequest()->getRequest('a');
 		}
 		else
 		{
-			$info['a']=$a;
+			$info['a'] = $a;
 		}
 		
 		if($c == null)
 		{
-			$c = Ccc::getFront()->getRequest()->getRequest('c');
+			$info['c'] = Ccc::getFront()->getRequest()->getRequest('c');
 		}
 		else
 		{
-			$info['c']=$c;
+			$info['c'] = $c;
 		}
 		
 		if($reset)
