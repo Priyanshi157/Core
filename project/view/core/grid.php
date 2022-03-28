@@ -36,7 +36,7 @@
         </tr>
     </thead>
     <tbody>
-        <?php if(!$columns): ?>
+        <?php if(!$collections): ?>
             <td>No Data Available.</td>
         <?php else: ?>
             <?php foreach ($collections as $collection) :?>

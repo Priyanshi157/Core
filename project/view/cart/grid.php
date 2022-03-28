@@ -1,7 +1,7 @@
 <?php $orders = $this->getOrders(); ?>
 <a href="<?php echo $this->getUrl('edit','cart') ?>"><button>Add New Order</button></a>
 
-<table border="1">
+<table class="table border my-4">
     <tr>
         <th>Order Id</th>
         <th>Customer Id</th>

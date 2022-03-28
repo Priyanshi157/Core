@@ -100,7 +100,7 @@
 <br><br>
 
 <h3><b>Order Summary</b></h3>
-<table border="1">
+<table class="table border my-4">
     <tr align="center">
         <th>ItemId </th>
         <th>OrderId </th>
