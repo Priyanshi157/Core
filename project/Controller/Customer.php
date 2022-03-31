@@ -273,7 +273,6 @@ class Controller_Customer extends Controller_Admin_Action
 			{
 				throw new Exception("Unable to Delete Record.");
 			}
-			$this->getMessage()->addMessage('Deleted Successfully.',1);
 			$this->gridBlockAction();
 		} 
 		catch (Exception $e) 
