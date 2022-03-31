@@ -17,9 +17,6 @@ class Controller_Cart extends Controller_Admin_Action
 		$content = $this->getLayout()->getContent();
 		$cartGrid = Ccc::getBlock('Cart_Grid');
 		$content->addChild($cartGrid,'Grid');
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$message = Ccc::getBlock('Core_Layout_Message');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
 		$this->renderLayout();
 	}
 
@@ -31,8 +28,6 @@ class Controller_Cart extends Controller_Admin_Action
 		$cartAdd = Ccc::getBlock('Cart_Edit'); 
 		$cartModel = $cartAdd->cart = $cartModel;
 		$content->addChild($cartAdd);
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -50,10 +45,6 @@ class Controller_Cart extends Controller_Admin_Action
 			$cartId = null;
 		}
 
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$message = Ccc::getBlock('Core_Layout_Message');
-		$header->addChild($menu,'menu')->addChild($message,'message');
 		$content = $this->getLayout()->getContent();
 		if(!$cartId)
 		{

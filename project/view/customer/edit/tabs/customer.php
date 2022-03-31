@@ -1,10 +1,7 @@
 <?php $customer = $this->getCustomer(); ?>
 
-<div class="row mb-4">
-<div class="col-md-10">
-  <input type="hidden" class="form-control" id="customerid" name="customer[customerId]" value="<?php echo $customer->customerId;?>">
-</div>
-</div>
+<p id="done"></p>
+<input type="hidden" class="form-control" id="customerid" name="customer[customerId]" value="<?php echo $customer->customerId;?>">
 	
 <div class="row mb-4">
 <label for="name" class="col-sm-2 col-form-label">First Name</label>
@@ -46,6 +43,19 @@
 </div>
 
 <div class="row justify-content-center">
-		<button type="submit" class="btn btn-primary col-sm-2 m-1">Save</button>
-		<a href="<?php echo $this->getUrl('grid','customer',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+		<button type="button" name="submit" class="btn btn-primary col-sm-2 m-1" id="customerSubmitBtn">Save</button>
+		<button type="button" class="btn btn-primary  col-sm-2 m-1" id="cancel">Cancel</a>
 </div>
+
+<script>
+$("#customerSubmitBtn").click(function(){
+    admin.setForm($("#indexForm"));
+    admin.setUrl("<?php echo $this->getEdit()->getSaveUrl(); ?>");
+    admin.load();
+});
+
+$("#cancel").click(function(){
+    admin.setUrl("<?php echo $this->getUrl('gridBlock','customer'); ?>");
+    admin.load();
+});
+</script>

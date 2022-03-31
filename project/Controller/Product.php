@@ -17,9 +17,6 @@ class Controller_Product extends Controller_Admin_Action
 		$content = $this->getLayout()->getContent();
 		$productGrid = Ccc::getBlock('Product_Grid');
 		$content->addChild($productGrid,'Grid');
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$message = Ccc::getBlock('Core_Layout_Message');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
 		$this->renderLayout();
 	}
 
@@ -30,8 +27,6 @@ class Controller_Product extends Controller_Admin_Action
 		$content = $this->getLayout()->getContent();
 		$productAdd = Ccc::getBlock('Product_Edit')->setData(['product'=>$productModel]);
 		$content->addChild($productAdd,'Add');
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -56,8 +51,6 @@ class Controller_Product extends Controller_Admin_Action
 			$content = $this->getLayout()->getContent();
 			$productEdit = Ccc::getBlock('Product_Edit')->setData(['product'=>$productData]);
 			$content->addChild($productEdit,'Edit');
-			$menu = Ccc::getBlock('Core_Layout_Menu');
-			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 			$this->renderLayout();
 		} 
 		catch (Exception $e) 
@@ -133,7 +126,7 @@ class Controller_Product extends Controller_Admin_Action
 		}
 	}
 
-		public function deleteAction()
+	public function deleteAction()
 	{
 		try 
 		{

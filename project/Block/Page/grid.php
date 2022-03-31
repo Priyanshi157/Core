@@ -13,7 +13,7 @@ class Block_Page_Grid extends Block_Core_Grid
 		'title' => 'Page Id',
 		'type' => 'int',
 		'key' =>'pageId'
-		],'Page Id');
+		],'id');
 		$this->addColumn([
 		'title' => 'Name',
 		'type' => 'varchar',

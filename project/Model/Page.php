@@ -37,4 +37,9 @@ class Model_Page extends Model_Core_Row
 	{
 		return Ccc::getModel('Core_View')->getUrl($action['title'],$action['class'],['id'=>$this->pageId],true);
 	}
+
+	public function getEditUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('edit','page',['id'=>$this->pageId]);
+	}
 }

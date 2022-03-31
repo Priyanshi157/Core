@@ -1,4 +1,4 @@
-<form action="<?php echo $this->getEditUrl() ?>" method="POST">
-<?php $this->getTab()->toHtml(); ?>
-<?php $this->getTabContent()->toHtml(); ?>
-</form>
+<!-- <form id="form" method="POST" action="<?php //echo $this->getUrl('save'); ?>">  -->
+<?php echo $this->getTab()->toHtml(); ?>
+<?php echo $this->getTabContent()->toHtml(); ?>
+<!-- </form> -->

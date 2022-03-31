@@ -37,6 +37,7 @@
 </div>
 
 <div class="row justify-content-center">
-<button type="submit" class="btn btn-primary col-sm-2 m-1">Save</button>
-<a href="<?php echo $this->getUrl('grid','page',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+<input type="button" name="submit" class="btn btn-primary col-sm-2 m-1" id="submit" value="Save">
+<button class="btn btn-primary  col-sm-2 m-1" id="cancel">Cancel</a>
 </div>
+

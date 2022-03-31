@@ -16,10 +16,16 @@ class Controller_Page extends Controller_Admin_Action
 		$content = $this->getLayout()->getContent();
 		$pageGrid = Ccc::getBlock('Page_Grid');
 		$content->addChild($pageGrid,'Grid');
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$message = Ccc::getBlock('Core_Layout_Message');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
 		$this->renderLayout();
+	}
+
+	public function gridContentAction()
+	{
+		$this->setTitle('Page_Grid');
+		$content = $this->getLayout()->getContent();
+		$pageGrid = Ccc::getBlock('Page_Grid');
+		$content->addChild($pageGrid,'Grid');
+		$this->renderContent();
 	}
 
 	public function addAction()
@@ -30,9 +36,7 @@ class Controller_Page extends Controller_Admin_Action
 		$pageAdd = Ccc::getBlock('Page_Edit');
 		Ccc::register('page',$pageModel);
 		$content->addChild($pageAdd,'Add');
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
-		$this->renderLayout();
+		$this->renderContent();
 	}
 
 	public function editAction()
@@ -57,10 +61,7 @@ class Controller_Page extends Controller_Admin_Action
 			$pageEdit = Ccc::getBlock('Page_Edit');
 			Ccc::register('page',$pageData);
 			$content->addChild($pageEdit,'Edit');
-			$menu = Ccc::getBlock('Core_Layout_Menu');
-			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
-			$this->renderLayout();
-
+			$this->renderContent();
 		} 
 		catch (Exception $e) 
 		{
@@ -100,12 +101,10 @@ class Controller_Page extends Controller_Admin_Action
 			{
 				$this->getMessage()->addMessage('System is unable to save data.');
 			}
-			$this->getMessage()->addMessage('Added Successfully.');
-			$this->redirect('grid','page');
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('grid','page',[],true);
+			$this->getMessage()->addMessage($e->getMessage());
 		}
 	}
 
@@ -126,12 +125,11 @@ class Controller_Page extends Controller_Admin_Action
 			{
 				throw new Exception("System is unable to fetch record.", 1);
 			}
-			$this->getMessage()->addMessage('Deleted Successfully.');
-			$this->redirect('grid','page',[],true);
+			$this->renderContent();
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('grid','page',[],true);
+			$this->getMessage()->addMessage($e->getMessage());
 		}
 	}
 }
