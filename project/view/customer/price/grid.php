@@ -1,62 +1,48 @@
 <?php $products = $this->getProducts(); ?>
-<form action="<?php echo $this->getUrl('save','customer_price') ?>" method="post">
-    <input type="submit" value="Save">
-    <a href="<?php echo $this->getUrl('grid','customer') ?>"><button>Cancel</button></a>
-    <table border="1" width="100%">
+
+<input type="button" value="Save" id="customerPriceSubmitBtn">
+<button type="button" id="cancel">Cancel</button>
+<table border="1" width="100%">
+    <tr>
+        <th>Product Id</th>
+        <th>sku</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Salesman Price</th>
+        <th>Customer Price</th>
+    </tr>
+    <?php if(!$products): ?>
         <tr>
-            <th>Product Id</th>
-            <th>sku</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Salesman Price</th>
-            <th>Customer Price</th>
+            <td colspan = "7">Salesman not assign</td>
         </tr>
-        <?php if(!$products): ?>
-            <tr>
-                <td colspan = "7">Salesman not assign</td>
-            </tr>
-        <?php else: ?>
-        <?php $i = 0; ?>
-        <?php foreach($products as $product): ?>
-        <tr>
-            <input type="hidden" name="product[<?php echo $i ?>][productId]" value="<?php echo $product->productId; ?>">
-            <input type="hidden" name="product[<?php echo $i ?>][salesmanPrice]" value="<?php echo $this->getSalesmanPrice($product->productId); ?>">
-            <td><?php echo $product->productId ?></td>
-            <td><?php echo $product->sku ?></td>
-            <td><?php echo $product->name ?></td>
-            <td><?php echo $product->price ?></td>
-            <td><?php echo $this->getSalesmanPrice($product->productId); ?>
-            <td><input type="text" name="product[<?php echo $i ?>][price]" value="<?php echo $this->getCustomerPrice($product->productId) ?>"></td>
-        </tr>
-        <?php $i++; ?>
-        <?php endforeach; ?>
-        <?php endif; ?>
-    </table>
-</form>
-<?php if($products): ?>
-    <div>
-    <select onchange="ppr(this.value)" id="ppr">
-        <option>Select</option>
-        <?php foreach($this->getPager()->getPerPageCountOption() as $perPageCount) :?>
-            <option value="<?php echo $perPageCount ?>" ><?php echo $perPageCount ?></option>
-        <?php endforeach;?>
-    </select>
+    <?php else: ?>
+    <?php $i = 0; ?>
+    <?php foreach($products as $product): ?>
+    <tr>
+        <input type="hidden" name="product[<?php echo $i ?>][productId]" value="<?php echo $product->productId; ?>">
+        <input type="hidden" name="product[<?php echo $i ?>][salesmanPrice]" value="<?php echo $this->getSalesmanPrice($product->productId); ?>">
+        <td><?php echo $product->productId ?></td>
+        <td><?php echo $product->sku ?></td>
+        <td><?php echo $product->name ?></td>
+        <td><?php echo $product->price ?></td>
+        <td><?php echo $this->getSalesmanPrice($product->productId); ?>
+        <td><input type="text" name="product[<?php echo $i ?>][price]" value="<?php echo $this->getCustomerPrice($product->productId) ?>"></td>
+    </tr>
+    <?php $i++; ?>
+    <?php endforeach; ?>
+    <?php endif; ?>
+</table>
 
-    <button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getStart()]); ?>" style="<?php echo ($this->getPager()->getStart() == NULL) ? "pointer-events: none;" : "" ?> ">Start</a></button>
 
-    <button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getPrev()]); ?>" style="<?php echo ($this->getPager()->getPrev() == NULL) ? "pointer-events: none;" : "" ?>">Prev</a></button>
+<script type="text/javascript"> 
+    $("#customerPriceSubmitBtn").click(function(){
+        admin.setForm($("#indexForm"));
+        admin.setUrl("<?php echo $this->getUrl('save','customer_price'); ?>");
+        admin.load();
+    });
 
-    <button>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->getPager()->getCurrent(); ?> &nbsp;&nbsp;&nbsp;&nbsp;</button>
-
-    <button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getNext()]); ?>" style="<?php echo ($this->getPager()->getNext() == NULL) ? "pointer-events: none;" : "" ?>">Next</a></button>
-
-    <button><a href="<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getEnd()]); ?>" style="<?php echo ($this->getPager()->getEnd() == NULL) ? "pointer-events: none;" : "" ?> ">End</a></button>
-    </div>
-<?php endif; ?>
-
-<script type="text/javascript">
-function ppr(val) 
-{
-  window.location = "<?php echo $this->getUrl(null,null,['p'=>$this->getPager()->getStart(),'ppr'=>null]);?>&ppr="+val;
-}    
+    $("#cancel").click(function(){
+        admin.setUrl("<?php echo $this->getUrl('gridBlock','customer'); ?>");
+        admin.load();
+    });
 </script>

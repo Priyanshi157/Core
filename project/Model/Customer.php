@@ -100,4 +100,19 @@ class Model_Customer extends Model_Core_Row
 		}
 		return Ccc::getModel('Core_View')->getUrl($action['title'],$action['class'],['id'=>$this->customerId],true);
 	}
+
+	public function getEditUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('edit','customer',['id'=>$this->customerId]);
+	}
+
+	public function getDeleteUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('delete','customer',['id'=>$this->customerId]);
+	}
+
+	public function getPriceUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('grid','customer_price',['id' => $this->customerId]);
+	}
 }

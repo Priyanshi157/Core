@@ -5,7 +5,7 @@
 	</tr>
 
 	<tr>
-		<td><?php echo $this->getContent()->toHtml(); ?></td>
+		<td id="content"><?php echo $this->getContent()->toHtml(); ?></td>
 	</tr>
 
 	<tr>

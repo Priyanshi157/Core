@@ -8,6 +8,7 @@ class Block_Core_Edit_Tab extends Block_Core_Template
 
     public function __construct()
     {
+        parent::__construct();
         $this->setTemplate('view/core/edit/tab.php');
         $this->prepareTabs();
     }

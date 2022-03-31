@@ -16,9 +16,6 @@ class Controller_Admin extends Controller_Admin_Action
 		$content = $this->getLayout()->getContent();
 		$adminGrid = Ccc::getBlock('Admin_Grid');
 		$content->addChild($adminGrid,'Grid');
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$message = Ccc::getBlock('Core_Layout_Message');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
 		$this->renderLayout();
 	}
 
@@ -30,8 +27,6 @@ class Controller_Admin extends Controller_Admin_Action
 		$adminAdd = Ccc::getBlock('Admin_Edit'); 
 		Ccc::register('admin',$adminModel);
 		$content->addChild($adminAdd,'Add');
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -57,8 +52,6 @@ class Controller_Admin extends Controller_Admin_Action
 			$adminEdit = Ccc::getBlock('Admin_Edit');
 			Ccc::register('admin',$admin);
 			$content->addChild($adminEdit,'Edit');
-			$menu = Ccc::getBlock('Core_Layout_Menu');
-			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 			$this->renderLayout();
    		}	 
    		catch (Exception $e) 
@@ -109,11 +102,10 @@ class Controller_Admin extends Controller_Admin_Action
 			}
 			
 			$this->getMessage()->addMessage('Data saved Successfully.');
-			$this->redirect('grid','admin',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('grid','admin',[],true);
+			$this->getMessage()->addMessage($e->getMessage());
 		}
 	}
 
@@ -140,11 +132,10 @@ class Controller_Admin extends Controller_Admin_Action
 				
 			}
 			$this->getMessage()->addMessage('Deleted Successfully.');
-			$this->redirect('grid','admin',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('grid','admin',[],true);
+			$this->getMessage()->addMessage($e->getMessage());
 		}
 	}
 }

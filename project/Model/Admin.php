@@ -37,5 +37,10 @@ class Model_Admin extends Model_Core_Row
 	{
 		return Ccc::getModel('Core_View')->getUrl($action['title'],$action['class'],['id'=>$this->adminId],true);
 	}
+
+	public function getEditUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('edit','admin',['id'=>$this->adminId]);
+	}
 }
 

@@ -17,9 +17,6 @@ class Controller_Vendor extends Controller_Admin_Action
 		$content = $this->getLayout()->getContent();
 		$vendorGrid = Ccc::getBlock('Vendor_Grid');
 		$content->addChild($vendorGrid,'Grid');
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$message = Ccc::getBlock('Core_Layout_Message');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
 		$this->renderLayout();
 	}
 
@@ -31,8 +28,6 @@ class Controller_Vendor extends Controller_Admin_Action
 		$content = $this->getLayout()->getContent();
 		$vendorAdd = Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendorModel,'address'=>$addressModel]);
 		$content->addChild($vendorAdd,'Add');
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 		$this->renderLayout();
 	}
 
@@ -66,8 +61,6 @@ class Controller_Vendor extends Controller_Admin_Action
 			$content = $this->getLayout()->getContent();
 			$vendorEdit = Ccc::getBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address'=>$address]);
 			$content->addChild($vendorEdit,'Edit');
-			$menu = Ccc::getBlock('Core_Layout_Menu');
-			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 			$this->renderLayout();
 		} 
 		catch (Exception $e) 

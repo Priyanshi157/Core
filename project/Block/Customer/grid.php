@@ -13,7 +13,7 @@ class Block_Customer_Grid extends Block_Core_Grid
 		'title' => 'Customer Id',
 		'type' => 'int',
 		'key' =>'customerId'
-		],'Customer Id');
+		],'id');
 		$this->addColumn([
 		'title' => 'First Name',
 		'type' => 'varchar',
@@ -93,7 +93,6 @@ class Block_Customer_Grid extends Block_Core_Grid
         {
             $billing = null;
             $shiping = null; 
-            $customer->status = $customer->getStatus($customer->status);
             foreach($customer->getBillingAddress()->getData() as $key => $value)
             {
                 if($key != 'addressId' && $key != 'customerId')

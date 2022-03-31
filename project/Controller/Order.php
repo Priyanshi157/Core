@@ -17,9 +17,6 @@ class Controller_Order extends Controller_Admin_Action{
 		$content = $this->getLayout()->getContent();
 		$orderGrid = Ccc::getBlock('Order_Grid');
 		$content->addChild($orderGrid,'Grid');
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$message = Ccc::getBlock('Core_Layout_Message');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
 		$this->renderLayout();
 	}
 
@@ -52,8 +49,6 @@ class Controller_Order extends Controller_Admin_Action{
 			$content = $this->getLayout()->getContent();
 			$orderEdit = Ccc::getBlock('Order_Edit')->setData(['order'=>$order]);
 			$content->addChild($orderEdit,'Edit');
-			$menu = Ccc::getBlock('Core_Layout_Menu');
-			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
 			$this->renderLayout();
 		}
 		catch (Exception $e)

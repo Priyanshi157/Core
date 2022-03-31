@@ -17,9 +17,6 @@ class Controller_Salesman_SalesmanCustomer extends Controller_Admin_Action
         $content = $this->getLayout()->getContent();
         $salesmanGrid = Ccc::getBlock("Salesman_SalesmanCustomer_Grid");
         $content->addChild($salesmanGrid);
-        $menu = Ccc::getBlock('Core_Layout_Menu');
-        $message = Ccc::getBlock('Core_Layout_Message');
-        $header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
         $this->renderLayout();
 	}
 

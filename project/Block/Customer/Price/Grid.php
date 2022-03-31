@@ -3,25 +3,9 @@
 
 class Block_Customer_Price_Grid extends Block_Core_Template
 {
-    protected $pager = null;
     public function __construct()
     {
         $this->setTemplate("view/customer/price/grid.php");
-    }
-
-    public function getPager()
-    {
-        if(!$this->pager)
-        {
-            $this->setPager($this->pager);
-        }
-        return $this->pager;
-    }
-
-    public function setPager($pager)
-    {
-        $this->pager = $pager;
-        return $this;
     }
 
     public function getProducts()

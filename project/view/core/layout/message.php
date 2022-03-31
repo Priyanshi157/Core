@@ -1,3 +1,5 @@
+<div id="adminMessage"></div>
+
 <?php 
 $messages = $this->getMessages();
 if($messages)

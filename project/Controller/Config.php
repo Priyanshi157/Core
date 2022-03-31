@@ -16,10 +16,16 @@ class Controller_Config extends Controller_Admin_Action
 		$content = $this->getLayout()->getContent();
 		$configGrid = Ccc::getBlock('Config_Grid');
 		$content->addChild($configGrid,'Grid');
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$message = Ccc::getBlock('Core_Layout_Message');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
 		$this->renderLayout();
+	}
+
+	public function gridContentAction()
+	{
+		$this->setTitle('Config_Grid');
+		$content = $this->getLayout()->getContent();
+		$configGrid = Ccc::getBlock('Config_Grid');
+		$content->addChild($configGrid,'Grid');
+		$this->renderContent();
 	}
 
 	public function addAction()
@@ -27,11 +33,10 @@ class Controller_Config extends Controller_Admin_Action
 		$this->setTitle('Config_Add');
 		$configModel = Ccc::getModel('Config');
 		$content = $this->getLayout()->getContent();
-		$configAdd = Ccc::getBlock('Config_Edit')->setData(['config'=>$configModel]);
+		$configAdd = Ccc::getBlock('Config_Edit');
+		Ccc::register('config',$configModel);
 		$content->addChild($configAdd,'Add');
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
-		$this->renderLayout();
+		$this->renderContent();
 	}
 
 	public function editAction()
@@ -53,11 +58,10 @@ class Controller_Config extends Controller_Admin_Action
 			}
 			
 			$content = $this->getLayout()->getContent();
-			$configEdit = Ccc::getBlock('Config_Edit')->setData(['config'=>$config]);
+			$configEdit = Ccc::getBlock('Config_Edit');
+			Ccc::register('config',$config);
 			$content->addChild($configEdit,'Edit');
-			$menu = Ccc::getBlock('Core_Layout_Menu');
-			$header = $this->getLayout()->getHeader()->addChild($menu,'menu');
-			$this->renderLayout();
+			$this->renderContent();
    		}	 
    		catch (Exception $e) 
    		{
@@ -101,12 +105,10 @@ class Controller_Config extends Controller_Admin_Action
 			{
 				throw new Exception("System is unable to Update.", 1);
 			}
-			$this->getMessage()->addMessage('Data saved Successfully.');
-			$this->redirect('grid','config',[],true);
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('grid','config',[],true);
+			$this->getMessage()->addMessage($e->getMessage());
 		}
 	}
 
@@ -131,12 +133,11 @@ class Controller_Config extends Controller_Admin_Action
 			{
 				throw new Exception("Unable to Delete Record.", 1);
 			}
-			$this->getMessage()->addMessage('Deleted Successfully.');
-			$this->redirect('grid','config',[],true);
+			$this->renderContent();
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('grid','config',[],true);
+			$this->getMessage()->addMessage($e->getMessage());				
 		}
 	}
 }

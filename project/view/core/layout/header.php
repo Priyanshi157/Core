@@ -1,4 +1,2 @@
-<?php $children = $this->getChildren(); ?>
-<?php foreach ($children as $child): ?>
-<?php echo $child->toHtml(); ?>
-<?php endforeach; ?>
+<?php echo $this->getMenu()->toHtml(); ?>
+<?php echo $this->getMessage()->toHtml(); ?>

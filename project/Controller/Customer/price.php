@@ -11,16 +11,44 @@ class Controller_Customer_Price extends Controller_Admin_Action
 		}
 	}
 
-	public function gridAction()
+	public function gridCustomerBlockAction()
 	{
-		$this->setTitle('Customer_Price_Grid');
-		$content = $this->getLayout()->getContent();
-		$salesmanGrid = Ccc::getBlock('Customer_Price_Grid');
-		$content->addChild($salesmanGrid,'Grid');
-		$menu = Ccc::getBlock('Core_Layout_Menu');
-		$message = Ccc::getBlock('Core_Layout_Message');
-		$header = $this->getLayout()->getHeader()->addChild($menu,'menu')->addChild($message,'message');
-		$this->renderLayout();
+		$customerGrid = Ccc::getBlock('Customer_Grid')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' =>  $customerGrid
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->renderJson($response);
+	}
+
+	public function gridBlockAction()
+	{
+		$customerPriceGrid = Ccc::getBlock('Customer_Price_Grid')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' =>  $customerPriceGrid
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->renderJson($response);
 	}
 
 	public function saveAction()
@@ -62,13 +90,12 @@ class Controller_Customer_Price extends Controller_Admin_Action
 					}
 				}
 			}
-			$this->getMessage()->addMessage('Discount set successfully');
-			$this->redirect('grid','customer',[],false);
+			$this->gridBlockAction();
 		}
 		catch (Exception $e) 
 		{
-			$this->redirect('grid','customer',[],false);
+			$this->getMessage()->addMessage($e->getMessage());
+			$this->gridBlockAction();
 		}
 	}
 }
-

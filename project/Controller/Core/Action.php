@@ -76,4 +76,14 @@ class Controller_Core_Action
     {
         return Ccc::getFront()->getResponse();
     }
+
+    public function renderContent()
+    {
+        $this->getResponse()->setHeader('Content-type', 'text/html')->render($this->getLayout()->getContent()->toHtml());
+    }
+
+    public function renderJson($content)
+    {
+        $this->getResponse()->setHeader('Content-type', 'application/json')->render(json_encode($content));
+    }
 }
