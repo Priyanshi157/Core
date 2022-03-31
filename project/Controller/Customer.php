@@ -13,6 +13,7 @@ class Controller_Customer extends Controller_Admin_Action
 
 	public function indexAction()
 	{
+		$this->setTitle('Customer');
 		$content = $this->getLayout()->getContent();
 		$adminGrid = Ccc::getBlock('Customer_Index');
 		$content->addChild($adminGrid);
@@ -97,7 +98,6 @@ class Controller_Customer extends Controller_Admin_Action
 			Ccc::register('customer',$customer);
 			Ccc::register('billingAddress',$billingAddress);
 			Ccc::register('shipingAddress',$shipingAddress);
-
 			$customerEdit = Ccc::getBlock('Customer_Edit')->toHtml();
 			$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
 			$response = [
@@ -242,6 +242,7 @@ class Controller_Customer extends Controller_Admin_Action
 			{
 				$this->saveAddress();
 			}
+			$this->getMessage()->addMessage("Data saved successfully",1);
 			$this->gridBlockAction();
 		}
 		catch (Exception $e) 
@@ -273,6 +274,7 @@ class Controller_Customer extends Controller_Admin_Action
 			{
 				throw new Exception("Unable to Delete Record.");
 			}
+			$this->getMessage()->addMessage("Data Deleted successfully",1);
 			$this->gridBlockAction();
 		} 
 		catch (Exception $e) 
