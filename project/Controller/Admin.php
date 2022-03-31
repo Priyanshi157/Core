@@ -10,54 +10,101 @@ class Controller_Admin extends Controller_Admin_Action
 		}
 	}
 	
-	public function gridAction()
+	public function indexAction()
 	{
-		$this->setTitle('Admin_Grid');
 		$content = $this->getLayout()->getContent();
-		$adminGrid = Ccc::getBlock('Admin_Grid');
-		$content->addChild($adminGrid,'Grid');
+		$adminGrid = Ccc::getBlock('Admin_Index');
+		$content->addChild($adminGrid);
 		$this->renderLayout();
 	}
 
-	public function addAction()
+	public function gridBlockAction()
 	{
-		$this->setTitle('Admin_Add');
+		$adminGrid = Ccc::getBlock('Admin_Grid')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' =>  $adminGrid
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->renderJson($response);
+	}
+
+	public function addBlockAction()
+	{
 		$adminModel = Ccc::getModel('Admin');
-		$content = $this->getLayout()->getContent();
-		$adminAdd = Ccc::getBlock('Admin_Edit'); 
-		Ccc::register('admin',$adminModel);
-		$content->addChild($adminAdd,'Add');
-		$this->renderLayout();
+		$admin = $adminModel;
+		Ccc::register('admin',$admin);
+		$adminEdit = $this->getLayout()->getBlock('Admin_Edit')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $adminEdit
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->renderJson($response);
 	}
 
-	public function editAction()
+	public function editBlockAction()
 	{
 		try 
-   		{
-   			$this->setTitle('Admin_Edit');
-   			$adminModel = Ccc::getModel('Admin');
+		{
+			$adminModel = Ccc::getModel("Admin");
 			$request = $this->getRequest();
-			$aid = (int)$request->getRequest('id');
-			if(!$aid)
+			$adminId = $request->getRequest('id');
+			if(!(int)$adminId)
 			{
-				throw new Exception("Invalid Request", 1);
+				$this->getMessage()->addMessage('Your data can not be fetch',3);
+				throw new Exception("Error Processing Request", 1);			
 			}
-			$admin = $adminModel->load($aid);
+
+			$admin = $adminModel->load($adminId);
 			if(!$admin)
 			{
-				throw new Exception("System is unable to find record.", 1);
+				$this->getMessage()->addMessage('Your data con not be fetch',3);
+				throw new Exception("Error Processing Request", 1);			
 			}
-			
-			$content = $this->getLayout()->getContent();
-			$adminEdit = Ccc::getBlock('Admin_Edit');
+	
 			Ccc::register('admin',$admin);
-			$content->addChild($adminEdit,'Edit');
-			$this->renderLayout();
-   		}	 
-   		catch (Exception $e) 
-   		{
-   			throw new Exception("Invalid Request.", 1);
-   		}
+
+			$adminEdit = Ccc::getBlock('Admin_Edit')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $adminEdit
+					],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+			$this->renderJson($response);
+			
+		}
+		catch (Exception $e)
+		{
+			$this->gridBlockAction();
+		}	
 	}
 
 	public function saveAction()
@@ -101,11 +148,12 @@ class Controller_Admin extends Controller_Admin_Action
 				$this->getMessage()->addMessage('Unable to save.',3);
 			}
 			
-			$this->getMessage()->addMessage('Data saved Successfully.');
-		} 
+			$this->gridBlockAction();
+		}
 		catch (Exception $e) 
 		{
 			$this->getMessage()->addMessage($e->getMessage());
+			$this->gridBlockAction();
 		}
 	}
 
@@ -131,11 +179,12 @@ class Controller_Admin extends Controller_Admin_Action
 				throw new Exception("Unable to Delet Record.", 1);
 				
 			}
-			$this->getMessage()->addMessage('Deleted Successfully.');
+			$this->gridBlockAction();
 		} 
 		catch (Exception $e) 
 		{
 			$this->getMessage()->addMessage($e->getMessage());
+			$this->gridBlockAction();
 		}
 	}
 }

@@ -17,7 +17,7 @@
 	      	<div class="collapse navbar-collapse" id="navbarExample01">
 	        	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 	          		<li class="nav-item active">
-	            		<a class="nav-link" aria-current="page" href="<?php echo $this->getUrl('grid','admin',['p'=>1],true) ?>">Admin</a>
+	            		<a class="nav-link" aria-current="page" href="<?php echo $this->getUrl('index','admin',['p'=>1],true) ?>">Admin</a>
 	          		</li>
 	          		<li class="nav-item">
 	            		<a class="nav-link" href="<?php echo $this->getUrl('grid','category',['p'=>1],true) ?>">Category</a>
@@ -26,7 +26,7 @@
 	            		<a class="nav-link" href="<?php echo $this->getUrl('grid','product',['p'=>1],true) ?>">Product</a>
 	          		</li>
 	          		<li class="nav-item">
-	            		<a class="nav-link" href="<?php echo $this->getUrl('grid','customer',['p'=>1],true) ?>">Customer</a>
+	            		<a class="nav-link" href="<?php echo $this->getUrl('index','customer',[],true) ?>">Customer</a>
 	          		</li>
 	          		<li class="nav-item">
 	            		<a class="nav-link" href="<?php echo $this->getUrl('grid','config',['p'=>1],true) ?>">Config</a>

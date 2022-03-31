@@ -1,6 +1,5 @@
 <?php $customer = $this->getCustomer(); ?>
 
-<p id="done"></p>
 <input type="hidden" class="form-control" id="customerid" name="customer[customerId]" value="<?php echo $customer->customerId;?>">
 	
 <div class="row mb-4">

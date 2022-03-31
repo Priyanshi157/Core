@@ -6,22 +6,23 @@
 <button class="btn btn-primary" id="addNew" type="button">Add</button><br><br>
 
 <div>
-<select onchange="ppr(this.value)" id="ppr">
+<select id="ppr">
     <option>Select</option>
     <?php foreach($pager->getPerPageCountOption() as $perPageCount) :?>  
         <option value="<?php echo $perPageCount ?>" ><?php echo $perPageCount ?></option>
     <?php endforeach;?>
 </select>
 
-<button><a href="<?php echo $this->getUrl('grid',null,['p'=>$pager->getStart()],true); ?>" style="<?php echo ($pager->getStart() == NULL) ? "pointer-events: none;" : "" ?> ">Start</a></button>
+<button type="button" class="pagerBtn" value="<?php echo $this->getUrl('gridBlock',null,['p' => $pager->getStart()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getStart()) ? 'none' : ''?>">Start</button>
 
-<button><a href="<?php echo $this->getUrl('grid',null,['p'=>$pager->getPrev()],true); ?>" style="<?php echo ($pager->getPrev() == NULL) ? "pointer-events: none;" : "" ?>">Prev</a></button>
+<button type="button" class="pagerBtn" value="<?php echo $this->getUrl('gridBlock',null,['p' => $pager->getPrev()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getPrev()) ? 'none' : ''?>">Previous</button>
 
-<button>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $pager->getCurrent(); ?> &nbsp;&nbsp;&nbsp;&nbsp;</button>
+&nbsp;&nbsp;&nbsp;<?php echo "<b>".$pager->getCurrent()."</b>"?>&nbsp;&nbsp;&nbsp;
 
-<button><a href="<?php echo $this->getUrl('grid',null,['p'=>$pager->getNext()],true); ?>" style="<?php echo ($pager->getNext() == NULL) ? "pointer-events: none;" : "" ?>">Next</a></button>
+<button type="button" class="pagerBtn" value="<?php echo $this->getUrl('gridBlock',null,['p' => $pager->getNext()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getNext()) ? 'none' : ''?>">Next</button>
 
-<button><a href="<?php echo $this->getUrl('grid',null,['p'=>$pager->getEnd()],true); ?>" style="<?php echo ($pager->getEnd() == NULL) ? "pointer-events: none;" : "" ?> ">End</a></button>
+<button type="button" class="pagerBtn" value="<?php echo $this->getUrl('gridBlock',null,['p' => $pager->getEnd()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getEnd()) ? 'none' : ''?>">End</button>
+
 </div>
 
 <table class="table table-bordered my-4">
@@ -92,4 +93,18 @@ function ppr(val)
         admin.load();
     });
 
+
+    $(".pagerBtn").click(function(){
+        var data = $(this).val();
+        admin.setUrl(data);
+        admin.setType('GET');
+        admin.load();
+    });
+
+    $("#ppr").change(function(){
+        var data = $(this).val();
+        admin.setUrl("<?php echo $this->getUrl('gridBlock',null,['p'=>1,'ppr'=>null]); ?>&ppr="+data);
+        admin.setType('GET');
+        admin.load();
+    });
 </script>

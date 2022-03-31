@@ -1,6 +1,5 @@
 <?php $admin = $this->getAdmin(); ?>
 
-<p id="done"></p>
 <input type="hidden" class="form-control" id="adminId" name="admin[adminId]" value="<?php echo $admin->adminId; ?>">
 
 <div class="row mb-4">
@@ -45,6 +44,19 @@
 </div>
 
 <div class="row justify-content-center">
-<input type="button" name="submit" class="btn btn-primary col-sm-2 m-1" id="submit" value="Save">
-<a href="<?php echo $this->getUrl('grid','admin',[],true); ?>" class="btn btn-primary  col-sm-2 m-1">Cancel</a>
+<button type="button" name="submit" class="btn btn-primary col-sm-2 m-1" id="adminSubmitBtn">Save</button>
+<button type="button" class="btn btn-primary  col-sm-2 m-1" id="cancel">Cancel</a>
 </div>
+
+<script>
+$("#adminSubmitBtn").click(function(){
+    admin.setForm($("#indexForm"));
+    admin.setUrl("<?php echo $this->getEdit()->getSaveUrl(); ?>");
+    admin.load();
+});
+
+$("#cancel").click(function(){
+    admin.setUrl("<?php echo $this->getUrl('gridBlock','admin'); ?>");
+    admin.load();
+});
+</script>
