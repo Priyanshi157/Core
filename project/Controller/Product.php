@@ -10,31 +10,65 @@ class Controller_Product extends Controller_Admin_Action
 			$this->redirect('login','admin_login');
 		}
 	}
+
+	public function indexAction()
+	{
+		$content = $this->getLayout()->getContent();
+		$productGrid = Ccc::getBlock('Product_Index');
+		$content->addChild($productGrid);
+		$this->renderLayout();
+	}
 	
-	public function gridAction()
+	public function gridBlockAction()
 	{
-		$this->setTitle('Product_Grid');
-		$content = $this->getLayout()->getContent();
-		$productGrid = Ccc::getBlock('Product_Grid');
-		$content->addChild($productGrid,'Grid');
-		$this->renderLayout();
+		$productGrid = Ccc::getBlock('Product_Grid')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $productGrid,
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->renderJson($response);
 	}
 
-	public function addAction()
+	public function addBlockAction()
 	{
-		$this->setTitle('Product_Add');
 		$productModel = Ccc::getModel('Product');
-		$content = $this->getLayout()->getContent();
-		$productAdd = Ccc::getBlock('Product_Edit')->setData(['product'=>$productModel]);
-		$content->addChild($productAdd,'Add');
-		$this->renderLayout();
+		$product = $productModel;
+		$media = Ccc::getModel('Product_Media');
+
+		Ccc::register('product',$product);
+		Ccc::register('media',$media);
+		$productEdit = Ccc::getBlock('Product_Edit')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $productEdit,
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->renderJson($response);
 	}
 
-	public function editAction()
+	public function editBlockAction()
 	{
 		try 
 		{
-			$this->setTitle('Product_Edit');
 			$productModel = Ccc::getModel('Product');
 			$request = $this->getRequest();
 			$pid = (int)$request->getRequest('id');
@@ -42,88 +76,263 @@ class Controller_Product extends Controller_Admin_Action
 			{
 				throw new Exception("Invalid Request", 1);
 			}
+
 			$product = $productModel;
 			$productData = $product->load($pid);
 			if(!$productData)
 			{
 				throw new Exception("System is unable to find record.", 1);
 			}
-			$content = $this->getLayout()->getContent();
-			$productEdit = Ccc::getBlock('Product_Edit')->setData(['product'=>$productData]);
-			$content->addChild($productEdit,'Edit');
-			$this->renderLayout();
+			
+			$media = $productData->getMedia();
+			Ccc::register('product',$productData);
+			Ccc::register('media',$media);
+			$productEdit = Ccc::getBlock('Product_Edit')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $productEdit,
+					],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+
+			$this->renderJson($response);
 		} 
 		catch (Exception $e) 
 		{
-			throw new Exception("System is unable to find record.", 1);
+			echo $e->getMessage();
 		}
 	}
 
 	public function saveAction()
 	{
-		try 
+		try
 		{
-			$productModel = Ccc::getModel('Product');
-			$request = $this->getRequest();
-			if(!$request->getPost('product'))
-			{
-				throw new Exception("Invalid Request", 1);
-			}	
-
-			$postData = $request->getPost('product');
+			$product = null;
+			$category = null;
+			$request=$this->getRequest();
+			$productModel= Ccc::getModel('Product');
 			$categoryIds = $request->getPost('category');
-			if(!$postData)
-			{
-				throw new Exception("Invalid data posted.", 1);
-			}
-
-			$product = $productModel;
+			$productId = $request->getRequest('id');
 			$type = $request->getPost('discountMethod');
-			$product->setData($postData);
-			if($type == 1)
+			if($request->isPost())
 			{
-				$product->discount = $product->price * $product->discount / 100 ;
-			}
-
-			if(!($product->costPrice <= ($product->price-$product->discount) && $product->price-$product->discount <= $product->price) || $product->discount<0)
-			{
-				$this->getMessage()->addMessage('Not Valid Discount.',3);
-				throw new Exception("Discount not valid.", 1);
-			}
-
-			if(!($product->productId))
-			{
-				$product->createdAt = date('y-m-d h:m:s');
-				unset($product->productId);
-			}
-			else
-			{
-				if(!(int)$product->productId)
+				$postData = $request->getPost('product');
+				if($postData)
 				{
-					throw new Exception("Invalid Request.", 1);
+
+					if(!$postData)
+					{
+						throw new Exception('Your data con not be updated', 1);			
+					}
+					$productData = $productModel->setData($postData);
+					if($type == 1)
+					{
+						$productData->discount = $productData->price * $productData->discount / 100;
+					}
+					if(!($productData->costPrice <= ($productData->price - $productData->discount) && $productData->price - $productData->discount <= $productData->price) || $productData->discount<0)
+					{
+						throw new Exception("Invalid discount", 1);
+					}
+					if($productData->productId)
+					{
+						$productData->updatedAt = date('Y-m-d h:i:s');
+					}
+					else
+					{
+						unset($productData->productId);
+						$productData->createdAt = date('Y-m-d h:i:s');
+					}
+					$product = $productData->save();	
+					if(!$product)
+					{
+						throw new Exception('product con not be saved', 1);			
+					}
 				}
-				$product->updatedAt = date('y-m-d h:m:s');
+				if(array_key_exists('category',$request->getPost()))
+				{
+					$categoryIds = $request->getPost('category');
+					$product = $productModel;
+					$product->productId = $productId;
+					$category = $product->saveCategories($categoryIds);
+				}
+				elseif(!array_key_exists('product',$request->getPost()))
+				{
+					$categoryIds = $request->getPost('category');
+					$product = $productModel;
+					$product->productId = $productId;
+					$category = $product->saveCategories($categoryIds);
+				}
+				$this->getMessage()->addMessage('product Save Successfully');
 			}
-
-			$result = $product->save();
-			if(!$result)
-			{
-				$this->getMessage()->addMessage('Unable to save.',3);
-			}
-
-			if(!$categoryIds)
-			{
-				$categoryIds['exists'] = [];
-			}
-			
-			$product->saveCategories($categoryIds);
-			$this->getMessage()->addMessage('Data saved Successfully.',1);
-			$this->redirect('grid','product',[],true);
+			$this->gridBlockAction();
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('grid','product',[],true);
+			$this->getMessage()->addMessage($e->getMessage());
+			$this->gridBlockAction();
 		}
+	}
+
+	public function saveMediaAction()
+	{
+		try 
+		{
+			$mediaModel = Ccc::getModel('Product_Media');
+			$productModel = $mediaModel->getProduct();
+			$request = $this->getRequest();
+			$file = $request->getFile();
+			$productId = $request->getRequest('id');
+			if($request->isPost())
+			{
+				if($file)
+				{
+					$mediaData = $mediaModel;
+					$mediaData->productId = $productId;
+					$file = $request->getFile();
+					$ext = explode('.',$file['name']['name']);
+					$fileExt = end($ext);
+					$fileName = prev($ext)."".date('Ymdhis').".".$fileExt;
+					$fileName = str_replace(" ","_",$fileName);
+					$mediaData->name = $fileName;
+					$extension = array('jpg','jpeg','png','Jpg','Jpeg','Png','JPEG','JPG','PNG');
+					if(in_array($fileExt, $extension))
+					{
+						$result = $mediaModel->save();
+						if(!$result)
+						{
+							$this->getMessage()->addMessage('Your media not saved',3);
+							throw new Exception("Error Processing Request", 1);
+						}	
+						move_uploaded_file($file['name']['tmp_name'],Ccc::getBlock('Product_Grid')->getBaseUrl("Media/Product/").$fileName);
+					}
+
+					$this->getMessage()->addMessage('Your Media saved successfully');
+				}
+				else
+				{
+					$mediaData = $mediaModel;
+					$productData = $productModel;
+					$mediaData->productId = $productId;
+					$postData = $request->getPost();
+					if(array_key_exists('remove',$postData['media']))
+					{
+						foreach($postData['media']['remove'] as $remove)
+						{
+							$media = $mediaModel->load($remove);
+							$result = $media->delete();
+							if(!$result)
+							{
+								$this->getMessage()->addMessage('media not removed',3);
+								throw new Exception("Error Processing Request", 1);
+							}
+							unlink(Ccc::getBlock('Product_Grid')->getBaseUrl("Media/Product/"). $media->name);
+
+							if(array_key_exists('base',$postData['media']))
+							{
+								if($postData['media']['base'] == $remove)
+								{
+									unset($postData['media']['base']);
+								}	
+							}
+							if(array_key_exists('thumb',$postData['media']))
+							{
+								if($postData['media']['thumb'] == $remove)
+								{
+									unset($postData['media']['thumb']);
+								}
+							}
+							if(array_key_exists('small',$postData['media']))
+							{
+								if($postData['media']['small'] == $remove)
+								{
+									unset($postData['media']['small']);
+								}
+							}
+						}
+						$this->getMessage()->addMessage('Your Media removed');
+					}
+	
+					if(array_key_exists('gallery',$postData['media']))
+					{
+						$mediaData->gallery = 2;
+						$result = $mediaModel->save('productId');
+						$mediaData->gallery = 1;
+						foreach ($postData['media']['gallery'] as $gallery) 
+						{
+							$mediaData->mediaId = $gallery;
+							$result = $mediaModel->save();
+							if(!$result)
+							{
+								$this->getMessage()->addMessage('Gallery Added',3);
+								throw new Exception("Error Processing Request", 1);
+							}
+						}
+						unset($mediaData->mediaId);
+						$this->getMessage()->addMessage('Your Gallery Sellected');
+					}
+					else
+					{
+						$mediaData->gallery = 2;
+						$result = $mediaModel->save('productId');
+					}
+					unset($mediaData->gallery);
+					if(array_key_exists('base',$postData['media']))
+					{
+						$productData->productId = $productId;
+						$productData->base = $postData['media']['base'];
+						$result = $productModel->save();
+						if(!$result)
+						{
+							$this->getMessage()->addMessage('Base set successfully',3);
+							throw new Exception("Error Processing Request", 1);
+						}
+						unset($productData->base);
+						$this->getMessage()->addMessage('Base set successfully');
+					}
+
+					if(array_key_exists('thumb',$postData['media']))
+					{
+						$productData->productId = $productId;
+						$productData->thumb = $postData['media']['thumb'];
+						$result = $productModel->save();
+						if(!$result)
+						{
+							$this->getMessage()->addMessage('Thumb set successfully',3);
+							throw new Exception("Error Processing Request", 1);
+						}
+						unset($productData->thumb);
+						$this->getMessage()->addMessage('Thumb set successfully');
+					}
+					if(array_key_exists('small',$postData['media']))
+					{
+						$productData->productId = $productId;
+						$productData->small = $postData['media']['small'];
+						$result = $productModel->save();
+						if(!$result)
+						{
+							$this->getMessage()->addMessage('Small set successfully',3);
+							throw new Exception("Error Processing Request", 1);
+						}
+						unset($productData->small);
+						$this->getMessage()->addMessage('Small set successfully');
+					}
+				}
+			} 	
+			$this->gridBlockAction();
+		}
+		catch (Exception $e) 
+		{
+			$this->getMessage()->addMessage($e->getMessage(),3);
+			$this->gridBlockAction();
+		}	
 	}
 
 	public function deleteAction()
@@ -143,13 +352,17 @@ class Controller_Product extends Controller_Admin_Action
 				throw new Exception("Unable to fetch ID.", 1);
 				
 			}
-			$product = $productModel;
-			$datas = $product->fetchAll("SELECT name FROM product_media WHERE  productId='$productId'");
 			
-			foreach ($datas as $data) 
+			$datas = $productModel->fetchAll("SELECT name FROM product_media WHERE  productId='$productId'");
+			
+			if($datas)
 			{
-				unlink($this->getView()->getBaseUrl("Media/Product/"). $data->name);
+				foreach ($datas as $data) 
+				{
+					unlink($this->getView()->getBaseUrl("Media/Product/"). $data->name);
+				}	
 			}
+			
 
 			$result = $productModel->load($productId)->delete();
 			if(!$result)
@@ -157,11 +370,11 @@ class Controller_Product extends Controller_Admin_Action
 				throw new Exception("Unable to Delet Record.", 1);	
 			}
 			$this->getMessage()->addMessage('Deleted Successfully.');
-		    $this->redirect('grid','product',[],true);
+		    $this->gridBlockAction();
 		} 
 		catch (Exception $e) 
 		{
-			$this->redirect('grid','product',[],true);
+			$this->gridBlockAction();
 		}		
 	}
 }

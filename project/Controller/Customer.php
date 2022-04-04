@@ -15,8 +15,8 @@ class Controller_Customer extends Controller_Admin_Action
 	{
 		$this->setTitle('Customer');
 		$content = $this->getLayout()->getContent();
-		$adminGrid = Ccc::getBlock('Customer_Index');
-		$content->addChild($adminGrid);
+		$customerGrid = Ccc::getBlock('Customer_Index');
+		$content->addChild($customerGrid);
 		$this->renderLayout();
 	}
 

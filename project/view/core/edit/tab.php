@@ -1,6 +1,8 @@
 <?php $tabs = $this->getTabs(); ?>
 <?php foreach($tabs as $key => $tab): ?>
-    <button type="button" class="loadTab" value="<?php echo $tab['url'] ?>" <?php echo ($this->getCurrentTab() == $key) ? 'style ="color:red";' : 'style ="color:green";' ; ?>><?php echo $tab['title'];?></button>
+    <div class="btn-group m-2">
+    <button type="button" class="btn btn-block btn-primary loadTab w-25" value="<?php echo $tab['url'] ?>" <?php echo ($this->getCurrentTab() == $key) ? 'style ="color:white";' : 'style ="color:yellow";' ; ?>><?php echo $tab['title'];?></button>
+    </div>
 <?php endforeach;?>
 
 <script>

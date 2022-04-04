@@ -9,7 +9,7 @@ class Block_Page_Edit extends Block_Core_Edit
 		parent::__construct();
 	}
 
-	public function getEditUrl()
+	public function getSaveUrl()
     {
         return $this->getUrl('save','page');
     }

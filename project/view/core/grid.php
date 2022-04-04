@@ -3,38 +3,50 @@
 <?php $columns = $this->getColumns();  ?>
 <?php $actions = $this->getActions(); ?>
 
-<button class="btn btn-primary" id="addNew" type="button">Add</button><br><br>
+<h2>All Records</h2>
 
-<div>
-<select id="ppr">
-    <option>Select</option>
-    <?php foreach($pager->getPerPageCountOption() as $perPageCount) :?>  
-        <option value="<?php echo $perPageCount ?>" ><?php echo $perPageCount ?></option>
-    <?php endforeach;?>
-</select>
+<div class="row d-flex justify-content-center">
+    <div>
+        <select onchange="ppr(this.value)" id="ppr">
+            <option>Select</option>
+            <?php foreach($pager->getPerPageCountOption() as $perPageCount) :?>  
+                <option value="<?php echo $perPageCount ?>" ><?php echo $perPageCount ?></option>
+            <?php endforeach;?>
+        </select>
 
-<button type="button" class="pagerBtn" value="<?php echo $this->getUrl('gridBlock',null,['p' => $pager->getStart()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getStart()) ? 'none' : ''?>">Start</button>
+        <button type="button" value="<?php echo $this->getUrl(null,null,['p'=>$pager->getStart()]); ?>" style="<?php echo ($pager->getStart() == NULL) ? "pointer-events: none;" : "" ?> " class="pagerBtn">Start</a></button>
 
-<button type="button" class="pagerBtn" value="<?php echo $this->getUrl('gridBlock',null,['p' => $pager->getPrev()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getPrev()) ? 'none' : ''?>">Previous</button>
+        <button type="button" value="<?php echo $this->getUrl(null,null,['p'=>$pager->getPrev()]); ?>" style="<?php echo ($pager->getPrev() == NULL) ? "pointer-events: none;" : "" ?> " class="pagerBtn">Prev</a></button>
 
-&nbsp;&nbsp;&nbsp;<?php echo "<b>".$pager->getCurrent()."</b>"?>&nbsp;&nbsp;&nbsp;
+        <button class="btn btn-primary" disabled>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $pager->getCurrent(); ?> &nbsp;&nbsp;&nbsp;&nbsp;</button>
 
-<button type="button" class="pagerBtn" value="<?php echo $this->getUrl('gridBlock',null,['p' => $pager->getNext()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getNext()) ? 'none' : ''?>">Next</button>
+        <button type="button" value="<?php echo $this->getUrl(null,null,['p'=>$pager->getNext()]); ?>" style="<?php echo ($pager->getNext() == NULL) ? "pointer-events: none;" : "" ?> " class="pagerBtn">Next</a></button>
 
-<button type="button" class="pagerBtn" value="<?php echo $this->getUrl('gridBlock',null,['p' => $pager->getEnd()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getEnd()) ? 'none' : ''?>">End</button>
-
+        <button type="button" value="<?php echo $this->getUrl(null,null,['p'=>$pager->getEnd()]); ?>" style="<?php echo ($pager->getEnd() == NULL) ? "pointer-events: none;" : "" ?> " class="pagerBtn">End</a></button>
+    </div>
 </div>
 
-<table class="table table-bordered my-4">
+<br>
+<br>
+<div class="row">
+    <div class="col-md-2">
+        <div class="card card-primary">
+            <button class="btn btn-block btn-primary" type="button" id="addNew">Add</button>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<table class="table table-bordered table-striped">
     <thead>
-        <tr>
-            <?php foreach ($columns as $key => $column) :?>
-                <th><?php echo $column['title'] ?></th>
-            <?php endforeach; ?>
-            <?php foreach ($actions as $title => $action) :?>
-                <th><?php echo $title ?></th>
-            <?php endforeach; ?> 
-        </tr>
+    <tr>
+        <?php foreach ($columns as $key => $column) :?>
+            <th><?php echo $column['title'] ?></th>
+        <?php endforeach; ?>
+        <?php foreach ($actions as $title => $action) :?>
+            <th><?php echo $title ?></th>
+        <?php endforeach; ?> 
+    </tr>
     </thead>
     <tbody>
         <?php if(!$collections): ?>
@@ -47,12 +59,12 @@
                 <?php endforeach; ?>
                 <?php foreach($actions as $action): ?>
                     <?php $key = $columns['id']['key']; ?>
-                    <td><button type="button" class="<?php echo $action['title'] ?>" value="<?php echo $collection->$key; ?>"><?php echo $action['title']; ?></button></td>
+                    <td><button type="button" class="btn btn-info w-100 <?php echo $action['title'] ?>" value="<?php echo $collection->$key; ?>"><?php echo $action['title']; ?></button></td>
                 <?php endforeach; ?>
             </tr>
             <?php endforeach; ?>
         <?php endif; ?>
-    </tbody> 
+    </tbody>
 </table>
 
 <script type="text/javascript">
@@ -92,7 +104,14 @@ function ppr(val)
         admin.setType('GET');
         admin.load();
     });
-
+    
+    $(".customer").click(function(){
+        var data = $(this).val();
+        admin.setData({'id' : data});
+        admin.setUrl("<?php echo $this->getUrl('gridBlock','salesman_SalesmanCustomer'); ?>");
+        admin.setType('GET');
+        admin.load();
+    });
 
     $(".pagerBtn").click(function(){
         var data = $(this).val();

@@ -9,64 +9,101 @@ class Controller_Page extends Controller_Admin_Action
 			$this->redirect('login','admin_login');
 		}
 	}
-	
-	public function gridAction()
+
+	public function indexAction()
 	{
-		$this->setTitle('Page_Grid');
+		$this->setTitle('Page');
 		$content = $this->getLayout()->getContent();
-		$pageGrid = Ccc::getBlock('Page_Grid');
-		$content->addChild($pageGrid,'Grid');
+		$pageGrid = Ccc::getBlock('Page_Index');
+		$content->addChild($pageGrid);
 		$this->renderLayout();
 	}
 
-	public function gridContentAction()
+	public function gridBlockAction()
 	{
-		$this->setTitle('Page_Grid');
-		$content = $this->getLayout()->getContent();
-		$pageGrid = Ccc::getBlock('Page_Grid');
-		$content->addChild($pageGrid,'Grid');
-		$this->renderContent();
+		$pageGrid = Ccc::getBlock('Page_Grid')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' =>  $pageGrid
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->renderJson($response);
 	}
 
-	public function addAction()
+	public function addBlockAction()
 	{
-		$this->setTitle('Page_Add');
 		$pageModel = Ccc::getModel('Page');
-		$content = $this->getLayout()->getContent();
-		$pageAdd = Ccc::getBlock('Page_Edit');
-		Ccc::register('page',$pageModel);
-		$content->addChild($pageAdd,'Add');
-		$this->renderContent();
+		$page = $pageModel;
+		Ccc::register('page',$page);
+		$pageEdit = $this->getLayout()->getBlock('Page_Edit')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $pageEdit
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->renderJson($response);
 	}
 
-	public function editAction()
+	public function editBlockAction()
 	{
 		try 
 		{
-			$this->setTitle('Page_Edit');
-			$pageModel = Ccc::getModel('Page');
+			$pageModel = Ccc::getModel("Page");
 			$request = $this->getRequest();
-			$id = $request->getRequest('id');
-			if(!$id)
+			$pageId = $request->getRequest('id');
+			if(!(int)$pageId)
 			{
-				throw new Exception("Invalid Request.", 1);
-			}	
-			$page = $pageModel;
-			$pageData = $page->load($id);
-			if(!$pageData)
-			{
-				throw new Exception("SYstem is unable to fetch record.", 1);
+				$this->getMessage()->addMessage('Your data can not be fetch',3);
+				throw new Exception("Error Processing Request", 1);			
 			}
-			$content = $this->getLayout()->getContent();
-			$pageEdit = Ccc::getBlock('Page_Edit');
-			Ccc::register('page',$pageData);
-			$content->addChild($pageEdit,'Edit');
-			$this->renderContent();
-		} 
-		catch (Exception $e) 
-		{
-			throw new Exception("System is unable to find record.", 1);
+
+			$page = $pageModel->load($pageId);
+			if(!$page)
+			{
+				$this->getMessage()->addMessage('Your data can not be fetch',3);
+				throw new Exception("Error Processing Request", 1);			
+			}
+	
+			Ccc::register('page',$page);
+			$pageEdit = Ccc::getBlock('Page_Edit')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $pageEdit
+					],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+			$this->renderJson($response);	
 		}
+		catch (Exception $e)
+		{
+			$this->gridBlockAction();
+		}	
 	}
 
 	public function saveAction()
@@ -83,28 +120,27 @@ class Controller_Page extends Controller_Admin_Action
 
 			$page = $pageModel;
 			$page->setData($postData);
-			if(!$page->pageId)
+			if(!(int)$page->pageId)
 			{
 				$page->createdAt = date('Y-m-d H:m:s');
 				unset($page->pageId);
 			}
 			else
 			{
-				if(!(int)$page->pageId)
-				{
-					throw new Exception("Invalid Request.", 1);
-				}
 				$page->updatedAt = date('Y-m-d H:m:s');
 			}
+
 			$result = $page->save();
 			if(!$result)
 			{
 				$this->getMessage()->addMessage('System is unable to save data.');
 			}
+			$this->gridBlockAction();
 		} 
 		catch (Exception $e) 
 		{
 			$this->getMessage()->addMessage($e->getMessage());
+			$this->gridBlockAction();
 		}
 	}
 
@@ -125,11 +161,12 @@ class Controller_Page extends Controller_Admin_Action
 			{
 				throw new Exception("System is unable to fetch record.", 1);
 			}
-			$this->renderContent();
+			$this->gridBlockAction();
 		} 
 		catch (Exception $e) 
 		{
 			$this->getMessage()->addMessage($e->getMessage());
+			$this->gridBlockAction();
 		}
 	}
 }

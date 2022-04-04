@@ -31,4 +31,14 @@ class Model_Salesman extends Model_Core_Row
 		}
 		return $statuses[self::STATUS_DEFAULT];
 	}
+
+	public function getEditUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('edit','salesman',['id'=>$this->salesmanId]);
+	}
+
+	public function getDeleteUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('delete','salesman',['id'=>$this->salesmanId]);
+	}
 }

@@ -72,10 +72,8 @@ var admin = {
 
     manageElements : function(elements) {
         jQuery(elements).each(function(index,element) {
-            console.log(element);
             jQuery(element.element).html(element.content);
             if(element.classAdd != undefined){
-                console.log(element.classAdd);
                 jQuery(element.element).addClass(element.classAdd);
             }
         });

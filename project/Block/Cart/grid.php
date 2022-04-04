@@ -1,42 +1,67 @@
-<?php Ccc::loadClass('Block_Core_Template'); ?>
-<?php
-class Block_Cart_Grid extends Block_Core_Template
-{ 
-    protected $pager = null;
-	public function __construct()
-	{
-		$this->setTemplate('view/cart/grid.php');
-	}
+<?php Ccc::loadClass('Block_Core_Grid');
 
-    public function getPager()
+class Block_Cart_Grid extends Block_Core_Grid
+{ 
+    public function __construct()
     {
-        if(!$this->pager)
-        {
-            $this->setPager($this->pager);
-        }
-        return $this->pager;
+        parent::__construct();
     }
 
-    public function setPager($pager)
+    public function prepareCollections()
     {
-        $this->pager = $pager;
+        $this->addColumn([
+        'title' => 'Order Id',
+        'type' => 'int',
+        'key' =>'orderId'
+        ],'id');
+        $this->addColumn([
+        'title' => 'Customer Id',
+        'type' => 'int',
+        'key' =>'customerId'
+        ],'id');
+        $this->addColumn([
+        'title' => 'First Name',
+        'type' => 'varchar',
+        'key' =>'firstName'
+        ],'firstName');
+        $this->addColumn([
+        'title' => 'Last Name',
+        'type' => 'varchar',
+        'key' =>'lastName'
+        ],'lastName');
+        $this->addColumn([
+        'title' => 'Email',
+        'type' => 'varchar',
+        'key' =>'email'
+        ],'email');
+        $this->addColumn([
+        'title' => 'Mobile',
+        'type' => 'int',
+        'key' =>'mobile'
+        ],'Mobile');
+        $this->addColumn([
+        'title' => 'Grand Total',
+        'type' => 'float',
+        'key' =>'grandTotal'
+        ],'Grand Total');
+        $this->addAction(['title' => 'View Order','method' => 'getEditUrl','class' => 'order' ],'Edit');
+        $this->prepareCollectionContent();       
+    }
+
+    public function prepareCollectionContent()
+    {
+        $orders = $this->getOrders();
+        $this->setCollection($orders);
         return $this;
     }
 
-   	public function getCart()
-	{
-	 	$request = Ccc::getModel('Core_Request');
-        $page = (int)$request->getRequest('p', 1);
-        $ppr = (int)$request->getRequest('ppr',10);
-        $pagerModel = Ccc::getModel('Core_Pager');
+    public function getCart()
+    {
         $cartModel = Ccc::getModel('Cart');
-        $totalCount = $this->getAdapter()->fetchOne("SELECT count(`cartId`) FROM `cart`");
-        $pagerModel->execute($totalCount, $page, $ppr);
-        $this->setPager($pagerModel);
         $query = "SELECT * FROM `cart` LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}";
         $cart = $cartModel->fetchAll($query);
         return $cart;
-	}
+    }
 
     public function getOrders()
     {
@@ -48,7 +73,16 @@ class Block_Cart_Grid extends Block_Core_Template
         $totalCount = $this->getAdapter()->fetchOne("SELECT COUNT('orderId') FROM `order_data`");
         $this->getPager()->execute($totalCount,$current,$perPageCount);
         $orders = $orderModel->fetchAll("SELECT * FROM `order_data` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
-        return $orders;
-    }
+        if(!$orders)
+        {
+            return null;
+        }
+        $orderColumn = [];
+        foreach ($orders as $order) 
+        {
+            array_push($orderColumn,$order);
+        }        
+        return $orderColumn;
 
+    }
 }

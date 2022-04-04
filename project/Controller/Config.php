@@ -9,64 +9,102 @@ class Controller_Config extends Controller_Admin_Action
 			$this->redirect('login','admin_login');
 		}
 	}
-
-	public function gridAction()
+	
+	public function indexAction()
 	{
-		$this->setTitle('Config_Grid');
+		$this->setTitle('Config');
 		$content = $this->getLayout()->getContent();
-		$configGrid = Ccc::getBlock('Config_Grid');
-		$content->addChild($configGrid,'Grid');
+		$configGrid = Ccc::getBlock('Config_Index');
+		$content->addChild($configGrid);
 		$this->renderLayout();
 	}
 
-	public function gridContentAction()
+	public function gridBlockAction()
 	{
-		$this->setTitle('Config_Grid');
-		$content = $this->getLayout()->getContent();
-		$configGrid = Ccc::getBlock('Config_Grid');
-		$content->addChild($configGrid,'Grid');
-		$this->renderContent();
+		$configGrid = Ccc::getBlock('Config_Grid')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' =>  $configGrid
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->renderJson($response);
 	}
 
-	public function addAction()
+	public function addBlockAction()
 	{
-		$this->setTitle('Config_Add');
 		$configModel = Ccc::getModel('Config');
-		$content = $this->getLayout()->getContent();
-		$configAdd = Ccc::getBlock('Config_Edit');
-		Ccc::register('config',$configModel);
-		$content->addChild($configAdd,'Add');
-		$this->renderContent();
+		$config = $configModel;
+		Ccc::register('config',$config);
+		$configEdit = $this->getLayout()->getBlock('Config_Edit')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $configEdit
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->renderJson($response);
 	}
 
-	public function editAction()
+	public function editBlockAction()
 	{
 		try 
-   		{
-   			$this->setTitle('Config_Edit');
-   			$configModel = Ccc::getModel('Config');
+		{
+			$configModel = Ccc::getModel("Config");
 			$request = $this->getRequest();
-			$id = (int)$request->getRequest('id');
-			if(!$id)
+			$configId = $request->getRequest('id');
+			if(!(int)$configId)
 			{
-				throw new Exception("Invalid Request", 1);
+				$this->getMessage()->addMessage('Your data can not be fetch',3);
+				throw new Exception("Error Processing Request", 1);			
 			}
-			$config = $configModel->load($id);
+
+			$config = $configModel->load($configId);
 			if(!$config)
 			{
-				throw new Exception("System is unable to find record.", 1);
+				$this->getMessage()->addMessage('Your data can not be fetch',3);
+				throw new Exception("Error Processing Request", 1);			
 			}
-			
-			$content = $this->getLayout()->getContent();
-			$configEdit = Ccc::getBlock('Config_Edit');
+	
 			Ccc::register('config',$config);
-			$content->addChild($configEdit,'Edit');
-			$this->renderContent();
-   		}	 
-   		catch (Exception $e) 
-   		{
-   			throw new Exception("Invalid Request.", 1);
-   		}
+
+			$configEdit = Ccc::getBlock('Config_Edit')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $configEdit
+					],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+			$this->renderJson($response);
+		}
+		catch (Exception $e)
+		{
+			$this->gridBlockAction();
+		}	
 	}
 
 	public function saveAction()
@@ -87,28 +125,24 @@ class Controller_Config extends Controller_Admin_Action
 
 			$config = $configModel;
 			$config->setData($postData);
-			if(!($config->configId))
+			if(!(int)$config->configId)
 			{
 				$config->createdAt = date('Y-m-d H:m:s');
 				unset($config->configId);
 			}
-			else
-			{
-				if(!(int)$config->configId)
-				{
-					throw new Exception("Invalid Request.", 1);
-				}
-				$config->configId = $postData["configId"];
-			}
+			
+			$config->configId = $postData["configId"];
 			$result = $config->save();
 			if(!$result)
 			{
 				throw new Exception("System is unable to Update.", 1);
 			}
+			$this->gridBlockAction();
 		} 
 		catch (Exception $e) 
 		{
 			$this->getMessage()->addMessage($e->getMessage());
+			$this->gridBlockAction();
 		}
 	}
 
@@ -133,7 +167,7 @@ class Controller_Config extends Controller_Admin_Action
 			{
 				throw new Exception("Unable to Delete Record.", 1);
 			}
-			$this->renderContent();
+			$this->gridBlockAction();
 		} 
 		catch (Exception $e) 
 		{

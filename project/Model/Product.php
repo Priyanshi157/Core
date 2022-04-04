@@ -42,6 +42,7 @@ class Model_Product extends Model_Core_Row
 		{
 			$categoryIds['exists'] = [];
 		}
+
 		foreach($categoryProduct as $category)
 		{
 			if(!in_array($category->categoryId, $categoryIds['exists']))
@@ -72,8 +73,9 @@ class Model_Product extends Model_Core_Row
 		$mediaModel = Ccc::getModel('Product_Media'); 
 		if(!$this->base)
 		{
-			return null;
+			return $mediaModel;
 		}
+		
 		$base = $mediaModel->fetchRow("SELECT * FROM `product_media` WHERE `mediaId` = {$this->base}");
 		if(!$base)
 		{
@@ -88,7 +90,7 @@ class Model_Product extends Model_Core_Row
 		$mediaModel = Ccc::getModel('Product_Media'); 
 		if(!$this->small)
 		{
-			return null;
+			return $mediaModel;
 		}
 		$small = $mediaModel->fetchRow("SELECT * FROM `product_media` WHERE `mediaId` = {$this->small}");
 		if(!$small)
@@ -104,7 +106,7 @@ class Model_Product extends Model_Core_Row
 		$mediaModel = Ccc::getModel('Product_Media'); 
 		if(!$this->thumb)
 		{
-			return null;
+			return $mediaModel;
 		}
 		$thumb = $mediaModel->fetchRow("SELECT * FROM `product_media` WHERE `mediaId` = {$this->thumb}");
 		if(!$thumb)
@@ -118,15 +120,16 @@ class Model_Product extends Model_Core_Row
 	public function getMedia($reload = false)
 	{
 		$mediaModel = Ccc::getModel('Product_Media'); 
-		if(!$this->media)
+		if(!$this->productId)
 		{
-			return null;
+			return $mediaModel;
 		}
 		if($this->media && !$reload)
 		{
 			return $this->media;
 		}
-		$media = $mediaModel->fetchRow("SELECT * FROM `product_media` WHERE `productId` = {$this->productId}");
+		
+		$media = $mediaModel->fetchAll("SELECT * FROM `product_media` WHERE `productId` = {$this->productId}");
 		if(!$media)
 		{
 			return null;
@@ -135,10 +138,26 @@ class Model_Product extends Model_Core_Row
 
 		return $this->media;
 	}
-	public function setMedia(Model_Product_Media $media)
+
+	public function setMedia($media)
 	{
 		$this->media =$media;
 		return $this;
+	}
+
+	public function getEditUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('edit','Category',['id'=>$this->CategoryId]);
+	}
+
+	public function getDeleteUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('delete','Category',['id'=>$this->CategoryId]);
+	}
+
+	public function getMediaUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('grid','Category_Media',['id'=>$this->CategoryId]);
 	}
 
 }

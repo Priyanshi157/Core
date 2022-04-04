@@ -3,25 +3,9 @@
 
 class Block_Salesman_SalesmanCustomer_Grid extends Block_Core_Template
 {
-    protected $pager = null;
     public function __construct()
     {
         $this->setTemplate("view/salesman/salesmancustomer/grid.php");
-    }
-
-    public function getPager()
-    {
-        if(!$this->pager)
-        {
-            $this->setPager($this->pager);
-        }
-        return $this->pager;
-    }
-
-    public function setPager($pager)
-    {
-        $this->pager = $pager;
-        return $this;
     }
 
     public function getCustomers()
@@ -55,6 +39,11 @@ class Block_Salesman_SalesmanCustomer_Grid extends Block_Core_Template
             return 'Disabled';
         }
         return null;
+    }
+
+    public function getSaveUrl()
+    {
+        return $this->getUrl('save','Salesman_SalesmanCustomer');
     }
 
 }

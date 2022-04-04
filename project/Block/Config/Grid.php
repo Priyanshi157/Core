@@ -58,7 +58,7 @@ class Block_Config_Grid extends Block_Core_Grid
         $ppr = (int)$request->getRequest('ppr',10);
         $pagerModel = Ccc::getModel('Core_Pager');
         $configModel = Ccc::getModel('Config');
-        $totalCount = $this->getAdapter()->fetchOne("SELECT count(pageId) FROM `page`");
+        $totalCount = $this->getAdapter()->fetchOne("SELECT count(configId) FROM `config`");
         $pagerModel->execute($totalCount, $page, $ppr);
         $this->setPager($pagerModel);
         $configs = $configModel->fetchAll("SELECT * FROM `config` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");

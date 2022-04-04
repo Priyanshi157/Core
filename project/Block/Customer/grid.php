@@ -79,10 +79,10 @@ class Block_Customer_Grid extends Block_Core_Grid
         $page = (int)$request->getRequest('p', 1);
         $ppr = (int)$request->getRequest('ppr',10);
         $pagerModel = Ccc::getModel('Core_Pager');
-        $totalCount = $this->getAdapter()->fetchOne("SELECT count(pageId) FROM `page`");
+        $totalCount = $this->getAdapter()->fetchOne("SELECT count(customerId) FROM `customer`");
         $pagerModel->execute($totalCount, $page, $ppr);
         $this->setPager($pagerModel);
-        $customers = $customerModel->fetchAll("SELECT * FROM `customer` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
+        $customers = $customerModel->fetchAll("SELECT * FROM `customer` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getEndLimit()}");
         if(!$customers)
         {
         	return null;
