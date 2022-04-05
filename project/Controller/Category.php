@@ -400,17 +400,26 @@ class Controller_Category extends Controller_Admin_Action
                             }
                             unlink(Ccc::getBlock('Category_Grid')->getBaseUrl("Media/category/"). $media->name);
 
-                            if($postData['media']['base'] == $remove)
+                            if(array_key_exists('base',$postData['media']))
                             {
-                                unset($postData['media']['base']);
-                            }   
-                            if($postData['media']['thumb'] == $remove)
-                            {
-                                unset($postData['media']['thumb']);
+                                if($postData['media']['base'] == $remove)
+                                {
+                                    unset($postData['media']['base']);
+                                }   
                             }
-                            if($postData['media']['small'] == $remove)
+                            if(array_key_exists('thumb',$postData['media']))
                             {
-                                unset($postData['media']['small']);
+                                if($postData['media']['thumb'] == $remove)
+                                {
+                                    unset($postData['media']['thumb']);
+                                }
+                            }
+                            if(array_key_exists('small',$postData['media']))
+                            {
+                                if($postData['media']['small'] == $remove)
+                                {
+                                    unset($postData['media']['small']);
+                                }
                             }
                         }
                     }
