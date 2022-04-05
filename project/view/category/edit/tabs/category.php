@@ -17,7 +17,7 @@
       <div class="form-group row">
         <label for="inputPassword3" class="col-sm-2 col-form-label">Sub Category</label>
         <div class="col-sm-10">
-          <select name="category[parentId]" id="parentId">
+          <select name="category[parentId]" id="parentId" class="form-control">
 	        <option value="<?php echo null; ?>" <?php echo ($categoryData->parentId == NULL) ? 'selected' : ''; ?>>Root Category
 	        </option>
 	       	<?php foreach($categories as $category): ?>
@@ -33,7 +33,7 @@
       <div class="form-group row">
         <label for="inputPassword3" class="col-sm-2 col-form-label">Status</label>
         <div class="col-sm-10">
-          <select name="category[status]">
+          <select name="category[status]" class="form-control">
 	        <option value="1" <?php echo ($category->getStatus($category->status)=='Active')?'selected':'' ?>>Active</option>
 	        <option value="2" <?php echo ($category->getStatus($category->status)=='Inactive')?'selected':'' ?>>Inactive</option>
 	  </select>
