@@ -22,10 +22,9 @@ class Model_Core_Cart
 
 	public function addCart($cartId)
 	{
-		$cart['cartId'] = $cartId;
-		$this->getSession()->cart = $cart;
-		return $this;
-	}
+        $this->getSession()->cart = $cartId;
+        return $this;   
+	}   
 
 	public function getSession()
 	{

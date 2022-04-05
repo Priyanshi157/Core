@@ -12,6 +12,7 @@ class Controller_Admin extends Controller_Admin_Action
 	
 	public function indexAction()
 	{
+		$this->setTitle('Admin');
 		$content = $this->getLayout()->getContent();
 		$adminGrid = Ccc::getBlock('Admin_Index');
 		$content->addChild($adminGrid);
@@ -147,7 +148,7 @@ class Controller_Admin extends Controller_Admin_Action
 			{
 				$this->getMessage()->addMessage('Unable to save.',3);
 			}
-			
+			$this->getMessage()->addMessage("Data saved successfully",1);
 			$this->gridBlockAction();
 		}
 		catch (Exception $e) 
@@ -179,6 +180,7 @@ class Controller_Admin extends Controller_Admin_Action
 				throw new Exception("Unable to Delet Record.", 1);
 				
 			}
+			$this->getMessage()->addMessage("Data Deleted successfully",1);
 			$this->gridBlockAction();
 		} 
 		catch (Exception $e) 

@@ -1,29 +1,88 @@
-<?php Ccc::loadClass('Block_Core_Template'); ?>
-<?php
-class Block_Category_Grid extends Block_Core_Template
-{ 
-    protected $pager = null;
+<?php Ccc::loadClass('Block_Core_Grid'); 
 
-	public function __construct()
-	{
-		$this->setTemplate('view/category/grid.php');
-	}
+class Block_Category_Grid extends Block_Core_Grid {
 
-    public function getPager()
+    public function __construct()
     {
-        if(!$this->pager)
-        {
-            $this->setPager($this->pager);
-        }
-        return $this->pager;
+        parent::__construct();
+        $this->prepareCollections();
     }
 
-    public function setPager($pager)
+    public function prepareCollections()
     {
-        $this->pager = $pager;
+
+        $this->addColumn([
+        'title' => 'Category Id',
+        'type' => 'int',
+        'key' =>'categoryId'
+        ],'id');
+        $this->addColumn([
+        'title' => 'Name',
+        'type' => 'varchar',
+        'key' =>'finalPath'
+        ],'Name');
+        $this->addColumn([
+        'title' => 'Base Image',
+        'type' => 'varchar',
+        'key' =>'base'
+        ],'Base Image');
+        $this->addColumn([
+        'title' => 'Thumb Image',
+        'type' => 'varchar',
+        'key' =>'thumb'
+        ],'Thumb Image');
+        $this->addColumn([
+        'title' => 'Small Image',
+        'type' => 'varchar',
+        'key' =>'small'
+        ],'Small Image');
+        $this->addColumn([
+        'title' => 'Status',
+        'type' => 'int',
+        'key' =>'status'
+        ],'Status');
+        $this->addColumn([
+        'title' => 'Created Date',
+        'type' => 'datetime',
+        'key' =>'createdAt'
+        ],'Created Date');
+        $this->addColumn([
+        'title' => 'Updated Date',
+        'type' => 'datetime',
+        'key' =>'updatedAt'
+        ],'Updated Date');
+        $this->addAction(['title' => 'edit','method' => 'getEditUrl','class' => 'category' ],'Edit');
+        $this->addAction(['title' => 'delete','method' => 'getDeleteUrl','class' => 'category' ],'Delete');
+        $this->prepareCollectionContent();
+    }
+
+    public function prepareCollectionContent()
+    {
+        $categorys = $this->getCategorys();
+        $this->setCollection($categorys);
         return $this;
     }
     
+
+    public function getCategorys()
+    {   
+        $categoryModel = Ccc::getModel('Category');
+        $request = Ccc::getModel('Core_Request');
+        $this->setPager(Ccc::getModel('Core_Pager'));
+        $current = $request->getRequest('p',1);
+        $perPageCount = $request->getRequest('ppr',20);
+        $totalCount = $this->getAdapter()->fetchOne("SELECT COUNT('categoryId') FROM `category`");
+        $this->getPager()->execute($totalCount,$current,$perPageCount);
+        $categorys = $categoryModel->fetchAll("SELECT * FROM `category` ORDER BY `path`  LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
+        $categoryColumn = [];
+        foreach ($categorys as $category) 
+        {
+            $category->finalPath = $this->getPath($category->categoryId,$category->path);
+            array_push($categoryColumn,$category);
+        }        
+        return $categoryColumn;
+    }
+
     public function getPath($categoryId,$path)
     {
         $finalPath = NULL;
@@ -43,26 +102,13 @@ class Block_Category_Grid extends Block_Core_Template
         }
         return $finalPath;
     }
-
-    public function getMedia($mediaId)
+    public function getAdapter()
     {
-        $mediaModel = Ccc::getModel('category');
-        $media = $mediaModel->fetchAll("SELECT * FROM `category_media` WHERE `mediaId` = '$mediaId'");
-        return $media[0]->getData();
+        global $adapter;
+        return $adapter;
     }
-
-    public function getCategories()
-    {
-        $request = Ccc::getModel('Core_Request');
-        $page = (int)$request->getRequest('p', 1);
-        $ppr = (int)$request->getRequest('ppr',10);
-        $pagerModel = Ccc::getModel('Core_Pager');
-        $categoryModel = Ccc::getModel('category');
-        $totalCount = $this->getAdapter()->fetchOne("SELECT count(`categoryId`) FROM `category` ORDER BY `path`");
-        $pagerModel->execute($totalCount, $page, $ppr);
-        $this->setPager($pagerModel);
-        $query = "SELECT * FROM `category` LIMIT {$pagerModel->getStartLimit()} , {$pagerModel->getEndLimit()}";
-        $categories = $categoryModel->fetchAll($query);
-        return $categories;
-    }
+    
 }
+
+
+?>

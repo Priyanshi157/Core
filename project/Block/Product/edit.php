@@ -1,16 +1,23 @@
 <?php
-Ccc::loadClass('Block_Core_Template');
-class Block_Product_Edit extends Block_Core_Template
+Ccc::loadClass('Block_Core_Edit');
+Ccc::loadClass('Block_Product_Edit_Tab');
+class Block_Product_Edit extends Block_Core_Edit
 {
 	public function __construct()
 	{
-		$this->setTemplate('view/product/edit.php');
+		parent::__construct();
 	}
 
 	public function getProduct()
 	{
-		return $this->getData('product');
+		$product = $this->product;
+        return $product;
 	}
+
+    public function getSaveUrl()
+    {
+        return $this->getUrl('save','product');
+    }
 
 	public function getCategories()
     {
@@ -41,18 +48,5 @@ class Block_Product_Edit extends Block_Core_Template
             }
         }
         return $finalPath;
-    }
-
-    public function selected($categoryId)
-    {
-        $request = Ccc::getFront()->getRequest();
-        $productId = $request->getRequest('id');
-        $categoryProductModel = Ccc::getModel('Product_CategoryProduct');
-        $select = $categoryProductModel->fetchAll("SELECT * FROM `category_product` WHERE `productId` = '$productId' AND `categoryId` = '$categoryId'");
-        if($select)
-        {
-            return 'checked';
-        }
-        return null;
     }
 }

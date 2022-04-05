@@ -63,10 +63,10 @@ class Block_Admin_Grid extends Block_Core_Grid
         $ppr = (int)$request->getRequest('ppr',10);
         $pagerModel = Ccc::getModel('Core_Pager');
         $adminModel = Ccc::getModel('Admin');
-        $totalCount = $this->getAdapter()->fetchOne("SELECT count(pageId) FROM `page`");
+        $totalCount = $this->getAdapter()->fetchOne("SELECT count(adminId) FROM `admin`");
         $pagerModel->execute($totalCount, $page, $ppr);
         $this->setPager($pagerModel);
-        $admins = $adminModel->fetchAll("SELECT * FROM `admin` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
+        $admins = $adminModel->fetchAll("SELECT * FROM `admin` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getEndLimit()}");
         if(!$admins)
         {
         	return null;
