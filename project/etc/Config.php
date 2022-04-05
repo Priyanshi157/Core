@@ -6,5 +6,5 @@ return [
         'password' => "",
         'dbname' => "project_priyanshi"
 	],
-	'baseUrl' => "http://localhost/jQuery/core/project/"
+	'baseUrl' => "http://localhost/core-app/core/project/"
 ];

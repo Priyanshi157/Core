@@ -3,25 +3,9 @@
 
 class Block_Product_Media_Grid extends Block_Core_Template
 {
-    protected $pager = null;
     public function __construct()
     {
         $this->setTemplate("view/product/media/grid.php");
-    }
-
-    public function getPager()
-    {
-        if(!$this->pager)
-        {
-            $this->setPager($this->pager);
-        }
-        return $this->pager;
-    }
-
-    public function setPager($pager)
-    {
-        $this->pager = $pager;
-        return $this;
     }
 
     public function getMedias()
@@ -36,10 +20,10 @@ class Block_Product_Media_Grid extends Block_Core_Template
     public function selected($mediaId,$column)
     {
         $request = Ccc::getFront()->getRequest();
-        $productId = $request->getRequest('id');
+        //$productId = $request->getRequest('id');
         $productModel = Ccc::getModel('Product');
-        $select = $productModel->fetchAll("SELECT * FROM `product` WHERE `$column` = '$mediaId'");
-        if($select)
+        $result = $productModel->fetchAll("SELECT * FROM `product` WHERE `$column` = '$mediaId'");
+        if($result)
         {
             return 'checked';
         }

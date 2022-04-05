@@ -11,14 +11,25 @@ class Controller_Salesman_SalesmanCustomer extends Controller_Admin_Action
         }
     }
     
-	public function gridAction()
-	{
-        $this->setTitle('Salesman_Customer_Grid');
-        $content = $this->getLayout()->getContent();
-        $salesmanGrid = Ccc::getBlock("Salesman_SalesmanCustomer_Grid");
-        $content->addChild($salesmanGrid);
-        $this->renderLayout();
-	}
+	public function gridBlockAction()
+    {
+        $salesmanGrid = Ccc::getBlock("Salesman_SalesmanCustomer_Grid")->toHtml();
+        $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+        $response = [
+            'status' => 'success',
+            'elements' => [
+                [
+                    'element' => '#indexContent',
+                    'content' => $salesmanGrid,
+                    ],
+                [
+                    'element' => '#adminMessage',
+                    'content' => $messageBlock
+                ]
+            ]
+        ];
+        $this->renderJson($response);
+    }
 
     public function saveAction()
     {
@@ -40,7 +51,22 @@ class Controller_Salesman_SalesmanCustomer extends Controller_Admin_Action
                     throw new Exception("Error Processing Request", 1);
                 }
             }
-			$this->redirect('grid','Salesman_SalesmanCustomer');
+			$salesmanGrid = Ccc::getBlock("Salesman_Grid")->toHtml();
+            $messageBlock = Ccc::getBlock('Core_Layout_Message')->toHtml();
+            $response = [
+                'status' => 'success',
+                'elements' => [
+                    [
+                        'element' => '#indexContent',
+                        'content' => $salesmanGrid,
+                        ],
+                    [
+                        'element' => '#adminMessage',
+                        'content' => $messageBlock
+                    ]
+                ]
+            ];
+            $this->renderJson($response);
         }
     }
 }

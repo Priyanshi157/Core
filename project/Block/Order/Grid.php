@@ -1,7 +1,7 @@
-<?php Ccc::loadClass("Block_Core_Template"); ?>
+<?php Ccc::loadClass("Block_Core_Grid"); ?>
 <?php
 
-class Block_Cart_Grid extends Block_Core_Template
+class Block_Order_Grid extends Block_Core_Grid
 {
     protected $pager = null;
     
@@ -50,7 +50,4 @@ class Block_Cart_Grid extends Block_Core_Template
         $orders = $orderModel->fetchAll("SELECT * FROM `order_data` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
         return $orders;
     }
-
 }
-
-?>

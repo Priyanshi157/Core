@@ -37,21 +37,27 @@ class Model_Core_Row_Resource
 		return $this;
 	}
 
-	public function insert(array $data=null)
+	public function insert(array $insertArray)
 	{
-		if(!$data)
+		$columnName = [];
+		$columnValue = [];
+		foreach ($insertArray as $columnKey => $value) 
 		{
-			return false;
+			if($value != null) 
+			{
+				$value = mysqli_real_escape_string($this->getConnect(),$value);
+				array_push($columnName, $columnKey);
+				array_push($columnValue, $value);
+			}	
 		}
 
-		$keys = '`'.implode("`,`",array_keys($data)).'`';
-		$values = '\''.implode("','",array_values($data)).'\'';
-
-		$query = "INSERT INTO `{$this->getTableName()}` ({$keys}) VALUES ({$values});";
-		
-		return $this->getAdapter()->insert($query);
+		$columnNames = implode(',', $columnName);
+		$columnValues = "'". implode("','", $columnValue) . "'";
+		$tableName = $this->getTableName();
+		$query = "INSERT INTO $tableName($columnNames) VALUES($columnValues)";
+		$result = $this->getAdapter()->insert($query);
+		return $result;
 	}
-
 
 	public function update(array $updateArray, array $updateWhere)
 	{
@@ -64,18 +70,22 @@ class Model_Core_Row_Resource
 		{
 			if($columnValue == null)
 			{
+
 				array_push($nullValueArray, $columnName);
 			}
 			else 
 			{
+				$columnValue = mysqli_real_escape_string($this->getConnect(),$columnValue);
 				$valueArray[] = "$columnName='$columnValue'";
-			}	
+			}
+			
 		}
 		foreach ($nullValueArray as $nullColumnName) 
 		{
 			$query2 = "UPDATE {$tableName} SET {$nullColumnName} = null WHERE $key = $value";
 			$result = $this->getAdapter()->update($query2);
 		}
+
 		$setString = implode(",", $valueArray);
 		$query = "UPDATE $tableName SET $setString WHERE $key = $value";
 		$result = $this->getAdapter()->update($query);
@@ -102,5 +112,10 @@ class Model_Core_Row_Resource
 		$query = "DELETE FROM $tableName WHERE $key = $value";
 		$result = $this->getAdapter()->delete($query);
 		return $result;
+	}
+
+	public function getConnect()
+	{
+		return $this->getAdapter()->connect();
 	}
 }

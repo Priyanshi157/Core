@@ -1,127 +1,195 @@
-<?php Ccc::loadClass('Model_Core_Row');
+<?php 
+Ccc::loadClass('Model_Core_Row');
 
 class Model_Order extends Model_Core_Row
 {
-	protected $billingAddress;
-	protected $shipingAddress;
-	protected $items;
+    protected $billingAddress;
+    protected $shipingAddress;
+    protected $comment;
 
-	const STATUS_ENABLED = 1;
-	const STATUS_DISABLED = 2;
-	const STATUS_DEFAULT = 1;
-	const STATUS_ENABLED_LBL = 'Enabled';
-	const STATUS_DISABLED_LBL = 'Disabled';
+    const STATUS_PENDING = 1;
+    const STATUS_PROCESSING = 2;
+    const STATUS_COMPLETED = 3;
+    const STATUS_CANCELLED = 4;
+    const STATUS_PENDING_LBL = 'Pending';
+    const STATUS_PROCESING_LBL = 'Processing';
+    const STATUS_COMPLETED_LBL = 'Completed';
+    const STATUS_CANCELLED_LBL = 'Cancelled';
 
-	public function __construct()
-	{
-		$this->setResourceClassName("Order_Resource");
-		parent::__construct();
-	}
+    const STATE_PENDING = 1;
+    const STATE_PACKAGING = 2;
+    const STATE_SHIPPED = 3;
+    const STATE_DELIVERY = 4;
+    const STATE_DISPATCHED = 5;
+    const STATE_COMPLETED = 6;
+    const STATE_PENDING_LBL = 'Pending';
+    const STATE_PACKAGING_LBL = 'Packaging';
+    const STATE_SHIPPED_LBL = 'Shipped';
+    const STATE_DELIVERY_LBL = 'Delivery';
+    const STATE_DISPATCHED_LBL = 'Dispatched';
+    const STATE_COMPLETED_LBL = 'Completed';
 
-	public function getStatus($key = null)
-	{
-		$statuses = [
-			self::STATUS_ENABLED => self::STATUS_ENABLED_LBL,
-			self::STATUS_DISABLED => self::STATUS_DISABLED_LBL
-		];
-		if(!$key)
-		{
-			return $statuses;
-		}
+    public function __construct()
+    {
+        $this->setResourceClassName("Order_Resource");
+        parent::__construct();
+    }
 
-		if(array_key_exists($key, $statuses)) {
-			return $statuses[$key];
-		}
-		return $statuses[self::STATUS_DEFAULT];
-	}
+   public function getStatus($key = null)
+    {
+        $statuses = [
+            self::STATUS_PENDING => self::STATUS_PENDING_LBL,
+            self::STATUS_PROCESSING => self::STATUS_PROCESING_LBL,
+            self::STATUS_COMPLETED => self::STATUS_COMPLETED_LBL,
+            self::STATUS_CANCELLED => self::STATUS_CANCELLED_LBL
+        ];
+        if(!$key)
+        {
+            return $statuses;
+        }
 
-	public function getBillingAddress($reload = false)
-	{
-		$addressModel = Ccc::getModel('Order_Address');
-		if(!$this->orderId)
-		{
-			return $addressModel;
-		}
+        if(array_key_exists($key, $statuses)) {
+            return $statuses[$key];
+        }
+        return $statuses[self::STATUS_DEFAULT];
+    }
 
-		if($this->billingAddress && !$reload)
-		{
-			return $this->billingAddress;
-		}
-		$address = $addressModel->fetchRow("SELECT * FROM `order_address` WHERE `orderId` = {$this->orderId} AND `billing` = 1");
-		
-		if(!$address)
-		{
-			return $addressModel;
-		}
-		$this->setBillingAddress($address);
-		return $this->billingAddress;
-	}
+    public function getBillingAddress($reload = false)
+    {
+        $addressModel = Ccc::getModel('Order_Address');
+        if(!$this->orderId)
+        {
+            return $addressModel;
+        }
 
-	public function setBillingAddress(Model_Order_Address $address)
-	{
-		$this->billingAddress = $address;
-		return $this;
-	}
+        if($this->billingAddress && !$reload)
+        {
+            return $this->billingAddress;
+        }
 
-	public function getShipingAddress($reload = false)
-	{
+        $address = $addressModel->fetchRow("SELECT * FROM `order_address` WHERE `orderId` = {$this->orderId} AND `billing` = 1");
+        if(!$address)
+        {
+            return $addressModel;
+        }
 
-		$addressModel = Ccc::getModel('Order_Address');
-		if(!$this->orderId)
-		{
-			return $addressModel;
-		}
+        $this->setBillingAddress($address);
+        return $this->billingAddress;
+    }
 
-		if($this->shipingAddress && !$reload)
-		{
-			return $this->shipingAddress;
-		}
+    public function setBillingAddress(Model_Order_Address $address)
+    {
+        $this->billingAddress = $address;
+        return $this;
+    }
 
-		$address = $addressModel->fetchRow("SELECT * FROM `order_address` WHERE `orderId` = {$this->orderId} AND `shiping` = 1");
-		if(!$address)
-		{
-			return $addressModel;
-		}
+    public function getShipingAddress($reload = false)
+    {
+        $addressModel = Ccc::getModel('Order_Address');
+        if(!$this->orderId)
+        {
+            return $addressModel;
+        }
 
-		$this->setShipingAddress($address);
-		return $this->shipingAddress;
-	}
+        if($this->shipingAddress && !$reload)
+        {
+            return $this->shipingAddress;
+        }
 
-	public function setShipingAddress(Model_Order_Address $address)
-	{
-		$this->shipingAddress = $address;
-		return $this;
-	}
+        $address=$addressModel->fetchRow("SELECT * FROM `order_address` WHERE `orderId` = {$this->orderId} AND `shiping` = 1");
+        if(!$address)
+        {
+            return $addressModel;
+        }
 
-	public function getItems($reload = false)
-	{
+        $this->setShipingAddress($address);
+        return $this->shipingAddress;
+    }
 
-		$itemModel = Ccc::getModel('Order_Item');
-		if(!$this->orderId)
-		{
-			return $itemModel;
-		}
+    public function setShipingAddress(Model_Order_Address $address)
+    {
+        $this->shipingAddress = $address;
+        return $this;
+    }
 
-		if($this->items && !$reload)
-		{
-			return $this->items;
-		}
+    
+    public function getItems($reload = false)
+    {
+        $itemModel = Ccc::getModel('Order_Item');
+        if(!$this->orderId)
+        {
+            return $itemModel;
+        }
 
-		$items=$itemModel->fetchAll("SELECT * FROM `order_item` WHERE `orderId` = {$this->orderId}");
-		if(!$items)
-		{
-			return $itemModel;
-		}
-		
-		$this->setItems($items);
-		return $this->items;
-	}
+        if($this->items && !$reload)
+        {
+            return $this->items;
+        }
 
-	public function setItems($items)
-	{
-		$this->items = $items;
-		return $this;
-	}
+        $items = $itemModel->fetchAll("SELECT * FROM `order_item` WHERE `orderId` = {$this->orderId}");
+        if(!$items)
+        {
+            return $itemModel;
+        }
+
+        $this->setItems($items);
+        return $this->items;
+    }
+
+    public function setItems($items)
+    {
+        $this->items = $items;
+        return $this;
+    }
+
+    public function getState($key = null)
+    {
+        $states = [
+            self::STATE_PENDING => self::STATE_PENDING_LBL,
+            self::STATE_PACKAGING => self::STATE_PACKAGING_LBL,
+            self::STATE_SHIPPED => self::STATE_SHIPPED_LBL,
+            self::STATE_DELIVERY => self::STATE_DELIVERY_LBL,
+            self::STATE_DISPATCHED => self::STATE_DISPATCHED_LBL,
+            self::STATE_COMPLETED => self::STATE_COMPLETED_LBL
+
+        ];
+        if(!$key)
+        {
+            return $states;
+        }
+
+        if(array_key_exists($key, $states)) {
+            return $states[$key];
+        }
+        return $states[self::STATE_PENDING];
+    }
+
+    public function getComment($reload = false)
+    {
+        $commentModel = Ccc::getModel('Order_Comment');
+        if(!$this->orderId)
+        {
+            return $commentModel;
+        }
+
+        if($this->comment && !$reload)
+        {
+            return $this->comment;
+        }
+
+        $comment = $commentModel->fetchRow("SELECT * FROM `order_comment` WHERE `orderId` = {$this->orderId}");
+        if(!$comment)
+        {
+            return $commentModel;
+        }
+        
+        $this->setComment($comment);
+        return $this->comment;
+    }
+
+    public function setComment(Model_Order_Comment $comment)
+    {
+        $this->comment = $comment;
+        return $this;
+    }
 }
-
-?>
