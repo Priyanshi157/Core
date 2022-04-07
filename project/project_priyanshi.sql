@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.1.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 05, 2022 at 10:14 AM
--- Server version: 8.0.27
--- PHP Version: 8.1.1
+-- Generation Time: Apr 07, 2022 at 09:41 AM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 7.4.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,16 +28,16 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `address` (
-  `addressId` int NOT NULL,
-  `customerId` int NOT NULL,
-  `address` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `postalCode` bigint NOT NULL DEFAULT '0',
-  `city` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `state` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `country` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `billing` tinyint NOT NULL DEFAULT '2',
-  `shiping` tinyint NOT NULL DEFAULT '2'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `addressId` int(11) NOT NULL,
+  `customerId` int(11) NOT NULL,
+  `address` varchar(1024) DEFAULT NULL,
+  `postalCode` bigint(20) NOT NULL DEFAULT 0,
+  `city` varchar(64) DEFAULT NULL,
+  `state` varchar(64) DEFAULT NULL,
+  `country` varchar(64) DEFAULT NULL,
+  `billing` tinyint(4) NOT NULL DEFAULT 2,
+  `shiping` tinyint(4) NOT NULL DEFAULT 2
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `address`
@@ -56,7 +56,7 @@ INSERT INTO `address` (`addressId`, `customerId`, `address`, `postalCode`, `city
 --
 
 CREATE TABLE `admin` (
-  `adminId` int NOT NULL,
+  `adminId` int(11) NOT NULL,
   `firstName` varchar(64) NOT NULL,
   `lastName` varchar(64) NOT NULL,
   `email` varchar(128) NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE `admin` (
   `status` enum('1','2') NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `admin`
@@ -80,17 +80,17 @@ INSERT INTO `admin` (`adminId`, `firstName`, `lastName`, `email`, `password`, `s
 --
 
 CREATE TABLE `cart` (
-  `cartId` int NOT NULL,
-  `customerId` int NOT NULL,
-  `subTotal` int DEFAULT '0',
+  `cartId` int(11) NOT NULL,
+  `customerId` int(11) NOT NULL,
+  `subTotal` int(11) DEFAULT 0,
   `shipingMethod` varchar(28) DEFAULT NULL,
   `paymentMethod` varchar(28) DEFAULT NULL,
   `shipingCost` float DEFAULT NULL,
-  `taxAmount` int NOT NULL DEFAULT '0',
-  `discount` float NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '2',
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `taxAmount` int(11) NOT NULL DEFAULT 0,
+  `discount` float NOT NULL DEFAULT 0,
+  `status` tinyint(1) NOT NULL DEFAULT 2,
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -99,19 +99,19 @@ CREATE TABLE `cart` (
 --
 
 CREATE TABLE `cart_address` (
-  `addressId` int NOT NULL,
-  `cartId` int NOT NULL,
-  `firstName` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `lastName` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `addressId` int(11) NOT NULL,
+  `cartId` int(11) NOT NULL,
+  `firstName` varchar(64) NOT NULL,
+  `lastName` varchar(64) NOT NULL,
   `address` varchar(128) NOT NULL,
-  `postalCode` bigint DEFAULT '0',
+  `postalCode` bigint(20) DEFAULT 0,
   `city` varchar(64) NOT NULL,
   `state` varchar(64) NOT NULL,
   `country` varchar(64) NOT NULL,
-  `billing` tinyint(1) NOT NULL DEFAULT '2',
-  `shiping` tinyint(1) NOT NULL DEFAULT '2',
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `billing` tinyint(1) NOT NULL DEFAULT 2,
+  `shiping` tinyint(1) NOT NULL DEFAULT 2,
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -120,16 +120,16 @@ CREATE TABLE `cart_address` (
 --
 
 CREATE TABLE `cart_item` (
-  `itemId` int NOT NULL,
-  `cartId` int NOT NULL,
-  `productId` int NOT NULL,
-  `quantity` int NOT NULL,
+  `itemId` int(11) NOT NULL,
+  `cartId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
   `itemTotal` float NOT NULL,
-  `tax` int NOT NULL DEFAULT '0',
-  `taxAmount` int NOT NULL DEFAULT '0',
-  `discount` float DEFAULT '0',
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `tax` int(11) NOT NULL DEFAULT 0,
+  `taxAmount` int(11) NOT NULL DEFAULT 0,
+  `discount` float DEFAULT 0,
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -138,17 +138,17 @@ CREATE TABLE `cart_item` (
 --
 
 CREATE TABLE `category` (
-  `categoryId` int NOT NULL,
+  `categoryId` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
-  `base` int DEFAULT NULL,
-  `thumb` int DEFAULT NULL,
-  `small` int DEFAULT NULL,
-  `status` enum('1','2') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '2',
+  `base` int(11) DEFAULT NULL,
+  `thumb` int(11) DEFAULT NULL,
+  `small` int(11) DEFAULT NULL,
+  `status` enum('1','2') NOT NULL DEFAULT '2',
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `parentId` int DEFAULT NULL,
-  `path` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `parentId` int(11) DEFAULT NULL,
+  `path` varchar(128) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `category`
@@ -172,11 +172,11 @@ INSERT INTO `category` (`categoryId`, `name`, `base`, `thumb`, `small`, `status`
 --
 
 CREATE TABLE `category_media` (
-  `mediaId` int NOT NULL,
-  `categoryId` int NOT NULL,
+  `mediaId` int(11) NOT NULL,
+  `categoryId` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
-  `gallery` tinyint NOT NULL DEFAULT '2'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `gallery` tinyint(4) NOT NULL DEFAULT 2
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `category_media`
@@ -202,10 +202,10 @@ INSERT INTO `category_media` (`mediaId`, `categoryId`, `name`, `gallery`) VALUES
 --
 
 CREATE TABLE `category_product` (
-  `entityId` int NOT NULL,
-  `productId` int NOT NULL,
-  `categoryId` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `entityId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
+  `categoryId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `category_product`
@@ -227,13 +227,13 @@ INSERT INTO `category_product` (`entityId`, `productId`, `categoryId`) VALUES
 --
 
 CREATE TABLE `config` (
-  `configId` int NOT NULL,
+  `configId` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   `code` varchar(30) NOT NULL,
   `value` varchar(216) NOT NULL,
-  `status` tinyint NOT NULL DEFAULT '1',
+  `status` tinyint(4) NOT NULL DEFAULT 1,
   `createdAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -242,16 +242,16 @@ CREATE TABLE `config` (
 --
 
 CREATE TABLE `customer` (
-  `customerId` int NOT NULL,
+  `customerId` int(11) NOT NULL,
   `firstName` varchar(64) NOT NULL,
   `lastName` varchar(64) NOT NULL,
   `email` varchar(64) NOT NULL,
   `mobile` varchar(10) DEFAULT NULL,
-  `status` tinyint NOT NULL DEFAULT '2',
-  `salesmanId` int DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 2,
+  `salesmanId` int(11) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `customer`
@@ -268,11 +268,11 @@ INSERT INTO `customer` (`customerId`, `firstName`, `lastName`, `email`, `mobile`
 --
 
 CREATE TABLE `customer_price` (
-  `entityId` int NOT NULL,
-  `customerId` int NOT NULL,
-  `productId` int NOT NULL,
-  `price` float NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `entityId` int(11) NOT NULL,
+  `customerId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
+  `price` float NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -281,21 +281,21 @@ CREATE TABLE `customer_price` (
 --
 
 CREATE TABLE `order_address` (
-  `addressId` int NOT NULL,
-  `orderId` int NOT NULL,
-  `firstName` varchar(64) COLLATE utf8mb4_general_ci NOT NULL,
-  `lastName` varchar(64) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
-  `mobile` bigint NOT NULL,
-  `address` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `city` varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
-  `state` varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
-  `country` varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
-  `postalCode` int NOT NULL,
-  `billing` tinyint(1) NOT NULL DEFAULT '2',
-  `shiping` tinyint(1) NOT NULL DEFAULT '2',
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `addressId` int(11) NOT NULL,
+  `orderId` int(11) NOT NULL,
+  `firstName` varchar(64) NOT NULL,
+  `lastName` varchar(64) NOT NULL,
+  `email` varchar(128) NOT NULL,
+  `mobile` bigint(20) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `city` varchar(128) NOT NULL,
+  `state` varchar(128) NOT NULL,
+  `country` varchar(128) NOT NULL,
+  `postalCode` int(11) NOT NULL,
+  `billing` tinyint(1) NOT NULL DEFAULT 2,
+  `shiping` tinyint(1) NOT NULL DEFAULT 2,
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `order_address`
@@ -307,7 +307,9 @@ INSERT INTO `order_address` (`addressId`, `orderId`, `firstName`, `lastName`, `e
 (77, 59, 'raj', 'jain', 'raj@gmail.com', 7845129874, 'xyz', 'dahod', 'guj', 'india', 784521, 1, 2, '2022-04-05 13:36:30'),
 (78, 59, 'raj', 'jain', 'raj@gmail.com', 7845129874, 'xyz', 'dahod', 'guj', 'india', 784521, 2, 1, '2022-04-05 13:36:30'),
 (79, 60, 'priyanshi', 'jain', 'priyanshi@gmail.com', 7845129874, 'mgroad', 'dahod', 'guj', 'india', 784521, 1, 2, '2022-04-05 13:37:23'),
-(80, 60, 'priyanshi', 'jain', 'priyanshi@gmail.com', 7845129874, 'mgroad', 'dahod', 'guj', 'india', 784521, 2, 1, '2022-04-05 13:37:23');
+(80, 60, 'priyanshi', 'jain', 'priyanshi@gmail.com', 7845129874, 'mgroad', 'dahod', 'guj', 'india', 784521, 2, 1, '2022-04-05 13:37:23'),
+(81, 61, 'priyanshi', 'jain', 'priyanshi@gmail.com', 7845129874, 'mgroad', 'dahod', 'guj', 'india', 784521, 1, 2, '2022-04-07 13:07:27'),
+(82, 61, 'priyanshi', 'jain', 'priyanshi@gmail.com', 7845129874, 'mgroad', 'dahod', 'guj', 'india', 784521, 2, 1, '2022-04-07 13:07:27');
 
 -- --------------------------------------------------------
 
@@ -316,13 +318,13 @@ INSERT INTO `order_address` (`addressId`, `orderId`, `firstName`, `lastName`, `e
 --
 
 CREATE TABLE `order_comment` (
-  `commentId` int NOT NULL,
-  `orderId` int NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `note` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `customerNotified` tinyint(1) NOT NULL DEFAULT '1',
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `commentId` int(11) NOT NULL,
+  `orderId` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `note` varchar(255) NOT NULL,
+  `customerNotified` tinyint(1) NOT NULL DEFAULT 1,
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `order_comment`
@@ -338,22 +340,22 @@ INSERT INTO `order_comment` (`commentId`, `orderId`, `status`, `note`, `customer
 --
 
 CREATE TABLE `order_data` (
-  `orderId` int NOT NULL,
-  `customerId` int NOT NULL,
-  `firstName` varchar(64) COLLATE utf8mb4_general_ci NOT NULL,
-  `lastName` varchar(64) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
-  `mobile` bigint NOT NULL,
+  `orderId` int(11) NOT NULL,
+  `customerId` int(11) NOT NULL,
+  `firstName` varchar(64) NOT NULL,
+  `lastName` varchar(64) NOT NULL,
+  `email` varchar(128) NOT NULL,
+  `mobile` bigint(20) NOT NULL,
   `grandTotal` float NOT NULL,
-  `taxAmount` int NOT NULL,
-  `shipingId` int NOT NULL,
+  `taxAmount` int(11) NOT NULL,
+  `shipingId` int(11) NOT NULL,
   `shipingCost` float NOT NULL,
-  `discount` float NOT NULL DEFAULT '0',
-  `paymentId` int NOT NULL,
-  `state` tinyint(1) NOT NULL DEFAULT '2',
-  `status` tinyint(1) NOT NULL DEFAULT '2',
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `discount` float NOT NULL DEFAULT 0,
+  `paymentId` int(11) NOT NULL,
+  `state` tinyint(1) NOT NULL DEFAULT 2,
+  `status` tinyint(1) NOT NULL DEFAULT 2,
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `order_data`
@@ -362,7 +364,8 @@ CREATE TABLE `order_data` (
 INSERT INTO `order_data` (`orderId`, `customerId`, `firstName`, `lastName`, `email`, `mobile`, `grandTotal`, `taxAmount`, `shipingId`, `shipingCost`, `discount`, `paymentId`, `state`, `status`, `createdAt`) VALUES
 (58, 203, 'priyanshi', 'jain', 'priyanshi@gmail.com', 7845129874, 47600, 2500, 1, 100, 5000, 1, 2, 1, '2022-04-05 13:33:46'),
 (59, 204, 'raj', 'jain', 'raj@gmail.com', 7845129874, 375, 15, 2, 70, 10, 2, 2, 2, '2022-04-05 13:36:51'),
-(60, 203, 'priyanshi', 'jain', 'priyanshi@gmail.com', 7845129874, 375, 15, 2, 70, 10, 2, 2, 2, '2022-04-05 13:37:43');
+(60, 203, 'priyanshi', 'jain', 'priyanshi@gmail.com', 7845129874, 375, 15, 2, 70, 10, 2, 2, 2, '2022-04-05 13:37:43'),
+(61, 203, 'priyanshi', 'jain', 'priyanshi@gmail.com', 7845129874, 47550, 2500, 3, 50, 5000, 4, 2, 2, '2022-04-07 13:07:45');
 
 -- --------------------------------------------------------
 
@@ -371,18 +374,18 @@ INSERT INTO `order_data` (`orderId`, `customerId`, `firstName`, `lastName`, `ema
 --
 
 CREATE TABLE `order_item` (
-  `itemId` int NOT NULL,
-  `orderId` int NOT NULL,
-  `productId` int NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `sku` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `itemId` int(11) NOT NULL,
+  `orderId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `sku` varchar(255) DEFAULT NULL,
   `price` float NOT NULL,
-  `discount` float DEFAULT '0',
-  `quantity` int NOT NULL,
-  `tax` int NOT NULL DEFAULT '0',
-  `taxAmount` int NOT NULL DEFAULT '0',
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `discount` float DEFAULT 0,
+  `quantity` int(11) NOT NULL,
+  `tax` int(11) NOT NULL DEFAULT 0,
+  `taxAmount` int(11) NOT NULL DEFAULT 0,
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `order_item`
@@ -391,7 +394,8 @@ CREATE TABLE `order_item` (
 INSERT INTO `order_item` (`itemId`, `orderId`, `productId`, `name`, `sku`, `price`, `discount`, `quantity`, `tax`, `taxAmount`, `createdAt`) VALUES
 (50, 58, 38, 'Laptop', NULL, 50000, 5000, 1, 5, 2500, '2022-04-05 13:33:46'),
 (51, 59, 31, 'Charger', NULL, 300, 10, 1, 5, 15, '2022-04-05 13:36:52'),
-(52, 60, 31, 'Charger', NULL, 300, 10, 1, 5, 15, '2022-04-05 13:37:43');
+(52, 60, 31, 'Charger', NULL, 300, 10, 1, 5, 15, '2022-04-05 13:37:43'),
+(53, 61, 38, 'Laptop', NULL, 50000, 5000, 1, 5, 2500, '2022-04-07 13:07:45');
 
 -- --------------------------------------------------------
 
@@ -400,14 +404,14 @@ INSERT INTO `order_item` (`itemId`, `orderId`, `productId`, `name`, `sku`, `pric
 --
 
 CREATE TABLE `page` (
-  `pageId` int NOT NULL,
+  `pageId` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `code` varchar(255) NOT NULL,
   `content` longtext NOT NULL,
-  `status` tinyint NOT NULL DEFAULT '2',
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` tinyint(4) NOT NULL DEFAULT 2,
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `page`
@@ -520,9 +524,9 @@ INSERT INTO `page` (`pageId`, `name`, `code`, `content`, `status`, `createdAt`, 
 --
 
 CREATE TABLE `payment_method` (
-  `methodId` int NOT NULL,
-  `name` varchar(64) COLLATE utf8mb4_general_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `methodId` int(11) NOT NULL,
+  `name` varchar(64) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `payment_method`
@@ -541,22 +545,22 @@ INSERT INTO `payment_method` (`methodId`, `name`) VALUES
 --
 
 CREATE TABLE `product` (
-  `productId` int NOT NULL,
+  `productId` int(11) NOT NULL,
   `sku` varchar(255) DEFAULT NULL,
   `name` varchar(64) NOT NULL,
-  `base` int DEFAULT NULL,
-  `thumb` int DEFAULT NULL,
-  `small` int DEFAULT NULL,
+  `base` int(11) DEFAULT NULL,
+  `thumb` int(11) DEFAULT NULL,
+  `small` int(11) DEFAULT NULL,
   `price` float NOT NULL,
-  `msp` int NOT NULL,
-  `costPrice` int NOT NULL,
-  `quantity` int NOT NULL,
+  `msp` int(11) NOT NULL,
+  `costPrice` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
   `tax` decimal(10,0) NOT NULL,
-  `discount` float NOT NULL DEFAULT '0',
-  `status` enum('1','2') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '2',
+  `discount` float NOT NULL DEFAULT 0,
+  `status` enum('1','2') NOT NULL DEFAULT '2',
   `createdAt` date NOT NULL,
   `updatedAt` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `product`
@@ -577,11 +581,11 @@ INSERT INTO `product` (`productId`, `sku`, `name`, `base`, `thumb`, `small`, `pr
 --
 
 CREATE TABLE `product_media` (
-  `mediaId` int NOT NULL,
-  `productId` int NOT NULL,
+  `mediaId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
-  `gallery` tinyint(1) NOT NULL DEFAULT '2'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `gallery` tinyint(1) NOT NULL DEFAULT 2
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `product_media`
@@ -612,16 +616,16 @@ INSERT INTO `product_media` (`mediaId`, `productId`, `name`, `gallery`) VALUES
 --
 
 CREATE TABLE `salesman` (
-  `salesmanId` int NOT NULL,
+  `salesmanId` int(11) NOT NULL,
   `firstName` varchar(64) NOT NULL,
   `lastName` varchar(64) NOT NULL,
   `email` varchar(256) NOT NULL,
-  `mobile` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `discount` float(5,2) NOT NULL DEFAULT '1.00',
-  `status` tinyint(1) NOT NULL DEFAULT '2',
+  `mobile` varchar(10) NOT NULL,
+  `discount` float(5,2) NOT NULL DEFAULT 1.00,
+  `status` tinyint(1) NOT NULL DEFAULT 2,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `salesman`
@@ -637,10 +641,10 @@ INSERT INTO `salesman` (`salesmanId`, `firstName`, `lastName`, `email`, `mobile`
 --
 
 CREATE TABLE `shiping_method` (
-  `methodId` int NOT NULL,
-  `name` varchar(64) COLLATE utf8mb4_general_ci NOT NULL,
+  `methodId` int(11) NOT NULL,
+  `name` varchar(64) NOT NULL,
   `charge` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `shiping_method`
@@ -658,15 +662,15 @@ INSERT INTO `shiping_method` (`methodId`, `name`, `charge`) VALUES
 --
 
 CREATE TABLE `vendor` (
-  `vendorId` int NOT NULL,
+  `vendorId` int(11) NOT NULL,
   `firstName` varchar(64) NOT NULL,
   `lastName` varchar(64) NOT NULL,
   `email` varchar(128) NOT NULL,
   `mobile` varchar(10) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '2',
+  `status` tinyint(1) NOT NULL DEFAULT 2,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `vendor`
@@ -685,14 +689,14 @@ INSERT INTO `vendor` (`vendorId`, `firstName`, `lastName`, `email`, `mobile`, `s
 --
 
 CREATE TABLE `vendor_address` (
-  `addressId` int NOT NULL,
-  `vendorId` int NOT NULL,
-  `address` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `postalCode` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `city` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `state` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `country` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `addressId` int(11) NOT NULL,
+  `vendorId` int(11) NOT NULL,
+  `address` varchar(256) DEFAULT NULL,
+  `postalCode` varchar(6) DEFAULT NULL,
+  `city` varchar(128) DEFAULT NULL,
+  `state` varchar(64) DEFAULT NULL,
+  `country` varchar(64) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `vendor_address`
@@ -879,139 +883,139 @@ ALTER TABLE `vendor_address`
 -- AUTO_INCREMENT for table `address`
 --
 ALTER TABLE `address`
-  MODIFY `addressId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
+  MODIFY `addressId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
 
 --
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `adminId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `adminId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cartId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
+  MODIFY `cartId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
 
 --
 -- AUTO_INCREMENT for table `cart_address`
 --
 ALTER TABLE `cart_address`
-  MODIFY `addressId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=208;
+  MODIFY `addressId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=210;
 
 --
 -- AUTO_INCREMENT for table `cart_item`
 --
 ALTER TABLE `cart_item`
-  MODIFY `itemId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `itemId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `categoryId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `categoryId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
 -- AUTO_INCREMENT for table `category_media`
 --
 ALTER TABLE `category_media`
-  MODIFY `mediaId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `mediaId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `category_product`
 --
 ALTER TABLE `category_product`
-  MODIFY `entityId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `entityId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `config`
 --
 ALTER TABLE `config`
-  MODIFY `configId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `configId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customerId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `customerId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
 
 --
 -- AUTO_INCREMENT for table `customer_price`
 --
 ALTER TABLE `customer_price`
-  MODIFY `entityId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `entityId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `order_address`
 --
 ALTER TABLE `order_address`
-  MODIFY `addressId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `addressId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `order_comment`
 --
 ALTER TABLE `order_comment`
-  MODIFY `commentId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `commentId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `order_data`
 --
 ALTER TABLE `order_data`
-  MODIFY `orderId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `itemId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `itemId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `page`
 --
 ALTER TABLE `page`
-  MODIFY `pageId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=221;
+  MODIFY `pageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=221;
 
 --
 -- AUTO_INCREMENT for table `payment_method`
 --
 ALTER TABLE `payment_method`
-  MODIFY `methodId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `methodId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `productId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `product_media`
 --
 ALTER TABLE `product_media`
-  MODIFY `mediaId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `mediaId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `salesman`
 --
 ALTER TABLE `salesman`
-  MODIFY `salesmanId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `salesmanId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `shiping_method`
 --
 ALTER TABLE `shiping_method`
-  MODIFY `methodId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `methodId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `vendor`
 --
 ALTER TABLE `vendor`
-  MODIFY `vendorId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `vendorId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `vendor_address`
 --
 ALTER TABLE `vendor_address`
-  MODIFY `addressId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `addressId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Constraints for dumped tables
